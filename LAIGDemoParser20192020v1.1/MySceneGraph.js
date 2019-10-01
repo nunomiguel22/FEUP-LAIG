@@ -605,6 +605,31 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = sph;
             }
+            else if (primitiveType == 'cylinder') {
+                var base = this.reader.getFloat(grandChildren[0], 'base');
+                if (!(base != null && !isNaN(base)))
+                    return "unable to parse base of the primitive coordinates for ID = " + primitiveId;
+
+                var top = this.reader.getFloat(grandChildren[0], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top of the primitive coordinates for ID = " + primitiveId;
+
+                var height = this.reader.getFloat(grandChildren[0], 'height');
+                if (!(height != null && !isNaN(height)))
+                    return "unable to parse height of the primitive coordinates for ID = " + primitiveId;
+
+                var slices = this.reader.getFloat(grandChildren[0], 'slices');
+                if (!(slices != null && !isNaN(slices)))
+                    return "unable to parse slices of the primitive coordinates for ID = " + primitiveId;
+
+                var stacks = this.reader.getFloat(grandChildren[0], 'stacks');
+                if (!(stacks != null && !isNaN(stacks)))
+                    return "unable to parse stacks of the primitive coordinates for ID = " + primitiveId;
+
+                var cyl = new MyCylinder(this.scene, base, top, height, slices, stacks);
+
+                this.primitives[primitiveId] = cyl;
+            }
 
 
 
@@ -792,6 +817,6 @@ class MySceneGraph {
 
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoTriangle'].display();
+        this.primitives['demoCylinder'].display();
     }
 }

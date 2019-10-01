@@ -3,12 +3,16 @@
 * @constructor
 */
 class MyCylinder extends CGFobject {
-    constructor(scene, slices, minComplexity, maxComplexity) {
+    constructor(scene, base, top, height, slices, stacks) {
         super(scene);
+
         this.slices = slices;
+        this.base = base;
+        this.top = top;
+        this.height = height;
+        this.stacks = stacks;
+
         this.initBuffers();
-        this.minComplexity = minComplexity;
-        this.complexityDelta = (maxComplexity - minComplexity);
     }
 
     initBuffers() {
@@ -16,58 +20,65 @@ class MyCylinder extends CGFobject {
         this.indices = [];
         this.normals = [];
         this.texCoords = [];
+        this.defaultTextCoords = [];
 
-        var alphaAng = 2 * Math.PI / this.slices;
-        var m = 2 * this.slices; // ensure indices wrap around
+        var alphaAng = 2 * Math.PI / this.slices; //diferença do angulo entre cada slice
+        var radius = (this.top - this.base) / this.stacks; // diferença entre o tamanho de cada slice
+        var stackheight = this.height / this.stacks; //Height para cada stack
 
-        for (var i = 0; i < this.slices; i++) {
-            // All vertices have to be declared for a given face
-            // even if they are shared with others, as the normals 
-            // in each face will be different
+        // para cada triangulo
+        for (var i = 0; i <= this.slices; ++i) {
 
-            var angle = i * alphaAng;
-            var x = Math.cos(angle);
-            var z = Math.sin(angle);
+            for (var j = 0; j <= this.stacks; ++j) {
 
-            this.vertices.push(
-                x, 0, z,
-                x, 1, z
-            );
+                var angle = i * alphaAng;
+                var x = Math.cos(angle);
+                var z = Math.sin(angle);
 
-            this.normals.push(
-                x, 0, z,
-                x, 0, z
-            );
+                this.vertices.push(
+                    x * this.base + radius * j , 
+                    z * this.base + radius *j,
+                    j * stackheight
+                );
 
-            this.indices.push(
-                2 * i, 2 * i + 1, (2 * (i + 1)) % m,
-                (2 * (i + 1)) % m, 2 * i + 1, (2 * (i + 1)) % m + 1
-            );
+                this.texCoords.push(i * 1 / this.slices,
+                    i-( j * 1 / this.stacks));
 
-            this.texCoords.push(0.5, 0.0);
-            this.texCoords.push(0.0, 1.0);
-            this.texCoords.push(1.0, 1.0);
-
+                this.normals.push(x,z,0);            
+            }
         }
+
+        //para cada rectangulo
+        for(var i= 0; i < this.slices; ++i){
+            for(var j = 0; j < this.stacks; ++j)
+            {
+                this.indices.push((i+1) * (this.stacks + 1) + j,
+                i* (this.stacks + 1) + j + 1,
+                i * (this.stacks + 1) + j,
+                i*(this.stacks + 1) + j + 1, (i+1) * (this.stacks + 1) + j,
+                (i+1) * (this.stacks + 1) + j+1);
+            }
+        }
+
+        this.defaultTextCoords = this.texCoords;
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
 
-    updateBuffers(complexity) {
-        this.slices = this.minComplexity + Math.round(this.complexityDelta * complexity); //complexity varies 0-1, so slices varies 3-12
 
-        // reinitialize buffers
-        this.initBuffers();
-        this.initNormalVizBuffers();
-    }
 	/**
 	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the quad
-	 * @param {Array} coords - Array of texture coordinates
 	 */
-    updateTexCoords(coords) {
-        this.texCoords = [...coords];
+    updateTexCoords(s,t) {
+        this.texCoords = this.defaultTextCoords.slice();
+
+        for(var i=0; i < this.texCoords.length; i +=2)
+        {
+            this.texCoords[i] /=s;
+            this.texCoords[i + 1] /=t;
+        }
+
         this.updateTexCoordsGLBuffers();
     }
 }
