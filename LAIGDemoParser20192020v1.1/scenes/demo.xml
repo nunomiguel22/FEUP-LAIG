@@ -55,7 +55,7 @@
         </primitive>
 
         <primitive id="demoCylinder">
-            <cylinder base="1" top="1" height="4" slices="20" stacks="20" />
+            <cylinder base="" top="" height="" slices="" stacks="" />
         </primitive>
 
         <primitive id="demoSphere">
@@ -63,7 +63,7 @@
         </primitive>
 
         <primitive id="demoTorus">
-            <torus inner="" outer="" slices="" loops="" />
+            <torus inner="1" outer="2" slices="16" loops="12" />
         </primitive>
 
     </primitives>
