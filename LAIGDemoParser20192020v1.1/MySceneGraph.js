@@ -763,9 +763,6 @@ class MySceneGraph {
 
                 this.primitives[primitiveId] = cyl;
             }
-
-
-
             else {
                 console.warn("To do: Parse other primitives.");
             }
@@ -951,7 +948,7 @@ class MySceneGraph {
 
 
         //To test the parsing/creation of the primitives, call the display function directly
-        this.primitives['demoTorus'].display();
+        this.primitives['demoCylinder'].display();
         //this.components['demoRoot'].display();
     }
 }
