@@ -63,7 +63,7 @@
         </primitive>
 
         <primitive id="demoTorus">
-            <torus inner="" outer="" slices="" loops="" />
+            <torus inner="1" outer="2" slices="16" loops="12" />
         </primitive>
 
     </primitives>
