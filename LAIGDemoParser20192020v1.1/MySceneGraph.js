@@ -444,7 +444,27 @@ class MySceneGraph {
 
             this.textures[textureID] = tex;
         }
+        this.log("Parsed textures");
         return null;
+    }
+
+    /**
+     * Parse RGB
+     * 
+     */
+
+    parseRGB(RBGString) {
+
+        let red = this.reader.getFloat(RBGString, 'r');
+        if (red == null) return null;
+        let green = this.reader.getFloat(RBGString, 'g');
+        if (green == null) return null;
+        let blue = this.reader.getFloat(RBGString, 'b');
+        if (blue == null) return null;
+        let alpha = this.reader.getFloat(RBGString, 'a');
+        if (alpha == null) return null;
+
+        return vec4.fromValues(red, green, blue, alpha);
     }
 
     /**
@@ -452,15 +472,15 @@ class MySceneGraph {
      * @param {materials block element} materialsNode
      */
     parseMaterials(materialsNode) {
-        var children = materialsNode.children;
+        let children = materialsNode.children;
 
         this.materials = [];
 
-        var grandChildren = [];
-        var nodeNames = [];
+        let grandChildren = [];
+        let nodeNames = [];
 
         // Any number of materials.
-        for (var i = 0; i < children.length; i++) {
+        for (let i = 0; i < children.length; i++) {
 
             if (children[i].nodeName != "material") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -468,7 +488,7 @@ class MySceneGraph {
             }
 
             // Get id of the current material.
-            var materialID = this.reader.getString(children[i], 'id');
+            let materialID = this.reader.getString(children[i], 'id');
             if (materialID == null)
                 return "no ID defined for material";
 
@@ -476,11 +496,53 @@ class MySceneGraph {
             if (this.materials[materialID] != null)
                 return "ID must be unique for each material (conflict: ID = " + materialID + ")";
 
-            //Continue here
-            this.onXMLMinorError("To do: Parse materials.");
+            // Get material shininess
+            let shininess = this.reader.getFloat(children[i], 'shininess');
+            if (shininess == null)
+                return "no shininess defined for material";
+
+            grandChildren = children[i].children;
+            var emission;
+            var ambient;
+            var diffuse;
+            var specular;
+
+            for (let j = 0; j < grandChildren.length; ++j) {
+                switch (grandChildren[j].nodeName) {
+                    case "emission": {
+                        emission = this.parseRGB(grandChildren[j]);
+                        break;
+                    }
+                    case "ambient": {
+                        ambient = this.parseRGB(grandChildren[j]);
+                        break;
+                    }
+                    case "diffuse": {
+                        diffuse = this.parseRGB(grandChildren[j]);
+                        break;
+                    }
+                    case "specular": {
+                        specular = this.parseRGB(grandChildren[j]);
+                        break;
+                    }
+                    default: break;
+                }
+            }
+
+            if (emission == null || ambient == null || diffuse == null || specular == null)
+                return "missing material component (conflict: ID = " + materialID + ")";
+
+            var mat = new CGFappearance(this.scene);
+            mat.setAmbient(ambient);
+            mat.setEmission(emission);
+            mat.setDiffuse(diffuse);
+            mat.setSpecular(specular);
+            mat.setShininess(shininess);
+
+            this.materials[materialID] = mat;
         }
 
-        //this.log("Parsed materials");
+        this.log("Parsed materials");
         return null;
     }
 
