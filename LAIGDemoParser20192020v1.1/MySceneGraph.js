@@ -227,6 +227,33 @@ class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
+        let children = viewsNode.children;
+        let fromVal = children[0].children[0];
+        let toVal = children[0].children[1];
+
+        let near = this.reader.getFloat(children[0], 'near');
+        let far = this.reader.getFloat(children[0], 'far');
+        let angle = this.reader.getFloat(children[0], 'angle');
+        angle *= DEGREE_TO_RAD;
+
+        let posX = this.reader.getFloat(fromVal, 'x');
+        let posY = this.reader.getFloat(fromVal, 'y');
+        let posZ = this.reader.getFloat(fromVal, 'z');
+
+        let targetX = this.reader.getFloat(toVal, 'x');
+        let targetY = this.reader.getFloat(toVal, 'y');
+        let targetZ = this.reader.getFloat(toVal, 'z');
+
+        /**
+         * View esta parsed, falta finalizar criar/alterar camara
+         * A cena usa uma camara ja criada por defeito
+         * Faltam verificar se os valores estao corretos
+         * Podem existir varias camaras?
+         */
+
+        this.scene.camera.setPosition(vec3.fromValues(posX, posY, posZ));
+        this.scene.camera.setTarget(vec3.fromValues(targetX, targetY, targetZ));
+
         this.onXMLMinorError("To do: Parse views and create cameras.");
 
         return null;
@@ -684,11 +711,13 @@ class MySceneGraph {
             this.onXMLMinorError("To do: Parse components.");
             // Transformations
 
+
             // Materials
 
             // Texture
 
             // Children
+
         }
     }
 
@@ -814,5 +843,6 @@ class MySceneGraph {
 
         //To test the parsing/creation of the primitives, call the display function directly
         this.primitives['demoTorus'].display();
+        //this.components['demoRoot'].display();
     }
 }
