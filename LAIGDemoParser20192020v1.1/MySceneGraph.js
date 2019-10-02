@@ -581,24 +581,51 @@ class MySceneGraph {
 
             for (var j = 0; j < grandChildren.length; j++) {
                 switch (grandChildren[j].nodeName) {
-                    case 'translate':
+                    case 'translate': {
                         var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
                         if (!Array.isArray(coordinates))
                             return coordinates;
 
                         transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
                         break;
-                    case 'scale':
-                        this.onXMLMinorError("To do: Parse scale transformations.");
+                    }
+                    case 'scale': {
+                        var scl = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
+                        if (!Array.isArray(scl))
+                            return scl;
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, scl);
                         break;
-                    case 'rotate':
+                    }
+                    case 'rotate': {
                         // angle
-                        this.onXMLMinorError("To do: Parse rotate transformations.");
+                        var axis = this.reader.getString(grandChildren[j], "axis");
+                        var angle = this.reader.getFloat(grandChildren[j], "angle");
+                        angle *= DEGREE_TO_RAD;
+                        if (axis == null || angle == null)
+                            return "Incomplete rotation information in transformation for ID " + transformationID;
+
+                        switch (axis) {
+                            case "x": {
+                                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
+                                break;
+                            }
+                            case "y": {
+                                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
+                                break;
+                            }
+                            case "z": {
+                                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
+                                break;
+                            }
+                            default: break;
+                        }
                         break;
+                    }
+                    default: break;
                 }
             }
-            this.transformations[transformationID] = transfMatrix;
         }
+        this.transformations[transformationID] = transfMatrix;
 
         this.log("Parsed transformations");
         return null;
@@ -773,9 +800,9 @@ class MySceneGraph {
     }
 
     /**
-   * Parses the <components> block.
-   * @param {components block element} componentsNode
-   */
+    * Parses the <components> block.
+    * @param {components block element} componentsNode
+    */
     parseComponents(componentsNode) {
         var children = componentsNode.children;
 
@@ -814,15 +841,66 @@ class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-            this.onXMLMinorError("To do: Parse components.");
             // Transformations
+            var transform = mat4.create();
 
+            for (let i = 0; i < grandChildren[transformationIndex].children.length; ++i)
+                grandgrandChildren.push(grandChildren[transformationIndex].children[i]);
+
+            for (let i = 0; grandgrandChildren.length; ++i) {
+                if (grandgrandChildren[i].nodeName == "transformationref") {
+                    let tid = this.reader.getString(grandgrandChildren[i], "id");
+                    if (this.transformations[tid] != null) {
+                        transform = this.transformations[tid];
+                        break;
+                    }
+                }
+                if (grandgrandChildren[i].nodeName == "translate") {
+                    let coordinates = this.parseCoordinates3D(grandgrandChildren[i], "translate transformation for component " + componentID);
+                    if (!Array.isArray(coordinates))
+                        return coordinates;
+
+                    transform = mat4.translate(transform, transform, coordinates);
+                }
+                if (grandgrandChildren[i].nodeName == "scale") {
+                    let scl = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for component " + componentID);
+                    if (!Array.isArray(scl))
+                        return scl;
+                    transform = mat4.scale(transform, transform, scl);
+
+                }
+                if (grandgrandChildren[i].nodeName == "rotate") {
+                    // angle
+                    let axis = this.reader.getString(grandChildren[j], "axis");
+                    let angle = this.reader.getFloat(grandChildren[j], "angle");
+                    angle *= DEGREE_TO_RAD;
+                    if (axis == null || angle == null)
+                        return "Incomplete rotation information in transformation for ID " + transformationID;
+
+                    switch (axis) {
+                        case "x": {
+                            transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
+                            break;
+                        }
+                        case "y": {
+                            transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
+                            break;
+                        }
+                        case "z": {
+                            transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
+                            break;
+                        }
+                        default: break;
+                    }
+                }
+            }
 
             // Materials
 
             // Texture
 
             // Children
+
 
         }
     }
@@ -948,7 +1026,19 @@ class MySceneGraph {
 
 
         //To test the parsing/creation of the primitives, call the display function directly
+
+        //Apply test transformations
+        this.scene.pushMatrix();
+        this.scene.multMatrix(this.transformations['demoTransform']);
+
+
+
         this.primitives['demoCylinder'].display();
         //this.components['demoRoot'].display();
+
+
+
+
+        this.scene.popMatrix();
     }
 }
