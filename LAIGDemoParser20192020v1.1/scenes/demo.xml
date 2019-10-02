@@ -23,7 +23,11 @@
     </lights>
 
     <textures>
-        <texture id="demoTexture" file="scenes/images/vidral.jpg" />
+        <texture id="bank" file="scenes/images/bank.jpg" />
+        <texture id="leaves" file="scenes/images/leaves.jpg" />
+        <texture id="rocks" file="scenes/images/rocks.jpg" />
+        <texture id="trunk" file="scenes/images/trunk-image.jpg" />
+        <texture id="vidral" file="scenes/images/vidral.jpg" />
     </textures>
 
     <materials>
@@ -51,7 +55,7 @@
         </primitive>
 
         <primitive id="demoRectangle">
-            <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
+            <rectangle x1="10" y1="0" x2="10" y2="0" />
         </primitive>
 
         <primitive id="demoCylinder">
@@ -69,18 +73,115 @@
     </primitives>
 
     <components>
-        <component id="demoRoot">
-            <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
-            </transformation>
+
+        <component id="wall">
             <materials>
                 <material id="demoMaterial" />
             </materials>
-            <texture id="demoTexture"/>
+            <texture id="leaves" length_s="256" length_t="256" />
             <children>
                 <primitiveref id="demoRectangle" />
             </children>
         </component>
+
+        <component id="wall2">
+         <transformation>
+                <rotate axis="xz" angle="180" />
+                <rotate axis="x" angle="90" />       
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="wall" />
+            </children>
+        </component>
+
+        <component id="floor">
+         <transformation>
+                <rotate axis="yz" angle="180" />
+                <rotate axis="y" angle="-90" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" />
+            <children>
+                <componentref id="wall" />
+            </children>
+        </component>
+
+        <component id="trunk_center">
+        <transformation>
+                <translate x="5" y="0" z="5" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="trunk"/>
+            <children>
+                <primitiveref id="demoSphere" />
+            </children>
+        </component>
+
+        <component id="trunk_torus">
+        <transformation>
+                <translate x="5" y="5" z="0" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="trunk"/>
+            <children>
+                <primitiveref id="demoTorus" />
+            </children>
+        </component>
+
+        <component id="trunk_wall">
+        <transformation>
+                <rotate axis="yz" angle="180" />
+                <translate x="-0.4" y="11" z="0" />
+                <rotate axis="-xz" angle="180" />
+                <rotate axis="y" angle="180" />
+                <translate x="5" y="5" z="0" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="trunk_torus" />
+            </children>
+        </component>
+
+         <component id="arm">
+        <transformation>
+                <translate x="0.5" y="5" z="5.1" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+             <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="vidral"/>
+            <children>
+                <primitiveref id="demoTriangle" />
+            </children>
+        </component>
+
+        <component id="arm2">
+        <transformation>
+                <translate x="0.5" y="5" z="6.3" />
+                <rotate axis="x" angle="90" />
+            </transformation>
+             <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit"/>
+            <children>
+                <componentref id="arm" />
+            </children>
+        </component>
+
     </components>
 </lxs>
