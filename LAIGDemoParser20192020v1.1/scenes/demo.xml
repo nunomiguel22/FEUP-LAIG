@@ -1,5 +1,5 @@
 <lxs>
-    <scene root="demoRoot" axis_length="5"/>
+    <scene root="scene" axis_length="5"/>
 
     <views default="defaultCamera">
         <perspective id="defaultCamera" near="0.1" far="500" angle="45">
@@ -44,6 +44,13 @@
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
+
+        <material id="grassMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.6" g="0.9" b="0.6" a="1.0" />
+            <diffuse r="0.6" g="0.9" b="0.6" a="1.0" />
+            <specular r="0.1" g="0.2" b="0.1" a="1.0" />
+        </material>
     </materials>
 
     <transformations>
@@ -54,7 +61,11 @@
         </transformation>
     </transformations>
 
-    <primitives>
+    <primitives>        
+        <primitive id="square">
+            <rectangle x1="-1" y1="-1" x2="1" y2="1" />
+        </primitive>
+
         <primitive id="pitchRectangle">
             <rectangle x1="-15" y1="-10" x2="15" y2="10" />
         </primitive>
@@ -82,16 +93,242 @@
         <primitive id="trackTorus">
             <torus inner="6" outer="26.8" slices="2" loops="40" />
         </primitive>
+
+        <primitive id="cornerCylinder">
+            <cylinder base="0.05" top="0.05" height="1" slices="12" stacks="12" />
+        </primitive>
+
+        <primitive id="cornerTriangle">
+            <triangle x1="0" y1="1.0" x2="0" y2="1.5" x3="0.5" y3="1.25" />
+        </primitive>
     </primitives>
 
     <components>
+        <!-- bench -->
+        <component id="cubeFace1">
+            <transformation>
+                <translate x="0" y="0" z="-1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+        <component id="cubeFace2">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+        <component id="cubeFace3">
+            <transformation>
+                <translate x="1" y="0" z="0" />
+                <rotate axis="y" angle="45"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+        <component id="cubeFace4">
+            <transformation>
+                <translate x="-1" y="0" z="0" />
+                <rotate axis="y" angle="45"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+        <component id="cubeFace5">
+            <transformation>
+                <translate x="0" y="1" z="0" />
+                <rotate axis="x" angle="270"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+        <component id="cubeFace6">
+            <transformation>
+                <translate x="0" y="-1" z="0" />
+                <rotate axis="x" angle="45"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="square" />
+            </children>
+        </component>
+
+        <component id="cube">
+            <transformation>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cubeFace1" />
+                <componentref id="cubeFace2" />
+                <componentref id="cubeFace3" />
+                <componentref id="cubeFace4" />
+                <componentref id="cubeFace5" />
+                <componentref id="cubeFace6" />
+            </children>
+        </component>
+
+        <component id="leftBench">
+            <transformation>
+                <translate x="5" y="0.5" z="-11" />
+                <scale x="1" y="0.5" z="0.5"/>
+            </transformation>
+            <materials>
+                <material id="postMat" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+
+        <component id="rightBench">
+            <transformation>
+                <translate x="-5" y="0.5" z="-11" />
+                <scale x="1" y="0.5" z="0.5"/>
+            </transformation>
+            <materials>
+                <material id="postMat" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cube" />
+            </children>
+        </component>
+        <!-- End bench -->
+
+        <!-- Corner flag -->
+        <component id="cornerTube">
+            <transformation>
+                <translate x="0" y="0.1" z="0" />
+                <rotate axis="x" angle="270"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cornerCylinder" />
+            </children>
+        </component>
+
+        <component id="cornerFlag">
+            <transformation>
+                <rotate axis="y" angle="45"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="cornerTriangle" />
+            </children>
+        </component>
+
+        <component id="bottomLeftCornerFlag">
+            <transformation>
+                <translate x="-15" y="0.0" z="10.0" />
+                <rotate axis="y" angle="45"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cornerTube" />
+                <componentref id="cornerFlag" />
+            </children>
+        </component>
+
+        <component id="bottomRightCornerFlag">
+            <transformation>
+                <translate x="15" y="0.0" z="10.0" />
+                <rotate axis="y" angle="45"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cornerTube" />
+                <componentref id="cornerFlag" />
+            </children>
+        </component>
+
+        <component id="topLeftCornerFlag">
+            <transformation>
+                <translate x="-15" y="0.0" z="-10.0" />
+                <rotate axis="y" angle="45"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cornerTube" />
+                <componentref id="cornerFlag" />
+            </children>
+        </component>
+
+        <component id="topRightCornerFlag">
+            <transformation>
+                <translate x="15" y="0.0" z="-10.0" />
+                <rotate axis="y" angle="45"/>
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="none" length_s="1" length_t="1" />
+            <children>
+                <componentref id="cornerTube" />
+                <componentref id="cornerFlag" />
+            </children>
+        </component>
+        <!-- End Corner flag -->
+        
         <!-- Pitch -->
         <component id="footballPitch">
             <transformation>
                 <rotate axis="x" angle="270"/>
             </transformation>
             <materials>
-                <material id="inherit" />
+                <material id="grassMat" />
             </materials>
             <texture id="pitch" length_s="1" length_t="1" />
             <children>
@@ -191,7 +428,7 @@
 
         <!-- adverts -->
         </component>
-        <component id="leftAdvert">
+        <component id="advert1">
             <transformation>
                 <translate x="-3" y="0" z="0" /> 
             </transformation>
@@ -204,9 +441,35 @@
             </children>
         </component>
 
-        <component id="rightAdvert">
+        <component id="advert2">
             <transformation>
                 <translate x="3" y="0" z="0" /> 
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="advertRectangle" />
+            </children>
+        </component>
+
+        <component id="advert3">
+            <transformation>
+                <translate x="-6" y="0" z="0" /> 
+            </transformation>
+            <materials>
+                <material id="inherit" />
+            </materials>
+            <texture id="inherit" length_s="1" length_t="1" />
+            <children>
+                <primitiveref id="advertRectangle" />
+            </children>
+        </component>
+
+        <component id="advert4">
+            <transformation>
+                <translate x="6" y="0" z="0" /> 
             </transformation>
             <materials>
                 <material id="inherit" />
@@ -226,8 +489,10 @@
             </materials>
             <texture id="advert" length_s="1" length_t="1" />
             <children>
-                <componentref id="leftAdvert" />
-                <componentref id="rightAdvert" />
+                <componentref id="advert1" />
+                <componentref id="advert2" />
+                <componentref id="advert3" />
+                <componentref id="advert4" />
                 <primitiveref id="advertRectangle" />
             </children>
         </component>
@@ -242,8 +507,10 @@
             </materials>
             <texture id="advert" length_s="1" length_t="1" />
             <children>
-                <componentref id="leftAdvert" />
-                <componentref id="rightAdvert" />
+                <componentref id="advert1" />
+                <componentref id="advert2" />
+                <componentref id="advert3" />
+                <componentref id="advert4" />
                 <primitiveref id="advertRectangle" />
             </children>
         </component>
@@ -265,6 +532,12 @@
                 <componentref id="football" />
                 <componentref id="leftAdvertPanel" />
                 <componentref id="rightAdvertPanel" />
+                <componentref id="leftBench" />
+                <componentref id="rightBench" />
+                <componentref id="bottomLeftCornerFlag" />
+                <componentref id="bottomRightCornerFlag" />
+                <componentref id="topLeftCornerFlag" />
+                <componentref id="topRightCornerFlag" />
             </children>
         </component>
         <!-- End Football field composite -->
