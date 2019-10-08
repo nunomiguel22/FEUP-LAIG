@@ -841,67 +841,14 @@ class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
+            this.onXMLMinorError("To do: Parse components.");
             // Transformations
-            var transform = mat4.create();
-
-            for (let i = 0; i < grandChildren[transformationIndex].children.length; ++i)
-                grandgrandChildren.push(grandChildren[transformationIndex].children[i]);
-
-            for (let i = 0; grandgrandChildren.length; ++i) {
-                if (grandgrandChildren[i].nodeName == "transformationref") {
-                    let tid = this.reader.getString(grandgrandChildren[i], "id");
-                    if (this.transformations[tid] != null) {
-                        transform = this.transformations[tid];
-                        break;
-                    }
-                }
-                if (grandgrandChildren[i].nodeName == "translate") {
-                    let coordinates = this.parseCoordinates3D(grandgrandChildren[i], "translate transformation for component " + componentID);
-                    if (!Array.isArray(coordinates))
-                        return coordinates;
-
-                    transform = mat4.translate(transform, transform, coordinates);
-                }
-                if (grandgrandChildren[i].nodeName == "scale") {
-                    let scl = this.parseCoordinates3D(grandgrandChildren[j], "translate transformation for component " + componentID);
-                    if (!Array.isArray(scl))
-                        return scl;
-                    transform = mat4.scale(transform, transform, scl);
-
-                }
-                if (grandgrandChildren[i].nodeName == "rotate") {
-                    // angle
-                    let axis = this.reader.getString(grandChildren[j], "axis");
-                    let angle = this.reader.getFloat(grandChildren[j], "angle");
-                    angle *= DEGREE_TO_RAD;
-                    if (axis == null || angle == null)
-                        return "Incomplete rotation information in transformation for ID " + transformationID;
-
-                    switch (axis) {
-                        case "x": {
-                            transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
-                            break;
-                        }
-                        case "y": {
-                            transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
-                            break;
-                        }
-                        case "z": {
-                            transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
-                            break;
-                        }
-                        default: break;
-                    }
-                }
-            }
 
             // Materials
 
             // Texture
 
             // Children
-
-
         }
     }
 
@@ -1033,7 +980,7 @@ class MySceneGraph {
 
 
 
-        this.primitives['demoCylinder'].display();
+        this.primitives['demoRectangle'].display();
         //this.components['demoRoot'].display();
 
 

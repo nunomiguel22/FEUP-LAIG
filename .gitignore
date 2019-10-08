@@ -1,15 +1,3 @@
+.vscode/*
+lib/*
 
-lib/CGF/shaders/Gouraud/multiple_light-vertex.glsl
-lib/CGF.js
-lib/CGF/shaders/Gouraud/fragment.glsl
-lib/CGF/shaders/Gouraud/lambert-vertex.glsl
-lib/CGF/shaders/Gouraud/textured/fragment.glsl
-lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl
-lib/CGF/shaders/Phong/multiple_light-phong-fragment.glsl
-lib/CGF/shaders/Phong/multiple_light-phong-vertex.glsl
-lib/CGF/shaders/Phong/phong-fragment.glsl
-lib/CGF/shaders/Phong/phong-vertex.glsl
-lib/CGF/shaders/picking/fragment.glsl
-lib/CGF/shaders/picking/vertex.glsl
-lib/CGF/shaders/viz/normals-fragment.glsl
-lib/CGF/shaders/viz/normals-vertex.glsl
