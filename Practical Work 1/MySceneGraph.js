@@ -841,14 +841,79 @@ class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-            this.onXMLMinorError("To do: Parse components.");
-            // Transformations
 
-            // Materials
+            // Transformations
+            let transformation = grandChildren[transformationIndex];
+            var transfMatrix = mat4.create();
+
+            for (let i = 0; i < transformation.length; i++) {
+                switch (transformation[i].nodeName) {
+                    case 'translate': {
+                        var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
+                        if (!Array.isArray(coordinates))
+                            return coordinates;
+
+                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                        break;
+                    }
+                    case 'scale': {
+                        var scl = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
+                        if (!Array.isArray(scl))
+                            return scl;
+                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, scl);
+                        break;
+                    }
+                    case 'rotate': {
+                        // angle
+                        var axis = this.reader.getString(grandChildren[j], "axis");
+                        var angle = this.reader.getFloat(grandChildren[j], "angle");
+                        angle *= DEGREE_TO_RAD;
+                        if (axis == null || angle == null)
+                            return "Incomplete rotation information in transformation for ID " + transformationID;
+
+                        switch (axis) {
+                            case "x": {
+                                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
+                                break;
+                            }
+                            case "y": {
+                                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
+                                break;
+                            }
+                            case "z": {
+                                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
+                                break;
+                            }
+                            default: break;
+                        }
+                        break;
+                    }
+                    default: break;
+                }
+            }
+
+
+            // Materials TO:DO: accept multiple materials
+            let matinfo = grandChildren[materialsIndex].children[0];
+            let matID = this.reader.getString(matinfo, 'id');
 
             // Texture
+            let texinfo = grandChildren[textureIndex];
+            let texID = this.reader.getString(texinfo, 'id');
 
             // Children
+            let node = new GraphNode(this, componentID, matID, texID, transfMatrix);
+            let childrenInfo = grandChildren[childrenIndex];
+
+            for (let i = 0; i < childrenInfo.children.length; ++i) {
+                let chid = this.reader.getString(childrenInfo.children[i], 'id');
+                if (childrenInfo.children[i].nodeName == 'primitiveref')
+                    node.pushPrimitive(chid);
+                else if (childrenInfo.children[i].nodeName == 'componentref')
+                    node.pushChild(chid);
+
+            }
+            this.components[componentID] = node;
         }
     }
 
