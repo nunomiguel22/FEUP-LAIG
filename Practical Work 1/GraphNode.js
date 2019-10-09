@@ -26,6 +26,8 @@ class GraphNode {
     }
 
     display() {
+        this.graph.scene.pushMatrix();
+        this.graph.scene.multMatrix(this.transformation);
 
         this.graph.materials[this.material].setTexture(this.graph.textures[this.texture]);
         this.graph.materials[this.material].apply();
@@ -37,6 +39,8 @@ class GraphNode {
         for (let i = 0; i < this.children.length; ++i) {
             this.graph.components[this.children[i]].display();
         }
+
+        this.graph.scene.popMatrix();
 
     }
 

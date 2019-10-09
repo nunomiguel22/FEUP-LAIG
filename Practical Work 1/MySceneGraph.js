@@ -846,10 +846,10 @@ class MySceneGraph {
             let transformation = grandChildren[transformationIndex];
             var transfMatrix = mat4.create();
 
-            for (let i = 0; i < transformation.length; i++) {
-                switch (transformation[i].nodeName) {
+            for (let i = 0; i < transformation.children.length; i++) {
+                switch (transformation.children[i].nodeName) {
                     case 'translate': {
-                        var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
+                        var coordinates = this.parseCoordinates3D(transformation.children[i], "translate transformation for Grandchild " + transformation.children[i]);
                         if (!Array.isArray(coordinates))
                             return coordinates;
 
@@ -857,7 +857,7 @@ class MySceneGraph {
                         break;
                     }
                     case 'scale': {
-                        var scl = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
+                        var scl = this.parseCoordinates3D(transformation.children[i], "translate transformation for Grandchild " + transformation.children[i]);
                         if (!Array.isArray(scl))
                             return scl;
                         transfMatrix = mat4.scale(transfMatrix, transfMatrix, scl);
@@ -865,11 +865,11 @@ class MySceneGraph {
                     }
                     case 'rotate': {
                         // angle
-                        var axis = this.reader.getString(grandChildren[j], "axis");
-                        var angle = this.reader.getFloat(grandChildren[j], "angle");
+                        var axis = this.reader.getString(transformation.children[i], "axis");
+                        var angle = this.reader.getFloat(transformation.children[i], "angle");
                         angle *= DEGREE_TO_RAD;
                         if (axis == null || angle == null)
-                            return "Incomplete rotation information in transformation for ID " + transformationID;
+                            return "Incomplete rotation information in transformation for Grandchild " + transformation.children[i];
 
                         switch (axis) {
                             case "x": {
@@ -888,7 +888,7 @@ class MySceneGraph {
                         }
                         break;
                     }
-                    default: break;
+                    default: mat4.identity(transfMatrix); break;
                 }
             }
 

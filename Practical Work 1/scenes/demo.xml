@@ -55,8 +55,8 @@
     <components>
         <component id="testCyl">
             <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
+                <translate x="2" y="0" z="1" />
+                <scale x="1" y="1" z="1" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />
@@ -70,8 +70,8 @@
 
         <component id="demoRoot">
             <transformation>
-                <translate x="0" y="0" z="1" />
-                <scale x="2" y="1" z="1" />
+                <translate x="3" y="0" z="1" />
+                <scale x="1" y="1" z="1" /> 
             </transformation>
             <materials>
                 <material id="demoMaterial" />
