@@ -1044,9 +1044,9 @@ class MySceneGraph {
         this.scene.multMatrix(this.transformations['demoTransform']);
 
 
+        this.components['demoRoot'].display();
+        //  this.primitives['demoRectangle'].display();
 
-        this.primitives['demoRectangle'].display();
-        //this.components['demoRoot'].display();
 
 
 

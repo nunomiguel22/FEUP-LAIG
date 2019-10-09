@@ -25,4 +25,11 @@ class GraphNode {
         this.primitives.push(primitiveID);
     }
 
+    display() {
+        for (let i = 0; i < this.primitives.length; ++i) {
+            this.graph.primitives[this.primitives[i]].display();
+        }
+
+    }
+
 }
