@@ -533,10 +533,10 @@ class MySceneGraph {
                 return "missing material component (conflict: ID = " + materialID + ")";
 
             var mat = new CGFappearance(this.scene);
-            mat.setAmbient(ambient);
-            mat.setEmission(emission);
-            mat.setDiffuse(diffuse);
-            mat.setSpecular(specular);
+            mat.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
+            mat.setEmission(emission[0], emission[1], emission[2], emission[3]);
+            mat.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
+            mat.setSpecular(specular[0], specular[1], specular[2], specular[3]);
             mat.setShininess(shininess);
 
             this.materials[materialID] = mat;
@@ -1039,18 +1039,10 @@ class MySceneGraph {
 
         //To test the parsing/creation of the primitives, call the display function directly
 
-        //Apply test transformations
-        this.scene.pushMatrix();
-        this.scene.multMatrix(this.transformations['demoTransform']);
-
-
+        //this.materials['demoMaterial'].apply();
         this.components['demoRoot'].display();
-        //  this.primitives['demoRectangle'].display();
 
 
 
-
-
-        this.scene.popMatrix();
     }
 }

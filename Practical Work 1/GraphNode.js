@@ -26,6 +26,10 @@ class GraphNode {
     }
 
     display() {
+
+        this.graph.materials[this.material].setTexture(this.graph.textures[this.texture]);
+        this.graph.materials[this.material].apply();
+
         for (let i = 0; i < this.primitives.length; ++i) {
             this.graph.primitives[this.primitives[i]].display();
         }
