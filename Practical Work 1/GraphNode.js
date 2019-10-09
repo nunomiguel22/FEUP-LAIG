@@ -25,23 +25,50 @@ class GraphNode {
         this.primitives.push(primitiveID);
     }
 
-    display() {
+    display(fatherMaterial, fatherTexture) {
+        //Transformation
         this.graph.scene.pushMatrix();
         this.graph.scene.multMatrix(this.transformation);
 
-        this.graph.materials[this.material].setTexture(this.graph.textures[this.texture]);
-        this.graph.materials[this.material].apply();
+        //Materials
+        let compMat;
+        if (this.material == 'inherit')
+            compMat = fatherMaterial;
+        else compMat = this.material;
 
+        //Textures
+        let compTex;
+        switch (this.texture) {
+            case 'inherit': {
+                compTex = fatherTexture;
+                break;
+            }
+            case 'none': {
+                compTex = null;
+                break;
+            }
+            default: {
+                compTex = this.texture;
+                break;
+            }
+        }
+
+        //Apply material/texture
+        let currentMat = this.graph.materials[compMat];
+        let currentTex = this.graph.textures[compTex];
+        currentMat.setTexture(currentTex);
+        currentMat.apply();
+
+        //Draw child primitives
         for (let i = 0; i < this.primitives.length; ++i) {
             this.graph.primitives[this.primitives[i]].display();
         }
 
+        //Draw child components
         for (let i = 0; i < this.children.length; ++i) {
-            this.graph.components[this.children[i]].display();
+            this.graph.components[this.children[i]].display(compMat, compTex);
         }
 
         this.graph.scene.popMatrix();
-
     }
-
 }
