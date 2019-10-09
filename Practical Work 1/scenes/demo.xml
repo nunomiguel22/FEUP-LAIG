@@ -55,8 +55,7 @@
     <components>
         <component id="testCyl">
             <transformation>
-                <translate x="2" y="0" z="1" />
-                <scale x="1" y="1" z="1" />
+                <transformationref id="demoTransform" />
             </transformation>
             <materials>
                 <material id="demoMaterial" />

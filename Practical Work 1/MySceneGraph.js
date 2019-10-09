@@ -845,9 +845,14 @@ class MySceneGraph {
             // Transformations
             let transformation = grandChildren[transformationIndex];
             var transfMatrix = mat4.create();
+            mat4.identity(transfMatrix);
 
             for (let i = 0; i < transformation.children.length; i++) {
                 switch (transformation.children[i].nodeName) {
+                    case 'transformationref': {
+                        transfMatrix = this.transformations[this.reader.getString(transformation.children[i], "id")];
+                        break;
+                    }
                     case 'translate': {
                         var coordinates = this.parseCoordinates3D(transformation.children[i], "translate transformation for Grandchild " + transformation.children[i]);
                         if (!Array.isArray(coordinates))
@@ -888,7 +893,7 @@ class MySceneGraph {
                         }
                         break;
                     }
-                    default: mat4.identity(transfMatrix); break;
+                    default: break;
                 }
             }
 
