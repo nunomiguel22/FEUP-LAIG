@@ -3,7 +3,7 @@ var DEGREE_TO_RAD = Math.PI / 180;
 // Order of the groups in the XML document.
 var SCENE_INDEX = 0;
 var VIEWS_INDEX = 1;
-var AMBIENT_INDEX = 2;
+var GLOBALS_INDEX = 2;
 var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
@@ -112,15 +112,15 @@ class MySceneGraph {
                 return error;
         }
 
-        // <ambient>
-        if ((index = nodeNames.indexOf("ambient")) == -1)
-            return "tag <ambient> missing";
+        // <globals>
+        if ((index = nodeNames.indexOf("globals")) == -1)
+            return "tag <globals> missing";
         else {
-            if (index != AMBIENT_INDEX)
-                this.onXMLMinorError("tag <ambient> out of order");
+            if (index != GLOBALS_INDEX)
+                this.onXMLMinorError("tag <globals> out of order");
 
-            //Parse ambient block
-            if ((error = this.parseAmbient(nodes[index])) != null)
+            //Parse globals block
+            if ((error = this.parseGlobals(nodes[index])) != null)
                 return error;
         }
 
@@ -263,7 +263,7 @@ class MySceneGraph {
      * Parses the <ambient> node.
      * @param {ambient block element} ambientsNode
      */
-    parseAmbient(ambientsNode) {
+    parseGlobals(ambientsNode) {
 
         var children = ambientsNode.children;
 
@@ -897,7 +897,6 @@ class MySceneGraph {
                 }
             }
 
-
             // Materials TO:DO: accept multiple materials
             let matinfo = grandChildren[materialsIndex].children[0];
             let matID = this.reader.getString(matinfo, 'id');
@@ -916,7 +915,6 @@ class MySceneGraph {
                     node.pushPrimitive(chid);
                 else if (childrenInfo.children[i].nodeName == 'componentref')
                     node.pushChild(chid);
-
             }
             this.components[componentID] = node;
         }
@@ -1037,17 +1035,5 @@ class MySceneGraph {
     /**
      * Displays the scene, processing each node, starting in the root node.
      */
-    displayScene() {
-        //To do: Create display loop for transversing the scene graph
-        //this.components['demoRoot'].display();
-
-
-        //To test the parsing/creation of the primitives, call the display function directly
-
-        //this.materials['demoMaterial'].apply();
-        this.components['demoRoot'].display();
-
-
-
-    }
+    displayScene() { this.components[this.idRoot].display(null, null); }
 }
