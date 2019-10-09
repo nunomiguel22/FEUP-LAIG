@@ -47,9 +47,27 @@
         <primitive id="demoRectangle">
             <rectangle x1="-0.5" y1="-1" x2="0.5" y2="1" />
         </primitive>
+        <primitive id="demoCylinder">
+            <cylinder base="0.5" top="0.5" height="1" slices="12" stacks="12" />
+        </primitive>
     </primitives>
 
     <components>
+        <component id="testCyl">
+            <transformation>
+                <translate x="0" y="0" z="1" />
+                <scale x="2" y="1" z="1" />
+            </transformation>
+            <materials>
+                <material id="demoMaterial" />
+            </materials>
+            <texture id="demoTexture"/>
+            <children>
+                <primitiveref id="demoCylinder" />
+            </children>
+        </component>
+
+
         <component id="demoRoot">
             <transformation>
                 <translate x="0" y="0" z="1" />
@@ -61,6 +79,7 @@
             <texture id="demoTexture"/>
             <children>
                 <primitiveref id="demoRectangle" />
+                <componentref id="testCyl" />
             </children>
         </component>
     </components>

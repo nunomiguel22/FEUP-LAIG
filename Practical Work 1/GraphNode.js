@@ -34,6 +34,10 @@ class GraphNode {
             this.graph.primitives[this.primitives[i]].display();
         }
 
+        for (let i = 0; i < this.children.length; ++i) {
+            this.graph.components[this.children[i]].display();
+        }
+
     }
 
 }
