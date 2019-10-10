@@ -24,9 +24,7 @@ class MySceneGraph {
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
         scene.graph = this;
-
         this.nodes = [];
-
         this.idRoot = null;                    // The id of the root element.
 
         this.axisCoords = [];
@@ -61,7 +59,6 @@ class MySceneGraph {
         }
 
         this.loadedOk = true;
-
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
     }
@@ -83,7 +80,7 @@ class MySceneGraph {
             nodeNames.push(nodes[i].nodeName);
         }
 
-        var error;
+        var error = null;
 
         // Processes each node, verifying errors.
 
@@ -195,6 +192,7 @@ class MySceneGraph {
                 return error;
         }
         this.log("all parsed");
+        return error;
     }
 
     /**
@@ -216,7 +214,6 @@ class MySceneGraph {
             this.onXMLMinorError("no axis_length defined for scene; assuming 'length = 1'");
 
         this.referenceLength = axis_length || 1;
-
         this.log("Parsed scene");
 
         return null;
@@ -546,6 +543,62 @@ class MySceneGraph {
         return null;
     }
 
+    parseTransformationMatrix(transformations) {
+        var transfMatrix = mat4.create();
+        mat4.identity(transfMatrix);
+
+        for (var j = 0; j < transformations.length; j++) {
+            switch (transformations[j].nodeName) {
+                case 'transformationref': {
+                    transfMatrix = this.transformations[this.reader.getString(transformation.children[i], "id")];
+                    break;
+                }
+                case 'translate': {
+                    var coordinates = this.parseCoordinates3D(transformations[j], "translate transformation ");
+                    if (!Array.isArray(coordinates))
+                        return null;
+
+                    transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                    break;
+                }
+                case 'scale': {
+                    var scl = this.parseCoordinates3D(transformations[j], "scale transformation ");
+                    if (!Array.isArray(scl))
+                        return null;
+                    transfMatrix = mat4.scale(transfMatrix, transfMatrix, scl);
+                    break;
+                }
+                case 'rotate': {
+                    // angle
+                    var axis = this.reader.getString(transformations[j], "axis");
+                    var angle = this.reader.getFloat(transformations[j], "angle");
+                    angle *= DEGREE_TO_RAD;
+                    if (axis == null || angle == null)
+                        return null;
+
+                    switch (axis) {
+                        case "x": {
+                            transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
+                            break;
+                        }
+                        case "y": {
+                            transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
+                            break;
+                        }
+                        case "z": {
+                            transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
+                            break;
+                        }
+                        default: break;
+                    }
+                    break;
+                }
+                default: break;
+            }
+        }
+        return transfMatrix;
+    }
+
     /**
      * Parses the <transformations> block.
      * @param {transformations block element} transformationsNode
@@ -577,53 +630,10 @@ class MySceneGraph {
             grandChildren = children[i].children;
             // Specifications for the current transformation.
 
-            var transfMatrix = mat4.create();
+            var transfMatrix = this.parseTransformationMatrix(grandChildren);
+            if (transfMatrix == null)
+                return "Incorrect transformation ID = " + transformationID + ")";
 
-            for (var j = 0; j < grandChildren.length; j++) {
-                switch (grandChildren[j].nodeName) {
-                    case 'translate': {
-                        var coordinates = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
-                        if (!Array.isArray(coordinates))
-                            return coordinates;
-
-                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
-                        break;
-                    }
-                    case 'scale': {
-                        var scl = this.parseCoordinates3D(grandChildren[j], "translate transformation for ID " + transformationID);
-                        if (!Array.isArray(scl))
-                            return scl;
-                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, scl);
-                        break;
-                    }
-                    case 'rotate': {
-                        // angle
-                        var axis = this.reader.getString(grandChildren[j], "axis");
-                        var angle = this.reader.getFloat(grandChildren[j], "angle");
-                        angle *= DEGREE_TO_RAD;
-                        if (axis == null || angle == null)
-                            return "Incomplete rotation information in transformation for ID " + transformationID;
-
-                        switch (axis) {
-                            case "x": {
-                                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
-                                break;
-                            }
-                            case "y": {
-                                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
-                                break;
-                            }
-                            case "z": {
-                                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
-                                break;
-                            }
-                            default: break;
-                        }
-                        break;
-                    }
-                    default: break;
-                }
-            }
         }
         this.transformations[transformationID] = transfMatrix;
 
@@ -813,7 +823,7 @@ class MySceneGraph {
         var nodeNames = [];
 
         // Any number of components.
-        for (var i = 0; i < children.length; i++) {
+        for (let i = 0; i < children.length; i++) {
 
             if (children[i].nodeName != "component") {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
@@ -841,61 +851,9 @@ class MySceneGraph {
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-
             // Transformations
-            let transformation = grandChildren[transformationIndex];
-            var transfMatrix = mat4.create();
-            mat4.identity(transfMatrix);
-
-            for (let i = 0; i < transformation.children.length; i++) {
-                switch (transformation.children[i].nodeName) {
-                    case 'transformationref': {
-                        transfMatrix = this.transformations[this.reader.getString(transformation.children[i], "id")];
-                        break;
-                    }
-                    case 'translate': {
-                        var coordinates = this.parseCoordinates3D(transformation.children[i], "translate transformation for Grandchild " + transformation.children[i]);
-                        if (!Array.isArray(coordinates))
-                            return coordinates;
-
-                        transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
-                        break;
-                    }
-                    case 'scale': {
-                        var scl = this.parseCoordinates3D(transformation.children[i], "translate transformation for Grandchild " + transformation.children[i]);
-                        if (!Array.isArray(scl))
-                            return scl;
-                        transfMatrix = mat4.scale(transfMatrix, transfMatrix, scl);
-                        break;
-                    }
-                    case 'rotate': {
-                        // angle
-                        var axis = this.reader.getString(transformation.children[i], "axis");
-                        var angle = this.reader.getFloat(transformation.children[i], "angle");
-                        angle *= DEGREE_TO_RAD;
-                        if (axis == null || angle == null)
-                            return "Incomplete rotation information in transformation for Grandchild " + transformation.children[i];
-
-                        switch (axis) {
-                            case "x": {
-                                transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
-                                break;
-                            }
-                            case "y": {
-                                transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
-                                break;
-                            }
-                            case "z": {
-                                transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
-                                break;
-                            }
-                            default: break;
-                        }
-                        break;
-                    }
-                    default: break;
-                }
-            }
+            let transformation = grandChildren[transformationIndex].children;
+            var transfMatrix = this.parseTransformationMatrix(transformation);
 
             // Materials TO:DO: accept multiple materials
             let matinfo = grandChildren[materialsIndex].children[0];
@@ -907,13 +865,13 @@ class MySceneGraph {
 
             // Children
             let node = new GraphNode(this, componentID, matID, texID, transfMatrix);
-            let childrenInfo = grandChildren[childrenIndex];
+            grandgrandChildren = grandChildren[childrenIndex].children;
 
-            for (let i = 0; i < childrenInfo.children.length; ++i) {
-                let chid = this.reader.getString(childrenInfo.children[i], 'id');
-                if (childrenInfo.children[i].nodeName == 'primitiveref')
+            for (let i = 0; i < grandgrandChildren.length; ++i) {
+                let chid = this.reader.getString(grandgrandChildren[i], 'id');
+                if (grandgrandChildren[i].nodeName == 'primitiveref')
                     node.pushPrimitive(chid);
-                else if (childrenInfo.children[i].nodeName == 'componentref')
+                else if (grandgrandChildren[i].nodeName == 'componentref')
                     node.pushChild(chid);
             }
             this.components[componentID] = node;
