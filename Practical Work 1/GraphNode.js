@@ -12,6 +12,7 @@ class GraphNode {
         this.material = material;
         this.texture = texture;
         this.transformation = transform;
+        this.materialIter = 0;
 
         this.children = [];
         this.primitives = [];
@@ -25,6 +26,11 @@ class GraphNode {
         this.primitives.push(primitiveID);
     }
 
+    cycleMaterial() {
+        let nextIter = this.materialIter + 1;
+        this.materialIter = (nextIter == this.material.length) ? 0 : nextIter;
+    }
+
     display(fatherMaterial, fatherTexture) {
         //Transformation
         this.graph.scene.pushMatrix();
@@ -34,7 +40,7 @@ class GraphNode {
         let compMat;
         if (this.material == 'inherit')
             compMat = fatherMaterial;
-        else compMat = this.material;
+        else compMat = this.material[this.materialIter];
 
         //Textures
         let compTex;
