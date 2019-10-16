@@ -108,7 +108,7 @@
         </primitive>
 
         <primitive id="cornerTriangle">
-            <triangle x1="0" y1="1.0" x2="0" y2="1.5" x3="0.5" y3="1.25" />
+            <triangle x1="0" y1="1.0" z1="0" x2="0" y2="1.5" z2="0" x3="0.5" y3="1.25" z3="0" />
         </primitive>
     </primitives>
 
