@@ -856,6 +856,7 @@ class MySceneGraph {
         var grandChildren = [];
         var grandgrandChildren = [];
         var nodeNames = [];
+        var componentsIds = [];
 
         // Any number of components.
         for (let i = 0; i < children.length; ++i) {
@@ -865,7 +866,7 @@ class MySceneGraph {
                 continue;
             }
 
-            // Get id of the current component.
+            // Get id of the current component.com
             var componentID = this.reader.getString(children[i], 'id');
             if (componentID == null)
                 return "no ID defined for componentID";
@@ -914,6 +915,10 @@ class MySceneGraph {
                     node.pushChild(chid);
             }
             this.components[componentID] = node;
+            
+            
+            componentsIds.push(componentID);
+
         }
     }
 
