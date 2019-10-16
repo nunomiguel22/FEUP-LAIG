@@ -120,7 +120,7 @@ class XMLscene extends CGFscene {
 
         if( this.gui.isKeyPressed("KeyM"))
         {
-            for(var i=0; i<this.MySceneGraph. )
+            for(var i=0;  )
             this.GraphNode.cycleMaterial();
 
         }
