@@ -20,13 +20,16 @@ class MyInterface extends CGFinterface {
 
         this.gui = new dat.GUI();
 
-        var setFolder = this.gui.addFolder("settings");
-        //setFolder.add(this.scene, 'selectedCamera', this.scene.cameras);
-        setFolder.open();
-
         this.initKeys();
 
         return true;
+    }
+
+    onGraphLoaded() {
+        var setFolder = this.gui.addFolder("settings");
+        setFolder.add(this.scene, 'scaleFactor', 0.1, 10.0).name('Scale');
+        setFolder.add(this.scene, 'selectedCamera', this.scene.cameraIds).onChange(this.scene.onCameraChanged.bind(this.scene)).name('Camera');
+        setFolder.open();
     }
 
     /**

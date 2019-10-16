@@ -61,6 +61,7 @@ class MySceneGraph {
         this.loadedOk = true;
         // As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
         this.scene.onGraphLoaded();
+        this.scene.interface.onGraphLoaded();
     }
 
     /**
@@ -224,35 +225,76 @@ class MySceneGraph {
      * @param {view block element} viewsNode
      */
     parseView(viewsNode) {
+
+        this.cameras = [];
+        let defaultCam = viewsNode.attributes[0].nodeValue;
+
         let children = viewsNode.children;
-        let fromVal = children[0].children[0];
-        let toVal = children[0].children[1];
+        for (let i = 0; i < children.length; ++i) {
+            let chid = this.reader.getString(children[i], 'id');
+            var cam;
+            if (children[i].nodeName == 'perspective') {
+                let fromVal = children[i].children[0];
+                let toVal = children[i].children[1];
 
-        let near = this.reader.getFloat(children[0], 'near');
-        let far = this.reader.getFloat(children[0], 'far');
-        let angle = this.reader.getFloat(children[0], 'angle');
-        angle *= DEGREE_TO_RAD;
+                let near = this.reader.getFloat(children[i], 'near');
+                let far = this.reader.getFloat(children[i], 'far');
+                let fov = this.reader.getFloat(children[i], 'angle');
+                fov *= DEGREE_TO_RAD;
 
-        let posX = this.reader.getFloat(fromVal, 'x');
-        let posY = this.reader.getFloat(fromVal, 'y');
-        let posZ = this.reader.getFloat(fromVal, 'z');
+                let posX = this.reader.getFloat(fromVal, 'x');
+                let posY = this.reader.getFloat(fromVal, 'y');
+                let posZ = this.reader.getFloat(fromVal, 'z');
+                let position = vec3.fromValues(posX, posY, posZ);
 
-        let targetX = this.reader.getFloat(toVal, 'x');
-        let targetY = this.reader.getFloat(toVal, 'y');
-        let targetZ = this.reader.getFloat(toVal, 'z');
+                let targetX = this.reader.getFloat(toVal, 'x');
+                let targetY = this.reader.getFloat(toVal, 'y');
+                let targetZ = this.reader.getFloat(toVal, 'z');
+                let target = vec3.fromValues(targetX, targetY, targetZ);
 
-        /**
-         * View esta parsed, falta finalizar criar/alterar camara
-         * A cena usa uma camara ja criada por defeito
-         * Faltam verificar se os valores estao corretos
-         * Podem existir varias camaras?
-         */
+                cam = new CGFcamera(fov, near, far, position, target);
+            } else if (children[i].nodeName == 'ortho') {
+                let fromVal = children[i].children[0];
+                let toVal = children[i].children[1];
+                let upVal = children[i].children[2];
 
-        this.scene.camera.setPosition(vec3.fromValues(posX, posY, posZ));
-        this.scene.camera.setTarget(vec3.fromValues(targetX, targetY, targetZ));
+                let near = this.reader.getFloat(children[i], 'near');
+                let far = this.reader.getFloat(children[i], 'far');
+                let left = this.reader.getFloat(children[i], 'left');
+                let right = this.reader.getFloat(children[i], 'right');
+                let top = this.reader.getFloat(children[i], 'top');
+                let bottom = this.reader.getFloat(children[i], 'bottom');
 
-        this.onXMLMinorError("To do: Parse views and create cameras.");
+                let posX = this.reader.getFloat(fromVal, 'x');
+                let posY = this.reader.getFloat(fromVal, 'y');
+                let posZ = this.reader.getFloat(fromVal, 'z');
+                let position = vec3.fromValues(posX, posY, posZ);
 
+                let targetX = this.reader.getFloat(toVal, 'x');
+                let targetY = this.reader.getFloat(toVal, 'y');
+                let targetZ = this.reader.getFloat(toVal, 'z');
+                let target = vec3.fromValues(targetX, targetY, targetZ);
+
+                let upX = this.reader.getFloat(upVal, 'x');
+                let upY = this.reader.getFloat(upVal, 'y');
+                let upZ = this.reader.getFloat(upVal, 'z');
+                let up = vec3.fromValues(upX, upY, upZ);
+
+                cam = new CGFcameraOrtho(left, right, bottom, top, near, far, position, target, up);
+            }
+
+            this.scene.cameraIds.push(chid);
+            this.cameras[chid] = cam;
+            if (chid == defaultCam) {
+                this.scene.selectedCamera = defaultCam;
+                this.scene.onCameraChanged();
+            }
+        }
+        if (this.cameras[defaultCam] == null) {
+            this.onXMLMinorError("Default Camera not found, using first camera element");
+            this.scene.selectedCamera = this.scene.cameraIds[0];
+            this.scene.onCameraChanged();
+        }
         return null;
     }
 
