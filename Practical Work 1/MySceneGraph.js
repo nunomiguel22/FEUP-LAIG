@@ -755,6 +755,10 @@ class MySceneGraph {
                     if (!(y1 != null && !isNaN(y1)))
                         return "unable to parse y1 of the primitive coordinates for ID = " + primitiveId;
 
+                    let z1 = this.reader.getFloat(grandChildren[0], 'z1');
+                    if (!(z1 != null && !isNaN(z1)))
+                        return "unable to parse z1 of the primitive coordinates for ID = " + primitiveId;
+
                     let x2 = this.reader.getFloat(grandChildren[0], 'x2');
                     if (!(x2 != null && !isNaN(x2)))
                         return "unable to parse x2 of the primitive coordinates for ID = " + primitiveId;
@@ -762,6 +766,10 @@ class MySceneGraph {
                     let y2 = this.reader.getFloat(grandChildren[0], 'y2');
                     if (!(y2 != null && !isNaN(y2)))
                         return "unable to parse y2 of the primitive coordinates for ID = " + primitiveId;
+
+                    let z2 = this.reader.getFloat(grandChildren[0], 'z2');
+                    if (!(z2 != null && !isNaN(z2)))
+                        return "unable to parse z2 of the primitive coordinates for ID = " + primitiveId;
 
                     let x3 = this.reader.getFloat(grandChildren[0], 'x3');
                     if (!(x3 != null && !isNaN(x3)))
@@ -771,7 +779,11 @@ class MySceneGraph {
                     if (!(y3 != null && !isNaN(y3)))
                         return "unable to parse y3 of the primitive coordinates for ID = " + primitiveId;
 
-                    prim = new MyTriangle(this.scene, x1, y1, x2, y2, x3, y3);
+                    let z3 = this.reader.getFloat(grandChildren[0], 'z3');
+                    if (!(z3 != null && !isNaN(z3)))
+                        return "unable to parse z3 of the primitive coordinates for ID = " + primitiveId;
+
+                    prim = new MyTriangle(this.scene, x1, y1, z1, x2, y2, z2, x3, y3, z3);
                     break;
                 }
                 case 'sphere': {
