@@ -118,13 +118,10 @@ class XMLscene extends CGFscene {
     display() {
         // ---- BEGIN Background, camera and axis setup
 
-        /*   if( this.gui.isKeyPressed("KeyM"))
-          {
-              for(var i=0;  )
-              this.GraphNode.cycleMaterial();
-  
-          } */
-
+        if (this.gui.isKeyPressed("KeyM")) {
+            for (let key in this.graph.components)
+                this.graph.components[key].cycleMaterial();
+        }
 
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);

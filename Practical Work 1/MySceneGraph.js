@@ -869,7 +869,6 @@ class MySceneGraph {
         var grandChildren = [];
         var grandgrandChildren = [];
         var nodeNames = [];
-        var componentsIds = [];
 
         // Any number of components.
         for (let i = 0; i < children.length; ++i) {
@@ -930,10 +929,6 @@ class MySceneGraph {
                     node.pushChild(chid);
             }
             this.components[componentID] = node;
-
-
-            componentsIds.push(componentID);
-
         }
     }
 
