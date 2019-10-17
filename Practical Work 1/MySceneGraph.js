@@ -230,6 +230,9 @@ class MySceneGraph {
         let defaultCam = viewsNode.attributes[0].nodeValue;
 
         let children = viewsNode.children;
+        if (!children.length)
+            return "No views found, at least one view is required";
+
         for (let i = 0; i < children.length; ++i) {
             let chid = this.reader.getString(children[i], 'id');
             var cam;
@@ -529,6 +532,9 @@ class MySceneGraph {
         let grandChildren = [];
         let nodeNames = [];
 
+        if (!children.length)
+            return "No material blocks detected, there must be at least one material block";
+
         // Any number of materials.
         for (let i = 0; i < children.length; i++) {
 
@@ -664,6 +670,8 @@ class MySceneGraph {
 
         var grandChildren = [];
 
+        if (!children.length)
+            return "No transformation blocks detected, there must be at least one transformation block";
         // Any number of transformations.
         for (var i = 0; i < children.length; i++) {
 
@@ -705,6 +713,9 @@ class MySceneGraph {
         this.primitives = [];
 
         var grandChildren = [];
+
+        if (!children.length)
+            return "No primitive blocks, there much be at least one primitive block";
 
         // Any number of primitives.
         for (var i = 0; i < children.length; i++) {
@@ -910,27 +921,44 @@ class MySceneGraph {
             let childrenIndex = nodeNames.indexOf("children");
 
             // Transformations
+            if (transformationIndex == -1)
+                return "No transformation block for component " + componentID;
+
             let transformation = grandChildren[transformationIndex].children;
             let transfMatrix = this.parseTransformationMatrix(transformation);
 
-            // Materials TO:DO: accept multiple materials
+            // Materials
+            if (materialsIndex == -1)
+                return "There must be at least one material per component (conflict: ID = " + componentID + ")";
             let chmaterials = [];
             grandgrandChildren = grandChildren[materialsIndex].children;
             for (let i = 0; i < grandgrandChildren.length; ++i) {
                 let matinfo = grandChildren[materialsIndex].children[i];
                 chmaterials.push(this.reader.getString(matinfo, 'id'));
             }
+            if (!chmaterials.length)
+                return "There must be at least one material per component (conflict: ID = " + componentID + ")";
 
             // Texture
+            if (textureIndex == -1)
+                return "There must be at least one texture per component (conflict: ID = " + componentID + ")";
+
             let texinfo = grandChildren[textureIndex];
             let texID = this.reader.getString(texinfo, 'id');
             let length_s = this.reader.getString(texinfo, 'length_s');
+            if (!(length_s != null && !isNaN(length_s) && length_s >= 0 && length_s <= 1))
+                return "unable to parse S length of texture " + texID;
             let length_t = this.reader.getString(texinfo, 'length_t');
+            if (!(length_t != null && !isNaN(length_t) && length_t >= 0 && length_t <= 1))
+                return "unable to parse T length of texture " + texID;
 
             // Children
             let node = new GraphNode(this, componentID, chmaterials,
                 texID, length_s, length_t, transfMatrix);
             grandgrandChildren = grandChildren[childrenIndex].children;
+
+            if (!grandgrandChildren.length)
+                return "No childrens for component " + componentID;
 
             for (let i = 0; i < grandgrandChildren.length; ++i) {
                 let chid = this.reader.getString(grandgrandChildren[i], 'id');

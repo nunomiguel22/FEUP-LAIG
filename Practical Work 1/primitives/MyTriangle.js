@@ -2,6 +2,15 @@
  * MyTriangle
  * @constructor
  * @param scene - Reference to MyScene object
+ * @param x1 - X Coordinate for vertice 1
+ * @param y1 - Y Coordinate for vertice 1
+ * @param z1 - Z Coordinate for vertice 1
+ * @param x2 - X Coordinate for vertice 2
+ * @param y2 - Y Coordinate for vertice 2
+ * @param z2 - Z Coordinate for vertice 2
+ * @param x3 - X Coordinate for vertice 3
+ * @param y3 - Y Coordinate for vertice 3
+ * @param z3 - Z Coordinate for vertice 3
  */
 class MyTriangle extends CGFobject {
 	constructor(scene, x1, y1, z1, x2, y2, z2, x3, y3, z3) {
@@ -15,9 +24,10 @@ class MyTriangle extends CGFobject {
 		this.z1 = z1;
 		this.z2 = z2;
 		this.z3 = z3;
-		this.initBuffers();
 
+		this.initBuffers();
 	}
+
 	initBuffers() {
 		this.baseTexCoords = [];
 
@@ -39,22 +49,41 @@ class MyTriangle extends CGFobject {
 		//Normals
 		this.normals = [];
 
-		for (var i = 0; i < 3; i++)
-			this.normals.push(0, 0, 1);
+		let v1 = vec3.fromValues(this.x2 - this.x1, this.y2 - this.y1, this.z2 - this.z1);
+		let v2 = vec3.fromValues(this.x3 - this.x1, this.y3 - this.y1, this.z3 - this.z1);
+		let normal = vec3.create();
+		vec3.cross(normal, v1, v2);
 
-		for (var i = 0; i < 3; i++)
-			this.normals.push(0, 0, -1);
+		for (let i = 0; i < 3; ++i) {
+			this.normals.push(normal[0]);
+			this.normals.push(normal[1]);
+			this.normals.push(normal[2]);
+		}
+		for (let i = 0; i < 3; ++i) {
+			this.normals.push(-normal[0]);
+			this.normals.push(-normal[1]);
+			this.normals.push(-normal[2]);
+		}
 
-		//Texture coordinates
-		this.texCoords = [
-			0, 1,
-			0, 0,
-			1, 0,
-			0, 1,
-			0, 0,
-			1, 0
-		];
+		//Textures
+		let dist_a = Math.sqrt(Math.pow(this.x2 - this.x3, 2) + Math.pow(this.y2 - this.y3, 2) + Math.pow(this.z2 - this.z3, 2));
+		let dist_b = Math.sqrt(Math.pow(this.x1 - this.x3, 2) + Math.pow(this.y1 - this.y3, 2) + Math.pow(this.z1 - this.z3, 2));
+		let dist_c = Math.sqrt(Math.pow(this.x1 - this.x2, 2) + Math.pow(this.y1 - this.y2, 2) + Math.pow(this.z1 - this.z2, 2));
+
+		let cosBeta = (Math.pow(dist_a, 2) - Math.pow(dist_b, 2) + Math.pow(dist_c, 2)) / (2 * dist_a * dist_c);
+		let sinBeta = Math.sqrt(1 - Math.pow(cosBeta, 2));
+		let dist_d = dist_a * sinBeta;
+
+		let max = Math.max.apply(Math, [dist_c, dist_a, dist_b, dist_d]);
+
+		dist_a /= max;
+		dist_b /= max;
+		dist_c /= max;
+		dist_d /= max;
+
+		this.texCoords = [dist_c - dist_a * cosBeta, 1 - dist_d, dist_c, 1, 0, 1];
 		this.baseTexCoords = [...this.texCoords]
+
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	}
