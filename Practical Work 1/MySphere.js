@@ -15,6 +15,7 @@ class MySphere extends CGFobject {
         this.indices = [];
         this.normals = [];
         this.texCoords = [];
+        this.baseTexCoords = [];
 
         let sliceStep = 2 * Math.PI / this.slices;
         let ringStep = Math.PI / this.rings;
@@ -53,16 +54,38 @@ class MySphere extends CGFobject {
                 this.texCoords.push(j * 1 / this.slices, i * 1 / this.rings);
             }
         }
+        this.baseTexCoords = [...this.texCoords]
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
-    /**
-     * @method updateTexCoords
-     * Updates the list of texture coordinates of the quad
-     * @param {Array} coords - Array of texture coordinates
-     */
+	/**
+	 * @method updateTexCoords
+	 * Updates the list of texture coordinates
+	 * @param {Array} coords - Array of texture coordinates
+	 */
     updateTexCoords(coords) {
         this.texCoords = [...coords];
+        this.updateTexCoordsGLBuffers();
+    }
+	/**
+	 * @method amplifyTexCoords
+	 * Amplify the list of texture coordinates by an S and T factor
+	 * @param length_s - S amplification factor
+	 * @param length_t - T amplification factor
+	 */
+    amplifyTexCoords(length_s, length_t) {
+        for (let i = 0; i < this.texCoords.length; ++i) {
+            this.texCoords[i] = this.texCoords[i] / length_s;
+            this.texCoords[++i] = this.texCoords[i] / length_t;
+        }
+        this.updateTexCoordsGLBuffers();
+    }
+	/**
+	 * @method updateTexCoords
+	 * Resets the list of texture coordinates to the initial values
+	 */
+    resetTexCoords() {
+        this.texCoords = [...this.baseTexCoords]
         this.updateTexCoordsGLBuffers();
     }
 }

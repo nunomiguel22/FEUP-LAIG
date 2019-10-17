@@ -577,6 +577,7 @@ class MySceneGraph {
             mat.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
             mat.setSpecular(specular[0], specular[1], specular[2], specular[3]);
             mat.setShininess(shininess);
+            mat.setTextureWrap('REPEAT', 'REPEAT');
 
             this.materials[materialID] = mat;
         }
@@ -890,9 +891,8 @@ class MySceneGraph {
             grandChildren = children[i].children;
 
             nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
+            for (var j = 0; j < grandChildren.length; j++)
                 nodeNames.push(grandChildren[j].nodeName);
-            }
 
             let transformationIndex = nodeNames.indexOf("transformation");
             let materialsIndex = nodeNames.indexOf("materials");
@@ -914,9 +914,12 @@ class MySceneGraph {
             // Texture
             let texinfo = grandChildren[textureIndex];
             let texID = this.reader.getString(texinfo, 'id');
+            let length_s = this.reader.getString(texinfo, 'length_s');
+            let length_t = this.reader.getString(texinfo, 'length_t');
 
             // Children
-            let node = new GraphNode(this, componentID, chmaterials, texID, transfMatrix);
+            let node = new GraphNode(this, componentID, chmaterials,
+                texID, length_s, length_t, transfMatrix);
             grandgrandChildren = grandChildren[childrenIndex].children;
 
             for (let i = 0; i < grandgrandChildren.length; ++i) {
@@ -927,8 +930,8 @@ class MySceneGraph {
                     node.pushChild(chid);
             }
             this.components[componentID] = node;
-            
-            
+
+
             componentsIds.push(componentID);
 
         }

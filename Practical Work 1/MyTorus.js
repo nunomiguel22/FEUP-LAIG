@@ -22,6 +22,7 @@ class MyTorus extends CGFobject {
         this.normals = [];
         this.indices = [];
         this.texCoords = [];
+        this.baseTexCoords = [];
 
         for (let i = 0; i <= this.slices; ++i) {
             let slice = i / this.slices;
@@ -55,16 +56,38 @@ class MyTorus extends CGFobject {
                 ++vert1; ++vert2;
             }
         }
+        this.baseTexCoords = [...this.texCoords]
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
 	/**
 	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the quad
+	 * Updates the list of texture coordinates
 	 * @param {Array} coords - Array of texture coordinates
 	 */
     updateTexCoords(coords) {
         this.texCoords = [...coords];
+        this.updateTexCoordsGLBuffers();
+    }
+	/**
+	 * @method amplifyTexCoords
+	 * Amplify the list of texture coordinates by an S and T factor
+	 * @param length_s - S amplification factor
+	 * @param length_t - T amplification factor
+	 */
+    amplifyTexCoords(length_s, length_t) {
+        for (let i = 0; i < this.texCoords.length; ++i) {
+            this.texCoords[i] = this.texCoords[i] / length_s;
+            this.texCoords[++i] = this.texCoords[i] / length_t;
+        }
+        this.updateTexCoordsGLBuffers();
+    }
+	/**
+	 * @method updateTexCoords
+	 * Resets the list of texture coordinates to the initial values
+	 */
+    resetTexCoords() {
+        this.texCoords = [...this.baseTexCoords]
         this.updateTexCoordsGLBuffers();
     }
 }
