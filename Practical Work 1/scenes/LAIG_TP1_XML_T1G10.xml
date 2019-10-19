@@ -123,7 +123,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="square" />
             </children>
@@ -136,7 +136,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="square" />
             </children>
@@ -150,7 +150,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="square" />
             </children>
@@ -164,7 +164,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="square" />
             </children>
@@ -178,7 +178,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="square" />
             </children>
@@ -192,7 +192,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="square" />
             </children>
@@ -204,7 +204,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <componentref id="cubeFace1" />
                 <componentref id="cubeFace2" />
@@ -223,7 +223,7 @@
             <materials>
                 <material id="postMat" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <componentref id="cube" />
             </children>
@@ -237,7 +237,7 @@
             <materials>
                 <material id="postMat" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <componentref id="cube" />
             </children>
@@ -253,7 +253,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <primitiveref id="cornerCylinder" />
             </children>
@@ -266,7 +266,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <primitiveref id="cornerTriangle" />
             </children>
@@ -280,7 +280,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <componentref id="cornerTube" />
                 <componentref id="cornerFlag" />
@@ -295,7 +295,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <componentref id="cornerTube" />
                 <componentref id="cornerFlag" />
@@ -310,7 +310,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <componentref id="cornerTube" />
                 <componentref id="cornerFlag" />
@@ -325,7 +325,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <componentref id="cornerTube" />
                 <componentref id="cornerFlag" />
@@ -445,7 +445,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="advertRectangle" />
             </children>
@@ -458,7 +458,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="advertRectangle" />
             </children>
@@ -471,7 +471,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="advertRectangle" />
             </children>
@@ -484,7 +484,7 @@
             <materials>
                 <material id="inherit" />
             </materials>
-            <texture id="inherit" length_s="1" length_t="1" />
+            <texture id="inherit" />
             <children>
                 <primitiveref id="advertRectangle" />
             </children>
@@ -534,7 +534,7 @@
             <materials>
                 <material id="defaultMat" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <componentref id="footballPitch" />
                 <componentref id="southGoal" />
@@ -591,7 +591,7 @@
             <materials>
                 <material id="defaultMat" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <componentref id="trackLayer" />
                 <componentref id="cementLayer" />
@@ -606,7 +606,7 @@
             <materials>
                 <material id="defaultMat" />
             </materials>
-            <texture id="none" length_s="1" length_t="1" />
+            <texture id="none" />
             <children>
                 <componentref id="outerLayerComposite" />
                 <componentref id="footballFieldComposite" />

@@ -945,12 +945,16 @@ class MySceneGraph {
 
             let texinfo = grandChildren[textureIndex];
             let texID = this.reader.getString(texinfo, 'id');
-            let length_s = this.reader.getString(texinfo, 'length_s');
-            if (!(length_s != null && !isNaN(length_s) && length_s >= 0 && length_s <= 1))
-                return "unable to parse S length of texture " + texID;
-            let length_t = this.reader.getString(texinfo, 'length_t');
-            if (!(length_t != null && !isNaN(length_t) && length_t >= 0 && length_t <= 1))
-                return "unable to parse T length of texture " + texID;
+            let length_s = 1;
+            let length_t = 1;
+            if (texID != 'inherit' && texID != 'none') {
+                length_s = this.reader.getString(texinfo, 'length_s');
+                if (!(length_s != null && !isNaN(length_s) && length_s > 0 && length_s <= 1))
+                    return "unable to parse S length of texture " + texID;
+                length_t = this.reader.getString(texinfo, 'length_t');
+                if (!(length_t != null && !isNaN(length_t) && length_t > 0 && length_t <= 1))
+                    return "unable to parse T length of texture " + texID;
+            }
 
             // Children
             let node = new GraphNode(this, componentID, chmaterials,
