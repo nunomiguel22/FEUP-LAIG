@@ -259,7 +259,9 @@ class MySceneGraph {
             } else if (children[i].nodeName == 'ortho') {
                 let fromVal = children[i].children[0];
                 let toVal = children[i].children[1];
-                let upVal = children[i].children[2];
+                let upVal = null;
+                if (children[i].length > 2)
+                    upVal = children[i].children[2];
 
                 let near = this.reader.getFloat(children[i], 'near');
                 let far = this.reader.getFloat(children[i], 'far');
@@ -278,9 +280,14 @@ class MySceneGraph {
                 let targetZ = this.reader.getFloat(toVal, 'z');
                 let target = vec3.fromValues(targetX, targetY, targetZ);
 
-                let upX = this.reader.getFloat(upVal, 'x');
-                let upY = this.reader.getFloat(upVal, 'y');
-                let upZ = this.reader.getFloat(upVal, 'z');
+                let upX = 0;
+                let upY = 1;
+                let upZ = 0;
+                if (upVal != null) {
+                    upX = this.reader.getFloat(upVal, 'x');
+                    upY = this.reader.getFloat(upVal, 'y');
+                    upZ = this.reader.getFloat(upVal, 'z');
+                }
                 let up = vec3.fromValues(upX, upY, upZ);
 
                 cam = new CGFcameraOrtho(left, right, bottom, top, near, far, position, target, up);
@@ -610,7 +617,7 @@ class MySceneGraph {
         for (var j = 0; j < transformations.length; j++) {
             switch (transformations[j].nodeName) {
                 case 'transformationref': {
-                    transfMatrix = this.transformations[this.reader.getString(transformation.children[i], "id")];
+                    transfMatrix = this.transformations[this.reader.getString(transformations[j], "id")];
                     break;
                 }
                 case 'translate': {
@@ -949,10 +956,10 @@ class MySceneGraph {
             let length_t = 1;
             if (texID != 'inherit' && texID != 'none') {
                 length_s = this.reader.getString(texinfo, 'length_s');
-                if (!(length_s != null && !isNaN(length_s) && length_s > 0 && length_s <= 1))
+                if (!(length_s != null && !isNaN(length_s) && length_s > 0))
                     return "unable to parse S length of texture " + texID;
                 length_t = this.reader.getString(texinfo, 'length_t');
-                if (!(length_t != null && !isNaN(length_t) && length_t > 0 && length_t <= 1))
+                if (!(length_t != null && !isNaN(length_t) && length_t > 0))
                     return "unable to parse T length of texture " + texID;
             }
 

@@ -41,11 +41,12 @@ class GraphNode {
     display(fatherMaterial, fatherTexture, fatherLength_s, fatherLength_t) {
         //Transformation
         this.graph.scene.pushMatrix();
-        this.graph.scene.multMatrix(this.transformation);
+        if (this.transformation != null)
+            this.graph.scene.multMatrix(this.transformation);
 
         //Materials
         let compMat;
-        if (this.material == 'inherit')
+        if (this.material[this.materialIter] == 'inherit')
             compMat = fatherMaterial;
         else compMat = this.material[this.materialIter];
 
@@ -75,11 +76,13 @@ class GraphNode {
         }
 
         //Apply material/texture
+
         let currentMat = this.graph.materials[compMat];
         let currentTex = this.graph.textures[compTex];
-        currentMat.setTexture(currentTex);
-        currentMat.apply();
-
+        if (currentMat != null) {
+            currentMat.setTexture(currentTex);
+            currentMat.apply();
+        }
         //Draw child primitives
         for (let i = 0; i < this.primitives.length; ++i) {
             this.graph.primitives[this.primitives[i]].amplifyTexCoords(compLength_s, compLength_t);
