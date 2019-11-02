@@ -13,5 +13,5 @@ class Animation {
 
     }
 
-    apply() { this.graph.scene.multMatrix(this.currentTransform); }
+    apply() { }
 }

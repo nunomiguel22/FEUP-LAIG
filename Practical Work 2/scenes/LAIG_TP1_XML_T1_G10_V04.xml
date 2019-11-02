@@ -71,6 +71,31 @@
         </transformation>
     </transformations>
 
+    <animations>
+        <animation id="ballAnimation">
+            <keyframe instant="1.0">
+                <translate x="5.0" y="0.2" z="0.0" />
+                <rotate angle_x="0.0" angle_y="360.0" angle_z="0.0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="2.0">
+                <translate x="10.0" y="0.4" z="0.0" />
+                <rotate angle_x="0.0" angle_y="720.0" angle_z="0.0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="3.0">
+                <translate x="15.0" y="0.3" z="0.0" />
+                <rotate angle_x="0.0" angle_y="1080.0" angle_z="0.0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+            <keyframe instant="3.2">
+                <translate x="16.0" y="0.2" z="0.0" />
+                <rotate angle_x="0.0" angle_y="1152.0" angle_z="0.0" />
+                <scale x="1.0" y="1.0" z="1.0" />
+            </keyframe>
+        </animation>
+    </animations>
+
     <primitives>        
         <primitive id="square">
             <rectangle x1="-1" y1="-1" x2="1" y2="1" />
@@ -427,6 +452,7 @@
             <transformation>
                 <translate x="0" y="0.2" z="0" /> 
             </transformation>
+            <animationref id="ballAnimation" />
             <materials>
                 <material id="inherit" />
             </materials>

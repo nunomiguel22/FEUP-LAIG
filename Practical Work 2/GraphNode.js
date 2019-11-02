@@ -20,6 +20,7 @@ class GraphNode {
         this.length_t = length_t;
         this.transformation = transform;
         this.materialIter = 0;
+        this.animationID = null;
 
         this.children = [];
         this.primitives = [];
@@ -33,6 +34,10 @@ class GraphNode {
         this.primitives.push(primitiveID);
     }
 
+    addAnimation(animationID) {
+        this.animationID = animationID;
+    }
+
     cycleMaterial() {
         let nextIter = this.materialIter + 1;
         this.materialIter = (nextIter == this.material.length) ? 0 : nextIter;
@@ -43,6 +48,9 @@ class GraphNode {
         this.graph.scene.pushMatrix();
         if (this.transformation != null)
             this.graph.scene.multMatrix(this.transformation);
+        if (this.animationID != null)
+            this.graph.animations[this.animationID].apply();
+
 
         //Materials
         let compMat;
@@ -76,7 +84,6 @@ class GraphNode {
         }
 
         //Apply material/texture
-
         let currentMat = this.graph.materials[compMat];
         let currentTex = this.graph.textures[compTex];
         if (currentMat != null) {

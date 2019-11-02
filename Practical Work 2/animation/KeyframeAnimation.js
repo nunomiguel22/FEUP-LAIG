@@ -46,6 +46,8 @@ class KeyframeAnimation extends Animation {
         this.update(t);
     }
 
+    apply() { this.graph.scene.multMatrix(this.currentTransform); }
+
     reset() {
         this.activeKeyframe = 0;
         this.previousKeyframe = 0;
