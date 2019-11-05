@@ -481,11 +481,9 @@ class MySceneGraph {
             let textureID = this.reader.getString(children[i], 'id');
             if (textureID == null)
                 return "no ID defined for texture";
-
             // Checks for repeated IDs.
             if (this.textures[textureID] != null)
                 return "ID must be unique for each texture (conflict: ID = " + textureID + ")";
-
             //Get texture filepath
             let textureFile = this.reader.getString(children[i], 'file');
             if (textureFile == null)
@@ -509,7 +507,6 @@ class MySceneGraph {
         this.materials = [];
 
         let grandChildren = [];
-        let nodeNames = [];
 
         if (!children.length)
             return "No material blocks detected, there must be at least one material block";
@@ -521,16 +518,13 @@ class MySceneGraph {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
-
             // Get id of the current material.
             let materialID = this.reader.getString(children[i], 'id');
             if (materialID == null)
                 return "no ID defined for material";
-
             // Checks for repeated IDs.
             if (this.materials[materialID] != null)
                 return "ID must be unique for each material (conflict: ID = " + materialID + ")";
-
             // Get material shininess
             let shininess = this.reader.getFloat(children[i], 'shininess');
             if (shininess == null)
@@ -571,14 +565,11 @@ class MySceneGraph {
                 }
             }
 
-            if (emission == null || ambient == null || diffuse == null || specular == null)
-                return "missing material component (conflict: ID = " + materialID + ")";
-
             var mat = new CGFappearance(this.scene);
-            mat.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
+            mat.setAmbient(...ambient);
             mat.setEmission(...emission);
-            mat.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
-            mat.setSpecular(specular[0], specular[1], specular[2], specular[3]);
+            mat.setDiffuse(...diffuse);
+            mat.setSpecular(...specular);
             mat.setShininess(shininess);
             mat.setTextureWrap('REPEAT', 'REPEAT');
 
