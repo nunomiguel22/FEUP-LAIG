@@ -8,8 +8,8 @@ var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
-var PRIMITIVES_INDEX = 7;
-var ANIMATIONS_INDEX = 8;
+var ANIMATIONS_INDEX = 7;
+var PRIMITIVES_INDEX = 8;
 var COMPONENTS_INDEX = 9;
 
 /**
@@ -78,9 +78,8 @@ class MySceneGraph {
         // Reads the names of the nodes to an auxiliary buffer.
         var nodeNames = [];
 
-        for (var i = 0; i < nodes.length; i++) {
+        for (var i = 0; i < nodes.length; i++)
             nodeNames.push(nodes[i].nodeName);
-        }
 
         var error = null;
 
@@ -93,43 +92,36 @@ class MySceneGraph {
         else {
             if (index != SCENE_INDEX)
                 this.onXMLMinorError("tag <scene> out of order " + index);
-
             //Parse scene block
             if ((error = this.parseScene(nodes[index])) != null)
                 return error;
         }
-
         // <views>
         if ((index = nodeNames.indexOf("views")) == -1)
             return "tag <views> missing";
         else {
             if (index != VIEWS_INDEX)
                 this.onXMLMinorError("tag <views> out of order");
-
             //Parse views block
             if ((error = this.parseView(nodes[index])) != null)
                 return error;
         }
-
         // <globals>
         if ((index = nodeNames.indexOf("globals")) == -1)
             return "tag <globals> missing";
         else {
             if (index != GLOBALS_INDEX)
                 this.onXMLMinorError("tag <globals> out of order");
-
             //Parse globals block
             if ((error = this.parseGlobals(nodes[index])) != null)
                 return error;
         }
-
         // <lights>
         if ((index = nodeNames.indexOf("lights")) == -1)
             return "tag <lights> missing";
         else {
             if (index != LIGHTS_INDEX)
                 this.onXMLMinorError("tag <lights> out of order");
-
             //Parse lights block
             if ((error = this.parseLights(nodes[index])) != null)
                 return error;
@@ -140,67 +132,56 @@ class MySceneGraph {
         else {
             if (index != TEXTURES_INDEX)
                 this.onXMLMinorError("tag <textures> out of order");
-
             //Parse textures block
             if ((error = this.parseTextures(nodes[index])) != null)
                 return error;
         }
-
         // <materials>
         if ((index = nodeNames.indexOf("materials")) == -1)
             return "tag <materials> missing";
         else {
             if (index != MATERIALS_INDEX)
                 this.onXMLMinorError("tag <materials> out of order");
-
             //Parse materials block
             if ((error = this.parseMaterials(nodes[index])) != null)
                 return error;
         }
-
         // <transformations>
         if ((index = nodeNames.indexOf("transformations")) == -1)
             return "tag <transformations> missing";
         else {
             if (index != TRANSFORMATIONS_INDEX)
                 this.onXMLMinorError("tag <transformations> out of order");
-
             //Parse transformations block
             if ((error = this.parseTransformations(nodes[index])) != null)
                 return error;
         }
-
         // <animations>
         if ((index = nodeNames.indexOf("animations")) == -1)
             return "tag <animations> missing";
         else {
             if (index != ANIMATIONS_INDEX)
                 this.onXMLMinorError("tag <animations> out of order");
-
             //Parse animations block
             if ((error = this.parseAnimations(nodes[index])) != null)
                 return error;
         }
-
         // <primitives>
         if ((index = nodeNames.indexOf("primitives")) == -1)
             return "tag <primitives> missing";
         else {
             if (index != PRIMITIVES_INDEX)
                 this.onXMLMinorError("tag <primitives> out of order");
-
             //Parse primitives block
             if ((error = this.parsePrimitives(nodes[index])) != null)
                 return error;
         }
-
         // <components>
         if ((index = nodeNames.indexOf("components")) == -1)
             return "tag <components> missing";
         else {
             if (index != COMPONENTS_INDEX)
                 this.onXMLMinorError("tag <components> out of order");
-
             //Parse components block
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
@@ -248,71 +229,68 @@ class MySceneGraph {
 
         for (let i = 0; i < children.length; ++i) {
             let chid = this.reader.getString(children[i], 'id');
+            if (children[i].children.length < 2)
+                return "Not enough properties in view " + chid;
+
             var cam;
+            // Position
+            let pos = this.parseCoordinates3D(children[i].children[0], "position in view " + chid);
+            if (!Array.isArray(pos))
+                return pos;
+            let position = vec3.fromValues(...pos);
+            //Target
+            let tar = this.parseCoordinates3D(children[i].children[1], "target in view " + chid);
+            if (!Array.isArray(tar))
+                return tar;
+            let target = vec3.fromValues(...tar);
+
+            let near = this.reader.getFloat(children[i], 'near');
+            if (!(near != null && !isNaN(near)))
+                return "unable to parse near value for view " + chid;
+            let far = this.reader.getFloat(children[i], 'far');
+            if (!(far != null && !isNaN(far)))
+                return "unable to parse far value for view " + chid;
+            // Perspective views
             if (children[i].nodeName == 'perspective') {
-                let fromVal = children[i].children[0];
-                let toVal = children[i].children[1];
-
-                let near = this.reader.getFloat(children[i], 'near');
-                let far = this.reader.getFloat(children[i], 'far');
                 let fov = this.reader.getFloat(children[i], 'angle');
+                if (!(fov != null && !isNaN(fov)))
+                    return "unable to parse fov value for view " + chid;
                 fov *= DEGREE_TO_RAD;
-
-                let posX = this.reader.getFloat(fromVal, 'x');
-                let posY = this.reader.getFloat(fromVal, 'y');
-                let posZ = this.reader.getFloat(fromVal, 'z');
-                let position = vec3.fromValues(posX, posY, posZ);
-
-                let targetX = this.reader.getFloat(toVal, 'x');
-                let targetY = this.reader.getFloat(toVal, 'y');
-                let targetZ = this.reader.getFloat(toVal, 'z');
-                let target = vec3.fromValues(targetX, targetY, targetZ);
-
                 cam = new CGFcamera(fov, near, far, position, target);
+                // Ortho views
             } else if (children[i].nodeName == 'ortho') {
-                let fromVal = children[i].children[0];
-                let toVal = children[i].children[1];
-                let upVal = null;
-                if (children[i].length > 2)
-                    upVal = children[i].children[2];
-
-                let near = this.reader.getFloat(children[i], 'near');
-                let far = this.reader.getFloat(children[i], 'far');
                 let left = this.reader.getFloat(children[i], 'left');
+                if (!(left != null && !isNaN(left)))
+                    return "unable to parse left value for view " + chid;
                 let right = this.reader.getFloat(children[i], 'right');
+                if (!(right != null && !isNaN(right)))
+                    return "unable to parse right value for view " + chid;
                 let top = this.reader.getFloat(children[i], 'top');
+                if (!(top != null && !isNaN(top)))
+                    return "unable to parse top value for view " + chid;
                 let bottom = this.reader.getFloat(children[i], 'bottom');
-
-                let posX = this.reader.getFloat(fromVal, 'x');
-                let posY = this.reader.getFloat(fromVal, 'y');
-                let posZ = this.reader.getFloat(fromVal, 'z');
-                let position = vec3.fromValues(posX, posY, posZ);
-
-                let targetX = this.reader.getFloat(toVal, 'x');
-                let targetY = this.reader.getFloat(toVal, 'y');
-                let targetZ = this.reader.getFloat(toVal, 'z');
-                let target = vec3.fromValues(targetX, targetY, targetZ);
-
-                let upX = 0;
-                let upY = 1;
-                let upZ = 0;
-                if (upVal != null) {
-                    upX = this.reader.getFloat(upVal, 'x');
-                    upY = this.reader.getFloat(upVal, 'y');
-                    upZ = this.reader.getFloat(upVal, 'z');
+                if (!(bottom != null && !isNaN(bottom)))
+                    return "unable to parse bottom value for view " + chid;
+                // Upwards direction, default: 0,1,0
+                let upVal = [0, 1, 0];
+                if (children[i].length > 2 && children[i].children[2] == 'up') {
+                    upVal = this.parseCoordinates3D(children[i].children[2], "up in view " + chid);
+                    if (!Array.isArray(upVal))
+                        upVal = [0, 1, 0];
                 }
-                let up = vec3.fromValues(upX, upY, upZ);
-
+                let up = vec3.fromValues(...upVal);
                 cam = new CGFcameraOrtho(left, right, bottom, top, near, far, position, target, up);
             }
-
+            // Add camera ID to ID array for interface purposes
             this.scene.cameraIds.push(chid);
+            // Add camera to camera array and activate if default camera
             this.cameras[chid] = cam;
             if (chid == defaultCam) {
                 this.scene.selectedCamera = defaultCam;
                 this.scene.onCameraChanged();
             }
         }
+        //If no default camera found use the first camera read
         if (this.cameras[defaultCam] == null) {
             this.onXMLMinorError("Default Camera not found, using first camera element");
             this.scene.selectedCamera = this.scene.cameraIds[0];
@@ -522,25 +500,6 @@ class MySceneGraph {
     }
 
     /**
-     * Parse RGB
-     * 
-     */
-
-    parseRGB(RBGString) {
-
-        let red = this.reader.getFloat(RBGString, 'r');
-        if (red == null) return null;
-        let green = this.reader.getFloat(RBGString, 'g');
-        if (green == null) return null;
-        let blue = this.reader.getFloat(RBGString, 'b');
-        if (blue == null) return null;
-        let alpha = this.reader.getFloat(RBGString, 'a');
-        if (alpha == null) return null;
-
-        return vec4.fromValues(red, green, blue, alpha);
-    }
-
-    /**
      * Parses the <materials> node.
      * @param {materials block element} materialsNode
      */
@@ -586,20 +545,27 @@ class MySceneGraph {
             for (let j = 0; j < grandChildren.length; ++j) {
                 switch (grandChildren[j].nodeName) {
                     case "emission": {
-                        emission = this.parseRGB(grandChildren[j]);
+                        emission = this.parseColor(grandChildren[j], "emission value (conflict: ID = " + materialID + ")");
+                        if (!Array.isArray(emission))
+                            return emission;
                         break;
                     }
                     case "ambient": {
-                        ambient = this.parseRGB(grandChildren[j]);
+                        ambient = this.parseColor(grandChildren[j], "ambient value (conflict: ID = " + materialID + ")");
+                        if (!Array.isArray(ambient))
+                            return ambient;
                         break;
                     }
                     case "diffuse": {
-                        diffuse = this.parseRGB(grandChildren[j]);
+                        diffuse = this.parseColor(grandChildren[j], "diffuse value (conflict: ID = " + materialID + ")");
+                        if (!Array.isArray(diffuse))
+                            return diffuse;
                         break;
                     }
                     case "specular": {
-                        specular = this.parseRGB(grandChildren[j]);
-                        break;
+                        specular = this.parseColor(grandChildren[j], "specular value (conflict: ID = " + materialID + ")");
+                        if (!Array.isArray(specular))
+                            return specular;
                     }
                     default: break;
                 }
@@ -610,7 +576,7 @@ class MySceneGraph {
 
             var mat = new CGFappearance(this.scene);
             mat.setAmbient(ambient[0], ambient[1], ambient[2], ambient[3]);
-            mat.setEmission(emission[0], emission[1], emission[2], emission[3]);
+            mat.setEmission(...emission);
             mat.setDiffuse(diffuse[0], diffuse[1], diffuse[2], diffuse[3]);
             mat.setSpecular(specular[0], specular[1], specular[2], specular[3]);
             mat.setShininess(shininess);
@@ -627,50 +593,41 @@ class MySceneGraph {
         var transfMatrix = mat4.create();
         mat4.identity(transfMatrix);
 
-        for (var j = 0; j < transformations.length; j++) {
+        for (let j = 0; j < transformations.length; j++) {
             switch (transformations[j].nodeName) {
                 case 'transformationref': {
                     transfMatrix = this.transformations[this.reader.getString(transformations[j], "id")];
+                    if (transfMatrix == null)
+                        return null;
                     break;
                 }
                 case 'translate': {
-                    var coordinates = this.parseCoordinates3D(transformations[j], "translate transformation ");
+                    let coordinates = this.parseCoordinates3D(transformations[j], "translate transformation ");
                     if (!Array.isArray(coordinates))
                         return null;
-
-                    transfMatrix = mat4.translate(transfMatrix, transfMatrix, coordinates);
+                    mat4.translate(transfMatrix, transfMatrix, coordinates);
                     break;
                 }
                 case 'scale': {
-                    var scl = this.parseCoordinates3D(transformations[j], "scale transformation ");
+                    let scl = this.parseCoordinates3D(transformations[j], "scale transformation ");
                     if (!Array.isArray(scl))
                         return null;
-                    transfMatrix = mat4.scale(transfMatrix, transfMatrix, scl);
+                    mat4.scale(transfMatrix, transfMatrix, scl);
                     break;
                 }
                 case 'rotate': {
-                    // angle
-                    var axis = this.reader.getString(transformations[j], "axis");
-                    var angle = this.reader.getFloat(transformations[j], "angle");
-                    angle *= DEGREE_TO_RAD;
-                    if (axis == null || angle == null)
+                    let axis = this.reader.getString(transformations[j], "axis");
+                    if (axis == null)
                         return null;
 
-                    switch (axis) {
-                        case "x": {
-                            transfMatrix = mat4.rotateX(transfMatrix, transfMatrix, angle);
-                            break;
-                        }
-                        case "y": {
-                            transfMatrix = mat4.rotateY(transfMatrix, transfMatrix, angle);
-                            break;
-                        }
-                        case "z": {
-                            transfMatrix = mat4.rotateZ(transfMatrix, transfMatrix, angle);
-                            break;
-                        }
-                        default: break;
-                    }
+                    let angle = this.reader.getFloat(transformations[j], "angle");
+                    if (!(angle != null && !isNaN(angle)))
+                        return null;
+                    angle *= DEGREE_TO_RAD;
+
+                    let axisVec = vec3.fromValues(axis == 'x', axis == 'y', axis == 'z');
+                    mat4.rotate(transfMatrix, transfMatrix, angle, axisVec);
+
                     break;
                 }
                 default: break;
@@ -743,12 +700,10 @@ class MySceneGraph {
                 this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
                 continue;
             }
-
             // Get id of the current animation.
             var animationID = this.reader.getString(children[i], 'id');
             if (animationID == null)
                 return "no ID defined for animation";
-
             // Checks for repeated IDs.
             if (this.animations[animationID] != null)
                 return "ID must be unique for each animation (conflict: ID = " + animationID + ")";
@@ -759,14 +714,32 @@ class MySceneGraph {
 
             for (let j = 0; j < grandChildren.length; ++j) {
                 let instant = this.reader.getFloat(grandChildren[j], 'instant');
+                if (!(instant != null && !isNaN(instant)))
+                    return "unable to parse instant (conflict: ID = " + animationID + ")";
+
                 let transl = this.parseCoordinates3D(grandChildren[j].children[0], 'keyframe translate');
+                if (!Array.isArray(transl))
+                    return "unable to parse translation values (conflict: ID = " + animationID + ")";
+
                 let angx = this.reader.getFloat(grandChildren[j].children[1], 'angle_x');
+                if (!(angx != null && !isNaN(angx)))
+                    return "unable to parse x angle (conflict: ID = " + animationID + ")";
                 angx *= DEGREE_TO_RAD;
+
                 let angy = this.reader.getFloat(grandChildren[j].children[1], 'angle_y');
+                if (!(angy != null && !isNaN(angy)))
+                    return "unable to parse y angle (conflict: ID = " + animationID + ")";
                 angy *= DEGREE_TO_RAD;
+
                 let angz = this.reader.getFloat(grandChildren[j].children[1], 'angle_z');
+                if (!(angz != null && !isNaN(angz)))
+                    return "unable to parse z angle (conflict: ID = " + animationID + ")";
                 angz *= DEGREE_TO_RAD;
+
                 let scl = this.parseCoordinates3D(grandChildren[j].children[2], 'keyframe scale');
+                if (!Array.isArray(scl))
+                    return "unable to parse scale values (conflict: ID = " + animationID + ")";
+
                 var kf = new Keyframe(instant, vec3.fromValues(...transl), vec3.fromValues(angx, angy, angz),
                     vec3.fromValues(...scl));
                 this.animations[animationID].addKeyframe(kf);
@@ -1053,8 +1026,6 @@ class MySceneGraph {
             this.components[componentID] = node;
         }
     }
-
-
     /**
      * Parse the coordinates from a node with ID = id
      * @param {block element} node
@@ -1082,7 +1053,6 @@ class MySceneGraph {
 
         return position;
     }
-
     /**
      * Parse the coordinates from a node with ID = id
      * @param {block element} node
@@ -1106,7 +1076,6 @@ class MySceneGraph {
 
         return position;
     }
-
     /**
      * Parse the attenuation components from a node
      * @param {block element} node
@@ -1142,31 +1111,26 @@ class MySceneGraph {
     parseColor(node, messageError) {
         var color = [];
 
-        // R
-        var r = this.reader.getFloat(node, 'r');
-        if (!(r != null && !isNaN(r) && r >= 0 && r <= 1))
+        let red = this.reader.getFloat(node, 'r');
+        if (!(red != null && !isNaN(red) && red >= 0 && red <= 1))
             return "unable to parse R component of the " + messageError;
 
-        // G
-        var g = this.reader.getFloat(node, 'g');
-        if (!(g != null && !isNaN(g) && g >= 0 && g <= 1))
+        let green = this.reader.getFloat(node, 'g');
+        if (!(green != null && !isNaN(green) && green >= 0 && green <= 1))
             return "unable to parse G component of the " + messageError;
 
-        // B
-        var b = this.reader.getFloat(node, 'b');
-        if (!(b != null && !isNaN(b) && b >= 0 && b <= 1))
+        let blue = this.reader.getFloat(node, 'b');
+        if (!(blue != null && !isNaN(blue) && blue >= 0 && blue <= 1))
             return "unable to parse B component of the " + messageError;
 
-        // A
-        var a = this.reader.getFloat(node, 'a');
-        if (!(a != null && !isNaN(a) && a >= 0 && a <= 1))
+        let alpha = this.reader.getFloat(node, 'a');
+        if (!(alpha != null && !isNaN(alpha) && alpha >= 0 && alpha <= 1))
             return "unable to parse A component of the " + messageError;
 
-        color.push(...[r, g, b, a]);
+        color.push(...[red, green, blue, alpha]);
 
         return color;
     }
-
     /*
      * Callback to be executed on any read error, showing an error on the console.
      * @param {string} message
@@ -1175,22 +1139,16 @@ class MySceneGraph {
         console.error("XML Loading Error: " + message);
         this.loadedOk = false;
     }
-
     /**
      * Callback to be executed on any minor error, showing a warning on the console.
      * @param {string} message
      */
-    onXMLMinorError(message) {
-        console.warn("Warning: " + message);
-    }
-
+    onXMLMinorError(message) { console.warn("Warning: " + message); }
     /**
      * Callback to be executed on any message.
      * @param {string} message
      */
-    log(message) {
-        console.log("   " + message);
-    }
+    log(message) { console.log("   " + message); }
 
     /**
      * Displays the scene, processing each node, starting in the root node.
