@@ -838,7 +838,10 @@ class MySceneGraph {
                     if (!Array.isArray(values))
                         return values;
 
-                    //  TODO
+                    /** 
+                     * TODO: Criar um cilindro usandos NURBS usandos os mesmos parametros
+                     * xml: <cylinder2 base=“ff” top=“ff” height=“ff” slices=“ii” stacks=“ii” />
+                     */
                     break;
                 }
                 case 'plane': {
@@ -848,7 +851,11 @@ class MySceneGraph {
                     if (!Array.isArray(values))
                         return values;
 
-                    // TODO
+                    /** 
+                    * TODO: Criar um plano usando NURBS com tamanho 1x1, nos eixos XZ, centrado na origem, face visivel para Y+. 
+                    * O plano deve ter subdivisoes equivalentes a npartsU*npartsV
+                    * <plane npartsU=“ii” npartsV=“ii” />
+                    */
                     break;
                 }
                 case 'patch': {
@@ -872,7 +879,18 @@ class MySceneGraph {
                             controlPoints.push(cpvalues);
                         }
                     }
-                    // TODO
+                    /** 
+                     *  TODO: patch, gerada por NURBS
+                     *  npartsU: divisão em partes no domínio U
+                     *  npartsV: divisão em partes no domínio V
+                     *  o número de pontos de controlo dentro da primitiva patch é npointsU * npointsV
+                     *  xml:
+                     * 
+                     *  <patch npointsU=“ii” npointsV=“ii” npartsU=“ii” npartsV=“ii” >
+                     *      <controlpoint xx=“ff” yy=“ff” zz=“ff” />
+                     *      ...
+                     * </patch>
+                     */
                     break;
                 }
                 default: return "Unknown primitive type must be rectangle, triangle, cylinder, sphere or torus"
