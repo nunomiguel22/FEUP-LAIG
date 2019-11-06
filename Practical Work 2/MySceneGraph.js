@@ -409,7 +409,12 @@ class MySceneGraph {
                             break;
                         }
                         case "attenuation": {
-                            aux = this.parseAttenuation(grandChildren[attributeIndex], "attenuation for ID" + lightId);
+                            aux = [];
+                            let values = this.parseMultipleFloats(['constant', 'linear', 'quadratic'], grandChildren[attributeIndex], " illumination for ID" + lightId);
+
+                            if (!Array.isArray(values))
+                                return values;
+                            aux.push(values['constant'], values['linear'], values['quadratic']);
                             break;
                         }
                         default: break;
@@ -759,7 +764,6 @@ class MySceneGraph {
                 continue;
             }
             grandChildren = children[i].children;
-
             // Validate the primitive type
             if (grandChildren.length != 1) {
                 this.onXMLMinorError("There must be exactly 1 primitive type (rectangle, triangle, cylinder, sphere or torus) (conflict: ID = " + primitiveId + ")");
@@ -796,6 +800,9 @@ class MySceneGraph {
                 case 'sphere': {
                     let values = this.parseMultipleFloats(['radius', 'slices', 'stacks'],
                         grandChildren[0], primitiveId);
+
+                    if (!Array.isArray(values))
+                        return values;
 
                     prim = new MySphere(this.scene, values['radius'], values['slices'], values['stacks']);
                     break;
@@ -1026,21 +1033,6 @@ class MySceneGraph {
         return position;
     }
     /**
-     * Parse the attenuation components from a node
-     * @param {block element} node
-     * @param {message to be displayed in case of error} messageError
-     */
-    parseAttenuation(node, messageError) {
-        var attenuation = [];
-        let values = this.parseMultipleFloats(['constant', 'linear', 'quadratic'], node, messageError);
-
-        if (!Array.isArray(values))
-            return values;
-
-        attenuation.push(values['constant'], values['linear'], values['quadratic']);
-        return attenuation;
-    }
-    /**
      * Parse the color components from a node
      * @param {block element} node
      * @param {message to be displayed in case of error} messageError
@@ -1055,7 +1047,7 @@ class MySceneGraph {
         color.push(values['r'], values['g'], values['b'], values['a']);
         return color;
     }
-    /*
+    /**
      * Callback to be executed on any read error, showing an error on the console.
      * @param {string} message
      */
