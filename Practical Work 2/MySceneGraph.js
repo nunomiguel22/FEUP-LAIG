@@ -905,6 +905,16 @@ class MySceneGraph {
                     prim = new MyCylinder(this.scene, base, top, height, slices, stacks);
                     break;
                 }
+                case 'cylinder2': {
+
+                    //  TODO
+                    break;
+                }
+                case 'plane': {
+                    // TODO
+                    break;
+                }
+
                 default: return "Unknown primitive type must be rectangle, triangle, cylinder, sphere or torus"
             }
             this.primitives[primitiveId] = prim;
