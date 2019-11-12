@@ -34,6 +34,8 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
+        this.SecurityCamera = new MySecurityCamera(this);
+        this.SecurityCameraTex = new CGFtextureRTT(this, this.gl.canvas.width, this.gl.canvas.height);
         this.setUpdatePeriod(20);
     }
 
@@ -123,9 +125,8 @@ class XMLscene extends CGFscene {
     /**
      * Displays the scene.
      */
-    display() {
+    render() {
         // ---- BEGIN Background, camera and axis setup
-
         if (this.gui.isKeyPressed("KeyM")) {
             for (let key in this.graph.components)
                 this.graph.components[key].cycleMaterial();
@@ -162,5 +163,15 @@ class XMLscene extends CGFscene {
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+    }
+    display() {
+        this.gl.enable(this.gl.DEPTH_TEST);
+        this.SecurityCameraTex.attachToFrameBuffer();
+        this.render();
+        this.SecurityCameraTex.detachFromFrameBuffer();
+        this.render();
+        this.gl.disable(this.gl.DEPTH_TEST);
+        this.SecurityCamera.display();
+
     }
 }
