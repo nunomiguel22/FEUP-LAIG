@@ -46,6 +46,7 @@ class XMLscene extends CGFscene {
         this.cameraIds = [];
         this.selectedCamera = null;
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
+        this.securityView = new CGFcamera(0.6, 0.1, 500, vec3.fromValues(0, 20, 20), vec3.fromValues(0, 0, 0));
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -125,12 +126,14 @@ class XMLscene extends CGFscene {
     /**
      * Displays the scene.
      */
-    render() {
+    render(camera) {
         // ---- BEGIN Background, camera and axis setup
         if (this.gui.isKeyPressed("KeyM")) {
             for (let key in this.graph.components)
                 this.graph.components[key].cycleMaterial();
         }
+        if (camera != null)
+            this.camera = camera;
 
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -142,12 +145,10 @@ class XMLscene extends CGFscene {
 
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
-
         this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
         this.pushMatrix();
         this.axis.display();
-
         for (var i = 0; i < this.lights.length; i++) {
             this.lights[i].setVisible(true);
             this.lights[i].enable();
@@ -167,8 +168,9 @@ class XMLscene extends CGFscene {
     display() {
         this.gl.enable(this.gl.DEPTH_TEST);
         this.SecurityCameraTex.attachToFrameBuffer();
-        this.render();
+        this.render(this.securityView);
         this.SecurityCameraTex.detachFromFrameBuffer();
+        this.onCameraChanged();
         this.render();
         this.gl.disable(this.gl.DEPTH_TEST);
         this.SecurityCamera.display();
