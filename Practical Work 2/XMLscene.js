@@ -112,7 +112,8 @@ class XMLscene extends CGFscene {
     }
 
     onCameraChanged() {
-        if (this.graph.cameras[this.selectedCamera] != null) {
+
+        if (this.graph.cameras != null && this.graph.cameras[this.selectedCamera] != null) {
             this.camera = this.graph.cameras[this.selectedCamera];
             this.interface.setActiveCamera(this.camera);
         }
@@ -121,6 +122,9 @@ class XMLscene extends CGFscene {
     update(t) {
         for (let key in this.graph.animations)
             this.graph.animations[key].update(t);
+
+        if (this.SecurityCamera != null)
+            this.SecurityCamera.update(t);
     }
 
     /**
@@ -166,7 +170,7 @@ class XMLscene extends CGFscene {
         // ---- END Background, camera and axis setup
     }
     display() {
-        this.gl.enable(this.gl.DEPTH_TEST);
+
         this.SecurityCameraTex.attachToFrameBuffer();
         this.render(this.securityView);
         this.SecurityCameraTex.detachFromFrameBuffer();
@@ -174,6 +178,6 @@ class XMLscene extends CGFscene {
         this.render();
         this.gl.disable(this.gl.DEPTH_TEST);
         this.SecurityCamera.display();
-
+        this.gl.enable(this.gl.DEPTH_TEST);
     }
 }
