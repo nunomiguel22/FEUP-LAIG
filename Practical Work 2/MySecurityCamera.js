@@ -19,9 +19,7 @@ class MySecurityCamera extends CGFobject {
         if (this.timeStarted == 0)
             this.timeStarted = t;
 
-        this.time = (((t - this.timeStarted) / 1000)).toFixed(1);
-
-
+        this.time = (((t - this.timeStarted) / 1000)).toFixed(2);
     }
 
     display() {

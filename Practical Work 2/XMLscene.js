@@ -46,7 +46,8 @@ class XMLscene extends CGFscene {
         this.cameraIds = [];
         this.selectedCamera = null;
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
-        this.securityView = new CGFcamera(0.6, 0.1, 500, vec3.fromValues(0, 20, 20), vec3.fromValues(0, 0, 0));
+        this.securityView = new CGFcamera(0.6, 0.1, 500, vec3.fromValues(0, 24, 23), vec3.fromValues(0, 0, 0));
+        this.mainCamera = this.camera;
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -102,6 +103,8 @@ class XMLscene extends CGFscene {
     onGraphLoaded() {
         this.axis = new CGFaxis(this, this.graph.referenceLength);
 
+        this.mainCamera = this.graph.cameras[this.selectedCamera];
+
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
@@ -114,8 +117,8 @@ class XMLscene extends CGFscene {
     onCameraChanged() {
 
         if (this.graph.cameras != null && this.graph.cameras[this.selectedCamera] != null) {
-            this.camera = this.graph.cameras[this.selectedCamera];
-            this.interface.setActiveCamera(this.camera);
+            this.mainCamera = this.graph.cameras[this.selectedCamera];
+            this.interface.setActiveCamera(this.mainCamera);
         }
     }
 
@@ -175,7 +178,7 @@ class XMLscene extends CGFscene {
         this.render(this.securityView);
         this.SecurityCameraTex.detachFromFrameBuffer();
         this.onCameraChanged();
-        this.render();
+        this.render(this.mainCamera);
         this.gl.disable(this.gl.DEPTH_TEST);
         this.SecurityCamera.display();
         this.gl.enable(this.gl.DEPTH_TEST);

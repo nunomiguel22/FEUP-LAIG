@@ -8,18 +8,20 @@ uniform float time;
 
 void main() {
 
-	float lineThickness = 0.005; 
-	float lineSpeed = 2.0; //revolutions a second
-	float line = mod(time, lineSpeed) / lineSpeed;
+	vec4 color = texture2D(uSampler, vTextureCoord);
 
+	//	Vignette;
+	float lengthFromCenter = length(vTextureCoord - 0.5);
+	float colorStrength = length(vec2(0.5)) - lengthFromCenter * 1.0 / length(vec2(0.5)) ;
 
-    vec2 fromCenter = vTextureCoord - vec2(0.5, 0.5);
-	float colorStrengh = 1.0 - length(fromCenter);
+	vec4 vignetteColor = vec4(mix(color.rgb, color.rgb * colorStrength, 0.8), 1.0);
 
-	
-	if (line >= vTextureCoord.y - lineThickness && line <= vTextureCoord.y + lineThickness)
-		gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-	
-	else
-	gl_FragColor = texture2D(uSampler, vTextureCoord) * vec4(colorStrengh , colorStrengh, colorStrengh, 1.0) ;
+	//	Cmamera lines effect
+	float lineSpeed = 20.0; //Seconds for a line to make a full revolution
+	float linethickness =  0.05; // Thickness of the line effect
+	float timeFactor = time / lineSpeed;
+	vec4 textureMod = vec4(mod(timeFactor - vTextureCoord.y, linethickness));
+
+	//	Final Color
+	gl_FragColor = vignetteColor + textureMod;
 }
