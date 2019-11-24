@@ -1,6 +1,7 @@
 /**
 * MySecurityCamera
 * @constructor
+* @param scene - Reference to MyScene object
 */
 class MySecurityCamera extends CGFobject {
     constructor(scene) {

@@ -1,6 +1,10 @@
 /**
 * MySphere
 * @constructor
+* @param scene - Reference to MyScene object
+* @param radius - Radius of the sphere
+* @param slices - Number of slice subdivisions
+* @param rings - Number of ring subdivisions
 */
 class MySphere extends CGFobject {
     constructor(scene, radius, slices, rings) {

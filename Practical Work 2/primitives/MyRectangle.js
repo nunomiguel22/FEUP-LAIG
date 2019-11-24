@@ -2,8 +2,11 @@
  * MyRectangle
  * @constructor
  * @param scene - Reference to MyScene object
- * @param x - Scale of rectangle in X
- * @param y - Scale of rectangle in Y
+ * @param id - Rectangle name
+ * @param x1 - First point in the X axis
+ * @param x2 - Second point in the X axis
+ * @param y1 - First point in the Y axis
+ * @param y2 - Second point in the Y axis
  */
 class MyRectangle extends CGFobject {
 	constructor(scene, id, x1, x2, y1, y2) {
@@ -12,6 +15,7 @@ class MyRectangle extends CGFobject {
 		this.x2 = x2;
 		this.y1 = y1;
 		this.y2 = y2;
+		this.id = id;
 
 		this.initBuffers();
 	}
