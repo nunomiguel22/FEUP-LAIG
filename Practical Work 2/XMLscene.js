@@ -45,6 +45,7 @@ class XMLscene extends CGFscene {
     initCameras() {
         this.cameraIds = [];
         this.selectedCamera = null;
+        this.selectedSecurityCamera = null;
         this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(15, 15, 15), vec3.fromValues(0, 0, 0));
         this.securityView = new CGFcamera(0.6, 0.1, 500, vec3.fromValues(0, 24, 23), vec3.fromValues(0, 0, 0));
         this.mainCamera = this.camera;
@@ -105,6 +106,8 @@ class XMLscene extends CGFscene {
 
         this.mainCamera = this.graph.cameras[this.selectedCamera];
 
+        this.securityView = this.graph.cameras[this.selectedSecurityCamera];
+
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
@@ -120,6 +123,12 @@ class XMLscene extends CGFscene {
             this.mainCamera = this.graph.cameras[this.selectedCamera];
             this.interface.setActiveCamera(this.mainCamera);
         }
+    }
+
+    onSecCameraChanged() {
+
+        if (this.graph.cameras != null && this.graph.cameras[this.selectedSecurityCamera] != null)
+            this.securityView = this.graph.cameras[this.selectedSecurityCamera];
     }
 
     update(t) {

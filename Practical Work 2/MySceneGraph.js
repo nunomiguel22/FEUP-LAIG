@@ -287,6 +287,7 @@ class MySceneGraph {
             this.cameras[chid] = cam;
             if (chid == defaultCam) {
                 this.scene.selectedCamera = defaultCam;
+                this.scene.selectedSecurityCamera = defaultCam;
                 this.scene.onCameraChanged();
             }
         }

@@ -26,9 +26,13 @@ class MyInterface extends CGFinterface {
     }
 
     onGraphLoaded() {
-        var setFolder = this.gui.addFolder("settings");
-        setFolder.add(this.scene, 'scaleFactor', 0.1, 10.0).name('Scale');
-        setFolder.add(this.scene, 'selectedCamera', this.scene.cameraIds).onChange(this.scene.onCameraChanged.bind(this.scene)).name('Camera');
+
+        this.gui.add(this.scene, 'scaleFactor', 0.1, 10.0).name('Scale');
+
+        var setFolder = this.gui.addFolder("Cameras");
+
+        setFolder.add(this.scene, 'selectedCamera', this.scene.cameraIds).onChange(this.scene.onCameraChanged.bind(this.scene)).name('Main');
+        setFolder.add(this.scene, 'selectedSecurityCamera', this.scene.cameraIds).onChange(this.scene.onSecCameraChanged.bind(this.scene)).name('Security');
         setFolder.open();
     }
 
