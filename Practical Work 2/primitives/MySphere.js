@@ -21,8 +21,8 @@ class MySphere extends CGFobject {
         this.texCoords = [];
         this.baseTexCoords = [];
 
-        let sliceStep = 2 * Math.PI / this.slices;
-        let ringStep = Math.PI / this.rings;
+        const sliceStep = 2 * Math.PI / this.slices;
+        const ringStep = Math.PI / this.rings;
 
         for (let i = 0; i <= this.rings; ++i) {
             let ringAngle = Math.PI / 2 - ringStep * i;

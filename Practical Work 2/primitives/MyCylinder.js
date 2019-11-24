@@ -28,9 +28,9 @@ class MyCylinder extends CGFobject {
         this.texCoords = [];
         this.baseTexCoords = [];
 
-        var alphaAng = 2 * Math.PI / this.slices; //diferença do angulo entre cada slice
-        var radius = (this.top - this.base) / this.stacks; // diferença entre o tamanho de cada slice
-        var stackheight = this.height / this.stacks; //Height para cada stack
+        const alphaAng = 2 * Math.PI / this.slices; //diferença do angulo entre cada slice
+        const radius = (this.top - this.base) / this.stacks; // diferença entre o tamanho de cada slice
+        const stackheight = this.height / this.stacks; //Height para cada stack
 
         // para cada triangulo
         for (var i = 0; i <= this.slices; ++i) {
