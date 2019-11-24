@@ -38,6 +38,7 @@
         <texture id="cement" file="scenes/images/cement.jpg" />
         <texture id="track" file="scenes/images/track.jpg" />
         <texture id="advert" file="scenes/images/feuplogo.jpg" />
+        <texture id="nurbsTex" file="scenes/images/texture.jpg" />
     </textures>
 
     <materials>
@@ -143,10 +144,61 @@
         <primitive id="cornerTriangle">
             <triangle x1="0" y1="1.0" z1="0" x2="0" y2="1.5" z2="0" x3="0.5" y3="1.25" z3="0" />
         </primitive>
+
+        <primitive id="nurbsPlane">
+            <plane npartsU="4" npartsV="4" />
+        </primitive>
+
+        <primitive id="nurbsPatch">
+            <patch npointsU="3" npointsV="4" npartsU="20" npartsV="20">
+                <controlpoint xx="-1.5" yy="-1.5" zz="0.0" />
+                <controlpoint xx="-2.0" yy="-2.0" zz="2.0" />
+                <controlpoint xx="-2.0" yy="2.0" zz="2.0" />
+                <controlpoint xx="-1.5" yy="1.5" zz="0.0" />
+                <controlpoint xx="0.0" yy="0.0" zz="3.0" />
+                <controlpoint xx="0.0" yy="-2.0" zz="3.0" />
+                <controlpoint xx="0.0" yy="2.0" zz="3.0" />
+                <controlpoint xx="0.0" yy="0.0" zz="3.0" />
+                <controlpoint xx="1.5" yy="-1.5" zz="0.0" />
+                <controlpoint xx="2.0" yy="-2.0" zz="2.0" />
+                <controlpoint xx="2.0" yy="2.0" zz="2.0" />
+                <controlpoint xx="1.5" yy="1.5" zz="0.0" />
+            </patch>
+        </primitive>
+
+
     </primitives>
 
      <components>
-      <!-- bench -->
+        <!-- nurbs -->
+        <component id="nurbsPlaneComp">
+            <transformation>
+                <translate x="-10" y="5" z="-15" />
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="postMat" />
+            </materials>
+            <texture id="nurbsTex" length_s="1" length_t="1" />>
+            <children>
+                <primitiveref id="nurbsPlane" />
+            </children>
+        </component>
+
+        <component id="nurbsPatchComp">
+            <transformation>
+                <translate x="0" y="5" z="-20" />
+            </transformation>
+            <materials>
+                <material id="postMat" />
+            </materials>
+            <texture id="nurbsTex" length_s="1" length_t="1" />>
+            <children>
+                <primitiveref id="nurbsPatch" />
+            </children>
+        </component>
+
+        <!-- bench -->
         <component id="cubeFace1">
             <transformation>
                 <translate x="0" y="0" z="-1" />
@@ -643,6 +695,8 @@
             <children>
                 <componentref id="outerLayerComposite" />
                 <componentref id="footballFieldComposite" />
+                <componentref id="nurbsPlaneComp" />
+                <componentref id="nurbsPatchComp" />
             </children>
         </component>
         <!-- End Scene -->

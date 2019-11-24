@@ -191,5 +191,7 @@ class XMLscene extends CGFscene {
         this.gl.disable(this.gl.DEPTH_TEST);
         this.SecurityCamera.display();
         this.gl.enable(this.gl.DEPTH_TEST);
+
+
     }
 }

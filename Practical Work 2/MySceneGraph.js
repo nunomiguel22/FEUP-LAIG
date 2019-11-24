@@ -852,46 +852,44 @@ class MySceneGraph {
                     if (!Array.isArray(values))
                         return values;
 
-                    /** 
-                    * TODO: Criar um plano usando NURBS com tamanho 1x1, nos eixos XZ, centrado na origem, face visivel para Y+. 
-                    * O plano deve ter subdivisoes equivalentes a npartsU*npartsV
-                    * <plane npartsU=“ii” npartsV=“ii” />
-                    */
+                    prim = new MyPlane(this.scene, values['npartsU'], values['npartsV']);
                     break;
                 }
                 case 'patch': {
 
                     let controlPoints = [];
+                    let controlVertexes = [];
                     let values = this.parseMultipleFloats(['npointsU', 'npointsV', 'npartsU', 'npartsV'],
                         grandChildren[0], primitiveId);
 
                     if (!Array.isArray(values))
                         return values;
 
-                    for (let i = 0; i < grandChildren[0].length; ++i) {
+                    for (let i = 0; i < grandChildren[0].children.length; ++i) {
                         let controlPoint = grandChildren[0].children[i];
-                        if (controlPoint.nodeName = 'controlpoint') {
-                            let cpvalues = this.parseMultipleFloats('xx', 'yy', 'zz', controlPoint,
+                        if (controlPoint.nodeName == 'controlpoint') {
+                            let cpvalues = this.parseMultipleFloats(['xx', 'yy', 'zz'], controlPoint,
                                 controlPoint.nodeName + ' of primitive ' + primitiveId);
 
                             if (!Array.isArray(cpvalues))
                                 return cpvalues;
-
-                            controlPoints.push(cpvalues);
+                            cpvalues['ww'] = 1.0;
+                            controlPoints.push([cpvalues['xx'], cpvalues['yy'], cpvalues['zz'], cpvalues['ww']]);
                         }
                     }
-                    /** 
-                     *  TODO: patch, gerada por NURBS
-                     *  npartsU: divisão em partes no domínio U
-                     *  npartsV: divisão em partes no domínio V
-                     *  o número de pontos de controlo dentro da primitiva patch é npointsU * npointsV
-                     *  xml:
-                     * 
-                     *  <patch npointsU=“ii” npointsV=“ii” npartsU=“ii” npartsV=“ii” >
-                     *      <controlpoint xx=“ff” yy=“ff” zz=“ff” />
-                     *      ...
-                     * </patch>
-                     */
+
+                    if (controlPoints.length != values['npointsU'] * values['npointsV'])
+                        return "Not enough control points for nurbs primitive: " + primitiveId;
+
+                    for (let i = 0; i < values['npointsU']; ++i) {
+                        let uGroup = [];
+                        for (let j = 0; j < values['npointsV']; ++j)
+                            uGroup.push(controlPoints[(i * values['npointsV']) + j])
+                        controlVertexes.push(uGroup);
+                    }
+
+                    prim = new MyPatch(this.scene, values['npointsU'], values['npointsV'],
+                        values['npartsU'], values['npartsV'], controlVertexes);
                     break;
                 }
                 default: return "Unknown primitive type must be rectangle, triangle, cylinder, sphere or torus"
