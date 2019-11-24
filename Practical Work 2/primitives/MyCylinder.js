@@ -1,6 +1,12 @@
 /**
 * MyCilinder
 * @constructor
+* @param scene - Reference to XMLscene object
+* @param base - Radius of the base of the cylinder
+* @param top - Radius of the top of the cylinder
+* @param height - Height of the cylinder
+* @param slices - Number of slice subdivisions
+* @param stacks - Number of stacks subdiivions
 */
 class MyCylinder extends CGFobject {
     constructor(scene, base, top, height, slices, stacks) {

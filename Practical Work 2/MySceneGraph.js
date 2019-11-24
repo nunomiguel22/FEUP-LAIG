@@ -839,10 +839,8 @@ class MySceneGraph {
                     if (!Array.isArray(values))
                         return values;
 
-                    /** 
-                     * TODO: Criar um cilindro usandos NURBS usandos os mesmos parametros
-                     * xml: <cylinder2 base=“ff” top=“ff” height=“ff” slices=“ii” stacks=“ii” />
-                     */
+                    prim = new MyNurbsCylinder(this.scene, values['base'], values['top'], values['height'],
+                        values['slices'], values['stacks']);
                     break;
                 }
                 case 'plane': {

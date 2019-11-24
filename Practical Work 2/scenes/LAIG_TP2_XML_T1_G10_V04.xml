@@ -117,6 +117,10 @@
             <cylinder base="0.1" top="0.1" height="1" slices="12" stacks="12" />
         </primitive>
 
+        <primitive id="nurbsCylinder">
+            <cylinder2 base="1" top="1 " height="2" slices="20" stacks="20" />
+        </primitive>
+
         <primitive id="crossbarCylinder">
             <cylinder base="0.1" top="0.1" height="2" slices="12" stacks="12" />
         </primitive>
@@ -195,6 +199,21 @@
             <texture id="nurbsTex" length_s="1" length_t="1" />>
             <children>
                 <primitiveref id="nurbsPatch" />
+            </children>
+        </component>
+
+    <component id="nurbsCylinderComp">
+            <transformation>
+                <translate x="10" y="5" z="-15" />
+                <rotate axis="y" angle="90"/>
+                <rotate axis="x" angle="90"/>
+            </transformation>
+            <materials>
+                <material id="postMat" />
+            </materials>
+            <texture id="nurbsTex" length_s="1" length_t="1" />>
+            <children>
+                <primitiveref id="nurbsCylinder" />
             </children>
         </component>
 
@@ -697,6 +716,7 @@
                 <componentref id="footballFieldComposite" />
                 <componentref id="nurbsPlaneComp" />
                 <componentref id="nurbsPatchComp" />
+                <componentref id="nurbsCylinderComp" />
             </children>
         </component>
         <!-- End Scene -->
