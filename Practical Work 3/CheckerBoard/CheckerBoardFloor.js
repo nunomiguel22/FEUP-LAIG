@@ -9,7 +9,7 @@ class CheckerBoardFloor extends CGFobject {
         this.floorMaterial = new CGFappearance(scene);
         this.floorMaterial.setAmbient(0.2, 0.2, 0.2, 1.0);
         this.floorMaterial.setDiffuse(0.5, 0.5, 0.5, 1.0);
-        this.floorMaterial.setSpecular(0.3, 0.3, 0.3, 1.0);
+        this.floorMaterial.setSpecular(0.7, 0.7, 0.7, 1.0);
         this.floorMaterial.setShininess(10.0);
         this.floorMaterial.loadTexture('scenes/images/checkerFloor.jpg');
     }
