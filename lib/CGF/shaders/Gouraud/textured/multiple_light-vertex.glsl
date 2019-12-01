@@ -49,6 +49,9 @@ uniform materialProperties uBackMaterial;
 out vec4 vFinalColor;
 out vec2 vTextureCoord;
 
+uniform sampler2D uSampler;
+uniform sampler2D uSampler2;
+
 vec4 lighting(vec4 vertex, vec3 E, vec3 N) {
 
     vec4 result = vec4(0.0, 0.0, 0.0, 0.0);
@@ -115,6 +118,8 @@ void main() {
 
     // Transformed normal position
 	vec3 N = normalize(vec3(uNMatrix * vec4(aVertexNormal, 1.0)));
+    //vec3 N = texture(uSampler2, aTextureCoord).rgb;
+   //N = normalize(N *2.0 -1.0);
 
     vec3 eyeVec = -vec3(vertex.xyz);
     vec3 E = normalize(eyeVec);
