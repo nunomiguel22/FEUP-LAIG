@@ -14,4 +14,3 @@ Repository to store the output for the course Applications with Graphical Interf
 ## Collaborators
 
  * Nuno Miguel Marques (nunomiguel22@gmail.com)
- * João Paulo Nunes
