@@ -28,6 +28,8 @@ class MyInterface extends CGFinterface {
     onGraphLoaded() {
 
         this.gui.add(this.scene, 'scaleFactor', 0.1, 10.0).name('Scale');
+
+        this.gui.add(this.scene, 'selectedCamera', this.scene.cameraIds).onChange(this.scene.onCameraChanged.bind(this.scene)).name('Camera');
     }
 
     /**

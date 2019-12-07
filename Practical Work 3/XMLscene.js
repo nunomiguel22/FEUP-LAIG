@@ -28,7 +28,7 @@ class XMLscene extends CGFscene {
 
         this.enableTextures(true);
 
-        this.gl.clearDepth(100.0);
+        this.gl.clearDepth(8000.0);
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
         this.gl.depthFunc(this.gl.LEQUAL);
@@ -36,11 +36,11 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(20);
 
-        this.checkerFloor = new CheckerBoardFloor(this, 40);
-
+        //this.checkerFloor = new CheckerBoardFloor(this, 40);
         this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl", "shaders/test.frag");
         this.defaultShader = this.testShader;
-
+        this.setPickEnabled(true);
+        this.objid = 0;
     }
 
     /**
@@ -49,7 +49,10 @@ class XMLscene extends CGFscene {
     initCameras() {
         this.cameraIds = [];
 
-        this.camera = new CGFcamera(0.4, 0.1, 500, vec3.fromValues(3, 100, 100), vec3.fromValues(0, 0, 0));
+        this.selectedCamera = null;
+        this.mainCamera = this.camera;
+
+        this.camera = new CGFcamera(1.0, 0.1, 8000, vec3.fromValues(3, 400, 300), vec3.fromValues(0, 0, 0));
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -105,19 +108,26 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        this.axis = new CGFaxis(this, this.graph.referenceLength);
+        this.axis = new CGFaxis(this, 200);
 
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
+
+        this.mainCamera = this.graph.cameras[this.selectedCamera];
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 
         this.initLights();
 
         this.sceneInited = true;
-
-
     }
 
+    onCameraChanged() {
+
+        if (this.graph.cameras != null && this.graph.cameras[this.selectedCamera] != null) {
+            this.mainCamera = this.graph.cameras[this.selectedCamera];
+            this.interface.setActiveCamera(this.mainCamera);
+        }
+    }
 
     update(t) {
         for (let key in this.graph.animations)
@@ -127,10 +137,28 @@ class XMLscene extends CGFscene {
             this.SecurityCamera.update(t);
     }
 
+    logPicking() {
+        if (this.pickMode == false) {
+            if (this.pickResults != null && this.pickResults.length > 0) {
+                for (var i = 0; i < this.pickResults.length; i++) {
+                    var obj = this.pickResults[i][0];
+                    if (obj) {
+                        var customId = this.pickResults[i][1];
+                        console.log("Picked object: " + obj + ", with pick id " + customId);
+                    }
+                }
+                this.pickResults.splice(0, this.pickResults.length);
+            }
+        }
+    }
+
     /**
      * Displays the scene.
      */
     render(camera) {
+        this.logPicking();
+        this.clearPickRegistration();
+
         // ---- BEGIN Background, camera and axis setup
         if (this.gui.isKeyPressed("KeyM")) {
             for (let key in this.graph.components)
@@ -160,27 +188,20 @@ class XMLscene extends CGFscene {
             this.lights[i].enable();
         }
 
+        this.objid = 0;
         if (this.sceneInited) {
             // Draw axis
             this.setDefaultAppearance();
 
             // Displays the scene (MySceneGraph function).
-
-
             this.graph.displayScene();
         }
         this.popMatrix();
-
-        this.checkerFloor.display();
 
 
         // ---- END Background, camera and axis setup
     }
     display() {
-
-        this.render(this.camera);
-
-
-
+        this.render(this.mainCamera);
     }
 }

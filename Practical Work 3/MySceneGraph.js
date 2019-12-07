@@ -286,8 +286,18 @@ class MySceneGraph {
             // Add camera to camera array and activate if default camera
             this.cameras[chid] = cam;
 
+            if (chid == defaultCam) {
+                this.scene.selectedCamera = defaultCam;
+                this.scene.selectedSecurityCamera = defaultCam;
+                this.scene.onCameraChanged();
+            }
         }
-
+        //If no default camera found use the first camera read
+        if (this.cameras[defaultCam] == null) {
+            this.onXMLMinorError("Default Camera not found, using first camera element");
+            this.scene.selectedCamera = this.scene.cameraIds[0];
+            this.scene.onCameraChanged();
+        }
         return null;
     }
 
@@ -839,6 +849,12 @@ class MySceneGraph {
                         return values;
 
                     prim = new MyPlane(this.scene, values['npartsU'], values['npartsV']);
+                    break;
+                }
+                case 'model': {
+                    let file = this.reader.getString(grandChildren[0], 'file');
+
+                    prim = new CGFOBJModel(this.scene, file, false);
                     break;
                 }
                 case 'patch': {

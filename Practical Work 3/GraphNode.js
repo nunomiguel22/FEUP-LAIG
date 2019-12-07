@@ -44,6 +44,7 @@ class GraphNode {
     }
 
     display(fatherMaterial, fatherTexture, fatherLength_s, fatherLength_t) {
+        this.graph.scene.registerForPick(++this.graph.scene.objid, this);
         //Transformation
         this.graph.scene.pushMatrix();
         if (this.transformation != null)
