@@ -857,6 +857,12 @@ class MySceneGraph {
                     prim = new CGFOBJModel(this.scene, file, false);
                     break;
                 }
+                case 'checkerBoard': {
+
+                    prim = this.scene.checkerBoard;
+                    break;
+                }
+
                 case 'patch': {
 
                     let controlPoints = [];

@@ -36,11 +36,10 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(20);
 
-        //this.checkerFloor = new CheckerBoardFloor(this, 40);
         this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl", "shaders/test.frag");
-        this.defaultShader = this.testShader;
         this.setPickEnabled(true);
         this.objid = 0;
+        this.checkerBoard = new CheckerBoard(this);
     }
 
     /**
@@ -95,8 +94,6 @@ class XMLscene extends CGFscene {
             }
         }
     }
-
-
 
     setDefaultAppearance() {
         this.setAmbient(0.2, 0.4, 0.8, 1.0);
@@ -190,7 +187,6 @@ class XMLscene extends CGFscene {
 
         this.objid = 0;
         if (this.sceneInited) {
-            // Draw axis
             this.setDefaultAppearance();
 
             // Displays the scene (MySceneGraph function).
