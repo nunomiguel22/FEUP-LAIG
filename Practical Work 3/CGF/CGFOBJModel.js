@@ -23,8 +23,8 @@ class CGFOBJModel extends CGFobject {
 		// init with empty object, so that there are no problems while the data is being loaded
 		this.vertices = [];
 		this.normals = [];
-		this.texcoords = [];
-		this.baseTexCoords = this.texcoords;
+		this.texCoords = [];
+		this.baseTexCoords = this.texCoords;
 		this.indices = [];
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
@@ -42,7 +42,7 @@ class CGFOBJModel extends CGFobject {
  * @param {Array} coords - Array of texture coordinates
  */
 	updateTexCoords(coords) {
-		this.texcoords = [...coords];
+		this.texCoords = [...coords];
 		this.updateTexCoordsGLBuffers();
 	}
 	/**
@@ -52,9 +52,9 @@ class CGFOBJModel extends CGFobject {
 	 * @param length_t - T amplification factor
 	 */
 	amplifyTexCoords(length_s, length_t) {
-		for (let i = 0; i < this.texcoords.length; ++i) {
-			this.texcoords[i] /= length_s;
-			this.texcoords[++i] /= length_t;
+		for (let i = 0; i < this.texCoords.length; ++i) {
+			this.texCoords[i] /= length_s;
+			this.texCoords[++i] /= length_t;
 		}
 		this.updateTexCoordsGLBuffers();
 	}
@@ -63,7 +63,7 @@ class CGFOBJModel extends CGFobject {
 	 * Resets the list of texture coordinates to the initial values
 	 */
 	resetTexCoords() {
-		this.texcoords = [...this.baseTexCoords]
+		this.texCoords = [...this.baseTexCoords]
 		this.updateTexCoordsGLBuffers();
 	}
 
@@ -131,7 +131,7 @@ class CGFOBJModel extends CGFobject {
 
 								if (f[1])
 									Array.prototype.push.apply(
-										model.texcoords, texcoords[parseInt(f[1]) - 1]
+										model.texCoords, texcoords[parseInt(f[1]) - 1]
 									);
 								if (f[2])
 									Array.prototype.push.apply(
@@ -181,9 +181,9 @@ class CGFOBJModel extends CGFobject {
 		}
 		console.log("Loaded mesh " + this.url + " with " + this.vcount + " vertices / " + this.fcount + " faces");
 
-		if (this.texcoords.length == 0)
-			this.texcoords = null;
-		this.baseTexCoords = this.texcoords;
+		if (this.texCoords.length == 0)
+			this.texCoords = null;
+		this.baseTexCoords = this.texCoords;
 
 		if (!this.wireframe)
 			this.primitiveType = this.scene.gl.TRIANGLES;

@@ -4,6 +4,9 @@ class CheckerBoard extends CGFobject {
     constructor(scene) {
         super(scene);
         this.scene = scene;
+    }
+
+    initTiles() {
         this.tiles = [];
         const size = 43.0;
         const eightSize = size / 8.0;
@@ -24,11 +27,8 @@ class CheckerBoard extends CGFobject {
                     u2, v2);
                 this.tiles.push(checkerTile);
             }
-
-
-
-
     }
+
 
     display() {
         for (let i = 0; i < this.tiles.length; ++i) {
