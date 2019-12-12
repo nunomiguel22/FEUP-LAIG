@@ -4,7 +4,50 @@ class CheckerBoard extends CGFobject {
     constructor(scene) {
         super(scene);
         this.scene = scene;
+        this.selectedPiece = null;
     }
+
+    display() {
+        for (let key in this.tiles) {
+            this.tiles[key].display();
+        }
+
+        for (let key in this.tiles) {
+            this.tiles[key].displayPiece();
+        }
+        this.scene.clearPickRegistration();
+    }
+
+    movePiece(piece, tile) {
+        if (this.tiles[tile] == null || this.pieces[piece] == null)
+            return;
+
+        this.tiles[tile].attachPiece(this.pieces[piece]);
+    }
+
+    tileUIDtoID(id) {
+        let nid = id - 30;
+
+        if (nid > 63)
+            return null;
+
+        let row = Math.floor(nid / 8) + 1;
+        let column = String.fromCharCode('A'.charCodeAt(0) + (nid % 8));
+        return column + row;
+    }
+
+    handlePick(pickResult) {
+        if (pickResult < 25)
+            this.selectedPiece = pickResult - 1;
+        else {
+            var tileID = this.tileUIDtoID(pickResult);
+            if (tileID != null)
+                this.movePiece(this.selectedPiece, tileID);
+            this.selectedPiece = null;
+        }
+    }
+
+    // Initializing functions
 
     initTiles() {
         this.tiles = [];
@@ -12,6 +55,7 @@ class CheckerBoard extends CGFobject {
         const eightSize = size / 8.0;
         const halfSize = size / 2.0;
 
+        let uID = 30;
         for (let i = 0; i < 8; ++i)
             for (let j = 0; j < 8; ++j) {
                 let x1 = -halfSize + i * eightSize;
@@ -24,8 +68,8 @@ class CheckerBoard extends CGFobject {
                 let v2 = 0.125 * j + 0.125;
 
                 let tileName = String.fromCharCode('A'.charCodeAt(0) + (7 - i)) + (8 - j);
-                let checkerTile = new CheckerTile(this.scene, tileName, x1, x2, y1, y2, u1, v1,
-                    u2, v2);
+                let checkerTile = new CheckerTile(this.scene, tileName, uID++, x1, x2, y1, y2, u1,
+                    v1, u2, v2);
 
                 this.tiles[tileName] = checkerTile;
             }
@@ -35,32 +79,24 @@ class CheckerBoard extends CGFobject {
         this.WhitePieceModel = this.scene.graph.components["checkerwhitepiece"];
         this.BlackPieceModel = this.scene.graph.components["checkerblackpiece"];
 
-        this.whitePieces = [];
-        this.blackPieces = [];
+        this.pieces = [];
+        for (let i = 0; i < 12; ++i)
+            this.pieces.push(new CheckerPiece(this.scene, this.WhitePieceModel, "white", i + 1));
 
         for (let i = 0; i < 12; ++i)
-            this.whitePieces.push(new CheckerPiece(this.scene, this.WhitePieceModel, "white"));
-
-        for (let i = 0; i < 12; ++i)
-            this.blackPieces.push(new CheckerPiece(this.scene, this.BlackPieceModel, "black"));
-
+            this.pieces.push(new CheckerPiece(this.scene, this.BlackPieceModel, "black", 13 + i));
     }
 
     fillStartBlock(type) {
-        let pieces;
-        let j;
+        let j = 1;
+        let pieceNumber = 0;
 
-        if (type == "white") {
-            pieces = this.whitePieces;
-            j = 1;
-        }
-        else if (type == "black") {
-            pieces = this.blackPieces;
+        if (type == "black") {
+            pieceNumber = 12;
             j = 6;
         }
 
         const jstop = j + 3;
-        let pieceNumber = 0;
         for (; j < jstop; ++j)
             for (let i = 0; i < 8; i += 2) {
                 let startCollumn;
@@ -69,26 +105,13 @@ class CheckerBoard extends CGFobject {
                 else startCollumn = 'A';
 
                 let tileName = String.fromCharCode(startCollumn.charCodeAt(0) + i) + j;
-                this.tiles[tileName].attachPiece(pieces[pieceNumber++]);
+                this.tiles[tileName].attachPiece(this.pieces[pieceNumber++]);
             }
     }
 
     initStartTable() {
         this.fillStartBlock("white");
         this.fillStartBlock("black");
-    }
-
-
-    display() {
-        let pick = 0;
-        for (let key in this.tiles) {
-            this.scene.registerForPick(pick++, this);
-            this.tiles[key].display();
-        }
-
-        for (let key in this.tiles) {
-            this.tiles[key].displayPiece();
-        }
     }
 
 	/**

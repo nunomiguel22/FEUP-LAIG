@@ -145,6 +145,7 @@ class XMLscene extends CGFscene {
                     var obj = this.pickResults[i][0];
                     if (obj) {
                         var customId = this.pickResults[i][1];
+                        this.checkerBoard.handlePick(customId);
                         console.log("Picked object: " + obj + ", with pick id " + customId);
                     }
                 }

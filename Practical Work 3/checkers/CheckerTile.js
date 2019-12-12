@@ -1,6 +1,6 @@
 
 class CheckerTile extends MyRectangle {
-    constructor(scene, id, x1, x2, y1, y2, u1, v1, u2, v2) {
+    constructor(scene, id, uID, x1, x2, y1, y2, u1, v1, u2, v2) {
         super(scene, null, x1, x2, y1, y2);
 
         var texCoords = [
@@ -11,21 +11,34 @@ class CheckerTile extends MyRectangle {
         ]
 
         this.id = id;
-        this.centerdist = (x2 - x1) / 2.0;
-        this.centerx = x1 + this.centerdist;
-        this.centery = y1 + this.centerdist;
+        this.uID = uID;
+        const centerdist = (x2 - x1) / 2.0;
+        this.centerx = x1 + centerdist;
+        this.centery = y1 + centerdist;
 
         this.updateTexCoords(texCoords);
         this.piece = null;
     }
 
     attachPiece(piece) {
+        if (this.piece != null)
+            return;
+
+        if (piece.tile != null)
+            piece.tile.detachPiece();
+
         this.piece = piece;
         this.piece.setTile(this);
     }
+
     detachPiece() {
-        this.piece = null;
         this.piece.setTile(null);
+        this.piece = null;
+    }
+
+    display() {
+        this.scene.registerForPick(this.uID, this);
+        super.display();
     }
 
     displayPiece() {
