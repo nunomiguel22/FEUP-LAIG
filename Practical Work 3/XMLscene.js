@@ -116,6 +116,8 @@ class XMLscene extends CGFscene {
         this.initLights();
 
         this.checkerBoard.initTiles();
+        this.checkerBoard.initPieces();
+        this.checkerBoard.initStartTable();
 
         this.sceneInited = true;
     }
