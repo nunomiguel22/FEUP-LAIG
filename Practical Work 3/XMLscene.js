@@ -39,7 +39,7 @@ class XMLscene extends CGFscene {
         this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl", "shaders/test.frag");
         this.setPickEnabled(true);
         this.objid = 0;
-        this.checkerBoard = new CheckerBoard(this);
+        this.checkers = new Checkers(this);
     }
 
     /**
@@ -115,9 +115,7 @@ class XMLscene extends CGFscene {
 
         this.initLights();
 
-        this.checkerBoard.initTiles();
-        this.checkerBoard.initPieces();
-        this.checkerBoard.initStartTable();
+        this.checkers.init();
 
         this.sceneInited = true;
     }
@@ -145,7 +143,7 @@ class XMLscene extends CGFscene {
                     var obj = this.pickResults[i][0];
                     if (obj) {
                         var customId = this.pickResults[i][1];
-                        this.checkerBoard.handlePick(customId);
+                        this.checkers.handlePick(customId);
                         console.log("Picked object: " + obj + ", with pick id " + customId);
                     }
                 }
@@ -158,13 +156,9 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     render(camera) {
-        this.logPicking();
-        this.clearPickRegistration();
-
         // ---- BEGIN Background, camera and axis setup
         if (this.gui.isKeyPressed("KeyM")) {
-            for (let key in this.graph.components)
-                this.graph.components[key].cycleMaterial();
+            this.checkers.undoMove();
         }
         if (camera != null)
             this.camera = camera;

@@ -4,10 +4,11 @@ class CheckerBoard extends CGFobject {
     constructor(scene) {
         super(scene);
         this.scene = scene;
-        this.selectedPiece = null;
+
     }
 
     display() {
+        this.scene.logPicking();
         for (let key in this.tiles) {
             this.tiles[key].display();
         }
@@ -25,8 +26,13 @@ class CheckerBoard extends CGFobject {
         this.tiles[tile].attachPiece(this.pieces[piece]);
     }
 
-    tileUIDtoID(id) {
-        let nid = id - 30;
+    getPiece(uID) { return this.pieces[uID]; }
+    getTile(ID) { return this.tiles[ID]; }
+    getPieceFromTile(tile) { return this.tiles[tile].piece; }
+    getTileFromPiece(piece) { return this.pieces[piece].tile; }
+
+    tileUIDtoID(uid) {
+        let nid = uid - 30;
 
         if (nid > 63)
             return null;
@@ -34,17 +40,6 @@ class CheckerBoard extends CGFobject {
         let row = Math.floor(nid / 8) + 1;
         let column = String.fromCharCode('A'.charCodeAt(0) + (nid % 8));
         return column + row;
-    }
-
-    handlePick(pickResult) {
-        if (pickResult < 25)
-            this.selectedPiece = pickResult - 1;
-        else {
-            var tileID = this.tileUIDtoID(pickResult);
-            if (tileID != null)
-                this.movePiece(this.selectedPiece, tileID);
-            this.selectedPiece = null;
-        }
     }
 
     // Initializing functions
@@ -112,6 +107,12 @@ class CheckerBoard extends CGFobject {
     initStartTable() {
         this.fillStartBlock("white");
         this.fillStartBlock("black");
+    }
+
+    init() {
+        this.initTiles();
+        this.initPieces();
+        this.initStartTable();
     }
 
 	/**

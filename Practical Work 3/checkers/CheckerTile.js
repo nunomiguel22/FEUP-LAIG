@@ -15,9 +15,53 @@ class CheckerTile extends MyRectangle {
         const centerdist = (x2 - x1) / 2.0;
         this.centerx = x1 + centerdist;
         this.centery = y1 + centerdist;
+        this.topRight = this.getTopRightTile(this.id);
+        this.topLeft = this.getTopLeftTile(this.id);
+        this.bottomLeft = this.getBottomLeftTile(this.id);
+        this.bottomRight = this.getBottomRightTile(this.id);
 
         this.updateTexCoords(texCoords);
         this.piece = null;
+    }
+
+    getTopRightTile(tile) {
+        let column = String.fromCharCode(tile.charCodeAt(0) + 1);
+        if (column.charCodeAt(0) > 'H'.charCodeAt(0))
+            return null;
+        let row = String.fromCharCode(tile.charCodeAt(1) + 1);
+        if (row > 8)
+            return null;
+        return column + row;
+    }
+
+    getTopLeftTile(tile) {
+        let column = String.fromCharCode(tile.charCodeAt(0) - 1);
+        if (column.charCodeAt(0) < 'A'.charCodeAt(0))
+            return null;
+        let row = String.fromCharCode(tile.charCodeAt(1) + 1);
+        if (row > 8)
+            return null;
+        return column + row;
+    }
+
+    getBottomLeftTile(tile) {
+        let column = String.fromCharCode(tile.charCodeAt(0) - 1);
+        if (column.charCodeAt(0) < 'A'.charCodeAt(0))
+            return null;
+        let row = String.fromCharCode(tile.charCodeAt(1) - 1);
+        if (row < 1)
+            return null;
+        return column + row;
+    }
+
+    getBottomRightTile(tile) {
+        let column = String.fromCharCode(tile.charCodeAt(0) + 1);
+        if (column.charCodeAt(0) > 'H'.charCodeAt(0))
+            return null;
+        let row = String.fromCharCode(tile.charCodeAt(1) - 1);
+        if (row < 1)
+            return null;
+        return column + row;
     }
 
     attachPiece(piece) {

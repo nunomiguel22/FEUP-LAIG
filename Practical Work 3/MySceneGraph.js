@@ -859,7 +859,7 @@ class MySceneGraph {
                 }
                 case 'checkerBoard': {
 
-                    prim = this.scene.checkerBoard;
+                    prim = this.scene.checkers.checkerBoard;
                     break;
                 }
 

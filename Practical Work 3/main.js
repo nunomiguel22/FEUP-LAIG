@@ -15,7 +15,8 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
     'primitives/MyRectangle.js', 'primitives/MyTriangle.js', 'primitives/MySphere.js', 'primitives/MyCylinder.js',
     'primitives/MyTorus.js', 'GraphNode.js', 'animation/Animation.js', 'animation/Keyframe.js', 'animation/KeyframeAnimation.js',
     'primitives/MyPlane.js', 'primitives/MyPatch.js', 'primitives/MyNurbsCylinder.js', 'CGF/CGFOBJModel.js',
-    'CGF/CGFResourceReader.js', , 'checkers/CheckerBoard.js', 'checkers/CheckerTile.js', 'checkers/CheckerPiece.js',
+    'CGF/CGFResourceReader.js', 'checkers/CheckerBoard.js', 'checkers/CheckerTile.js', 'checkers/CheckerPiece.js',
+    'checkers/CheckerMove.js', 'checkers/CheckerSequence.js', 'checkers/Checkers.js',
 
 
     main = function () {
