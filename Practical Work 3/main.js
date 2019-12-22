@@ -17,6 +17,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
     'primitives/MyPlane.js', 'primitives/MyPatch.js', 'primitives/MyNurbsCylinder.js', 'CGF/CGFOBJModel.js',
     'CGF/CGFResourceReader.js', 'checkers/CheckerBoard.js', 'checkers/CheckerTile.js', 'checkers/CheckerPiece.js',
     'checkers/CheckerMove.js', 'checkers/CheckerSequence.js', 'checkers/Checkers.js', 'checkers/CheckerLogic.js',
+    'checkers/CheckerThemer.js',
 
 
     main = function () {
@@ -32,15 +33,10 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
 
         myInterface.setActiveCamera(myScene.camera);
 
-        // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
-        // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
-
-        var defaultTheme = getUrlVars()['file'] || "LAIG_TP3_XML_SCENE_1.xml";
-
         // create and load graph, and associate it to scene. 
         // Check console for loading errors
         myScene.checkers = new Checkers(myScene);
-        myScene.checkers.setTheme(defaultTheme);
+        myScene.checkers.setTheme("DEFAULT_THEME.xml");
 
         // start
         app.run();

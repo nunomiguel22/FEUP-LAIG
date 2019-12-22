@@ -1,0 +1,6 @@
+<lxs>
+    <scenes default="default">
+        <scene id="default" filename="DEFAULT_THEME.xml" />
+        <scene id="test" filename="TEST_THEME.xml" />
+    </scenes>
+</lxs>

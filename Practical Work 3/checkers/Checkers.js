@@ -4,6 +4,7 @@ class Checkers {
         this.scene = scene;
         // CheckerBoard Theme
         this.checkerTheme = null;
+        this.checkerThemer = new CheckerThemer(this.scene);
 
         // CheckerBoard Visual Representation
         this.checkerBoard = null;
@@ -19,6 +20,7 @@ class Checkers {
     }
 
     setTheme(filename) {
+        getUrlVars()['file'] || filename;
         this.checkerTheme = new MySceneGraph(filename, this.scene);
     }
 
