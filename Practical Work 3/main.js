@@ -16,7 +16,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
     'primitives/MyTorus.js', 'GraphNode.js', 'animation/Animation.js', 'animation/Keyframe.js', 'animation/KeyframeAnimation.js',
     'primitives/MyPlane.js', 'primitives/MyPatch.js', 'primitives/MyNurbsCylinder.js', 'CGF/CGFOBJModel.js',
     'CGF/CGFResourceReader.js', 'checkers/CheckerBoard.js', 'checkers/CheckerTile.js', 'checkers/CheckerPiece.js',
-    'checkers/CheckerMove.js', 'checkers/CheckerSequence.js', 'checkers/Checkers.js',
+    'checkers/CheckerMove.js', 'checkers/CheckerSequence.js', 'checkers/Checkers.js', 'checkers/CheckerLogic.js',
 
 
     main = function () {
@@ -35,11 +35,12 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
         // get file name provided in URL, e.g. http://localhost/myproj/?file=myfile.xml 
         // or use "demo.xml" as default (assumes files in subfolder "scenes", check MySceneGraph constructor) 
 
-        var filename = getUrlVars()['file'] || "LAIG_TP3_XML_SCENE_1.xml";
+        var defaultTheme = getUrlVars()['file'] || "LAIG_TP3_XML_SCENE_1.xml";
 
         // create and load graph, and associate it to scene. 
         // Check console for loading errors
-        var myGraph = new MySceneGraph(filename, myScene);
+        myScene.checkers = new Checkers(myScene);
+        myScene.checkers.setTheme(defaultTheme);
 
         // start
         app.run();

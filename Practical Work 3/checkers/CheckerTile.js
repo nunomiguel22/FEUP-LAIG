@@ -1,27 +1,32 @@
 
-class CheckerTile extends MyRectangle {
-    constructor(scene, id, uID, x1, x2, y1, y2, u1, v1, u2, v2) {
-        super(scene, null, x1, x2, y1, y2);
+class CheckerTile {
+    constructor(scene, name, ID) {
 
-        var texCoords = [
-            u1, v1,
-            u2, v1,
-            u1, v2,
-            u2, v2
-        ]
+        this.scene = scene;
+        this.tileRect = null;
 
-        this.id = id;
-        this.uID = uID;
-        const centerdist = (x2 - x1) / 2.0;
-        this.centerx = x1 + centerdist;
-        this.centery = y1 + centerdist;
-        this.topRight = this.getTopRightTile(this.id);
-        this.topLeft = this.getTopLeftTile(this.id);
-        this.bottomLeft = this.getBottomLeftTile(this.id);
-        this.bottomRight = this.getBottomRightTile(this.id);
+        this.name = name;
+        this.ID = ID;
 
-        this.updateTexCoords(texCoords);
+        this.centerx = 0;
+        this.centery = 0;
+        this.topRight = this.getTopRightTile(this.name);
+        this.topLeft = this.getTopLeftTile(this.name);
+        this.bottomLeft = this.getBottomLeftTile(this.name);
+        this.bottomRight = this.getBottomRightTile(this.name);
+
         this.piece = null;
+    }
+
+    setRectangle(rectangle) {
+        this.tileRect = rectangle;
+        this.updateCenterPoints();
+    }
+
+    updateCenterPoints() {
+        const centerdist = (this.tileRect.x2 - this.tileRect.x1) / 2.0;
+        this.centerx = this.tileRect.x1 + centerdist;
+        this.centery = this.tileRect.y1 + centerdist;
     }
 
     getTopRightTile(tile) {
@@ -81,8 +86,8 @@ class CheckerTile extends MyRectangle {
     }
 
     display() {
-        this.scene.registerForPick(this.uID, this);
-        super.display();
+        this.scene.registerForPick(this.ID, this);
+        this.tileRect.display();
     }
 
     displayPiece() {
@@ -93,5 +98,16 @@ class CheckerTile extends MyRectangle {
             this.piece.display();
 
         this.scene.popMatrix();
+    }
+
+    static IDtoName(id) {
+        let nid = id - 30;
+
+        if (nid > 63)
+            return null;
+
+        let row = Math.floor(nid / 8) + 1;
+        let column = String.fromCharCode('A'.charCodeAt(0) + (nid % 8));
+        return column + row;
     }
 }

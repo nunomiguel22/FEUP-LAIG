@@ -1,56 +1,32 @@
 
 class CheckerBoard extends CGFobject {
 
-    constructor(scene) {
+    constructor(scene, size, checkerLogic) {
         super(scene);
         this.scene = scene;
-
+        this.size = size;
+        this.checkerLogic = checkerLogic;
     }
 
     display() {
         this.scene.logPicking();
-        for (let key in this.tiles) {
-            this.tiles[key].display();
-        }
 
-        for (let key in this.tiles) {
-            this.tiles[key].displayPiece();
-        }
+        for (let key in this.checkerLogic.tiles)
+            this.checkerLogic.tiles[key].display();
+
+        for (let key in this.checkerLogic.tiles)
+            this.checkerLogic.tiles[key].displayPiece();
+
         this.scene.clearPickRegistration();
     }
-
-    movePiece(piece, tile) {
-        if (this.tiles[tile] == null || this.pieces[piece] == null)
-            return;
-
-        this.tiles[tile].attachPiece(this.pieces[piece]);
-    }
-
-    getPiece(uID) { return this.pieces[uID]; }
-    getTile(ID) { return this.tiles[ID]; }
-    getPieceFromTile(tile) { return this.tiles[tile].piece; }
-    getTileFromPiece(piece) { return this.pieces[piece].tile; }
-
-    tileUIDtoID(uid) {
-        let nid = uid - 30;
-
-        if (nid > 63)
-            return null;
-
-        let row = Math.floor(nid / 8) + 1;
-        let column = String.fromCharCode('A'.charCodeAt(0) + (nid % 8));
-        return column + row;
-    }
-
     // Initializing functions
 
     initTiles() {
         this.tiles = [];
-        const size = 43.0;
-        const eightSize = size / 8.0;
-        const halfSize = size / 2.0;
 
-        let uID = 30;
+        const eightSize = this.size / 8.0;
+        const halfSize = this.size / 2.0;
+
         for (let i = 0; i < 8; ++i)
             for (let j = 0; j < 8; ++j) {
                 let x1 = -halfSize + i * eightSize;
@@ -61,58 +37,41 @@ class CheckerBoard extends CGFobject {
                 let v1 = 0.125 * j;
                 let u2 = 0.125 * i + 0.125;
                 let v2 = 0.125 * j + 0.125;
+                let texCoords = [
+                    u1, v1,
+                    u2, v1,
+                    u1, v2,
+                    u2, v2
+                ]
 
                 let tileName = String.fromCharCode('A'.charCodeAt(0) + (7 - i)) + (8 - j);
-                let checkerTile = new CheckerTile(this.scene, tileName, uID++, x1, x2, y1, y2, u1,
-                    v1, u2, v2);
 
-                this.tiles[tileName] = checkerTile;
+                let rect = new MyRectangle(this.scene, null, x1, x2, y1, y2);
+                rect.updateTexCoords(texCoords);
+
+
+                this.checkerLogic.tiles[tileName].setRectangle(rect);
             }
     }
 
     initPieces() {
         this.WhitePieceModel = this.scene.graph.components["checkerwhitepiece"];
         this.BlackPieceModel = this.scene.graph.components["checkerblackpiece"];
+        //this.selectedPieceAnim = this.scene.graph.animations["selectedPieceAnim"];
 
         this.pieces = [];
         for (let i = 0; i < 12; ++i)
-            this.pieces.push(new CheckerPiece(this.scene, this.WhitePieceModel, "white", i + 1));
+            this.checkerLogic.pieces[i].setModelComponent(this.WhitePieceModel);
 
-        for (let i = 0; i < 12; ++i)
-            this.pieces.push(new CheckerPiece(this.scene, this.BlackPieceModel, "black", 13 + i));
+        for (let i = 12; i < 24; ++i)
+            this.checkerLogic.pieces[i].setModelComponent(this.BlackPieceModel);
     }
 
-    fillStartBlock(type) {
-        let j = 1;
-        let pieceNumber = 0;
 
-        if (type == "black") {
-            pieceNumber = 12;
-            j = 6;
-        }
-
-        const jstop = j + 3;
-        for (; j < jstop; ++j)
-            for (let i = 0; i < 8; i += 2) {
-                let startCollumn;
-                if (j % 2 == 0)
-                    startCollumn = 'B';
-                else startCollumn = 'A';
-
-                let tileName = String.fromCharCode(startCollumn.charCodeAt(0) + i) + j;
-                this.tiles[tileName].attachPiece(this.pieces[pieceNumber++]);
-            }
-    }
-
-    initStartTable() {
-        this.fillStartBlock("white");
-        this.fillStartBlock("black");
-    }
 
     init() {
         this.initTiles();
         this.initPieces();
-        this.initStartTable();
     }
 
 	/**

@@ -858,8 +858,10 @@ class MySceneGraph {
                     break;
                 }
                 case 'checkerBoard': {
+                    let size = this.reader.getFloat(grandChildren[0], 'size');
 
-                    prim = this.scene.checkers.checkerBoard;
+                    prim = new CheckerBoard(this.scene, size, this.scene.checkers.checkerLogic);
+                    this.scene.checkers.setCheckerBoard(prim);
                     break;
                 }
 

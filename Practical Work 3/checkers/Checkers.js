@@ -2,79 +2,24 @@ class Checkers {
 
     constructor(scene) {
         this.scene = scene;
-        // CheckerBoard Representation
-        this.checkerBoard = new CheckerBoard(this.scene);
-        // Sequence of moves
-        this.selectedPiece = null;
-        this.availableMoves;
+        // CheckerBoard Theme
+        this.checkerTheme = null;
+
+        // CheckerBoard Visual Representation
+        this.checkerBoard = null;
+
+        // Checkers Logic
+        this.checkerLogic = new CheckerLogic(this.scene);
+        // Checkers move sequence
         this.checkerSequence = new CheckerSequence(this.checkerBoard);
     }
 
-    isValidMove(selectedPiece, tileID) {
-        if (selectedPiece == null || tileID == null)
-            return false;
-
-        for (let i = 0; i < this.availableMoves.length; ++i)
-            if (this.availableMoves[i] == tileID)
-                return true;
-
-        return false;
+    setCheckerBoard(checkerBoard) {
+        this.checkerBoard = checkerBoard;
     }
 
-    generateAvailableMoves(piece) {
-        let moves = [];
-        let tile = this.checkerBoard.getTileFromPiece(piece);
-        if (tile.piece.type == "white") {
-            if (tile.topLeft != null) {
-                let topLeft = this.checkerBoard.getTile(tile.topLeft);
-                if (topLeft.piece == null)
-                    moves.push(topLeft.id);
-                else if (topLeft.piece.type == "black" && topLeft.topLeft != null) {
-                    let topLeft2 = this.checkerBoard.getTile(topLeft.topLeft);
-                    if (topLeft2.piece == null)
-                        moves.push(topLeft2.id);
-                }
-            }
-            if (tile.topRight != null) {
-                let topRight = this.checkerBoard.getTile(tile.topRight);
-                if (topRight.piece == null)
-                    moves.push(topRight.id);
-                else if (topRight.piece.type == "black" && topRight.topRight != null) {
-                    let topRight2 = this.checkerBoard.getTile(topRight.topRight);
-                    if (topRight2.piece == null)
-                        moves.push(topRight2.id);
-                }
-            }
-        }
-
-        if (tile.piece.type == "black") {
-            if (tile.bottomLeft != null) {
-                let bottomLeft = this.checkerBoard.getTile(tile.bottomLeft);
-                if (bottomLeft.piece == null)
-                    moves.push(bottomLeft.id);
-                else if (bottomLeft.piece.type == "white" && bottomLeft.bottomLeft != null) {
-                    let bottomLeft2 = this.checkerBoard.getTile(bottomLeft.bottomLeft);
-                    if (bottomLeft2.piece == null)
-                        moves.push(bottomLeft2.id);
-                }
-            }
-            if (tile.bottomRight != null) {
-                let bottomRight = this.checkerBoard.getTile(tile.bottomRight);
-                if (bottomRight.piece == null)
-                    moves.push(bottomRight.id);
-                else if (bottomRight.piece.type == "white" && bottomRight.bottomRight != null) {
-                    let bottomRight2 = this.checkerBoard.getTile(bottomRight.bottomRight);
-                    if (bottomRight2.piece == null)
-                        moves.push(bottomRight2.id);
-                }
-            }
-        }
-        return moves;
-    }
-
-    onPieceSelection(pickResult) {
-        this.selectedPiece = pickResult - 1;
-        this.availableMoves = this.generateAvailableMoves(this.selectedPiece);
+    setTheme(filename) {
+        this.checkerTheme = new MySceneGraph(filename, this.scene);
     }
 
     onTileSelection(pickResult) {
@@ -89,18 +34,21 @@ class Checkers {
 
     handlePick(pickResult) {
         if (pickResult < 25)
-            this.onPieceSelection(pickResult);
-        else this.onTileSelection(pickResult);
-    }
-
-    init() {
-        this.checkerBoard.init();
+            this.checkerLogic.selectPiece(pickResult);
+        else if (this.checkerLogic.selectedPiece != null) {
+            let tileName = CheckerTile.IDtoName(pickResult);
+            let move = new CheckerMove(this.checkerLogic.selectedPiece,
+                this.checkerLogic.getTileFromPiece(this.checkerLogic.selectedPiece).name,
+                tileName);
+            this.checkerSequence.addMove(move);
+            this.checkerLogic.onTileSelection(tileName);
+        }
     }
 
     undoMove() {
         let move = this.checkerSequence.popMove();
         if (move != null) {
-            this.checkerBoard.movePiece(move.piece, move.originTile);
+            this.checkerLogic.movePiece(move.piece, move.originTile);
         }
     }
 }

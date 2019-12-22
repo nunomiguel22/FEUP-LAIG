@@ -39,7 +39,6 @@ class XMLscene extends CGFscene {
         this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl", "shaders/test.frag");
         this.setPickEnabled(true);
         this.objid = 0;
-        this.checkers = new Checkers(this);
     }
 
     /**
@@ -115,7 +114,8 @@ class XMLscene extends CGFscene {
 
         this.initLights();
 
-        this.checkers.init();
+        this.checkers.checkerBoard.init();
+        this.checkers.checkerLogic.newGame();
 
         this.sceneInited = true;
     }
@@ -132,8 +132,6 @@ class XMLscene extends CGFscene {
         for (let key in this.graph.animations)
             this.graph.animations[key].update(t);
 
-        if (this.SecurityCamera != null)
-            this.SecurityCamera.update(t);
     }
 
     logPicking() {
