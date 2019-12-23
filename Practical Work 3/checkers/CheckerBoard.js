@@ -6,6 +6,8 @@ class CheckerBoard extends CGFobject {
         this.scene = scene;
         this.size = size;
         this.checkerLogic = checkerLogic;
+        // Checker piece animator
+        this.checkerAnimator = new CheckerAnimator(this.scene, this.checkerLogic.selectedPiece);
     }
 
     display() {
@@ -57,14 +59,19 @@ class CheckerBoard extends CGFobject {
     initPieces() {
         this.WhitePieceModel = this.scene.graph.components["checkerwhitepiece"];
         this.BlackPieceModel = this.scene.graph.components["checkerblackpiece"];
-        //this.selectedPieceAnim = this.scene.graph.animations["selectedPieceAnim"];
+        this.selectedPieceAnim = this.scene.graph.animations["selectedPieceAnim"];
+        this.selectedPieceAnim.repeat = true;
+        this.checkerAnimator.setSelectAnimation(this.selectedPieceAnim);
 
         this.pieces = [];
-        for (let i = 0; i < 12; ++i)
+        for (let i = 0; i < 12; ++i) {
             this.checkerLogic.pieces[i].setModelComponent(this.WhitePieceModel);
-
-        for (let i = 12; i < 24; ++i)
+            this.checkerLogic.pieces[i].setSelectionAnimation(this.selectedPieceAnim);
+        }
+        for (let i = 12; i < 24; ++i) {
             this.checkerLogic.pieces[i].setModelComponent(this.BlackPieceModel);
+            this.checkerLogic.pieces[i].setSelectionAnimation(this.selectedPieceAnim);
+        }
     }
 
 
@@ -75,6 +82,10 @@ class CheckerBoard extends CGFobject {
 
         this.initTiles();
         this.initPieces();
+    }
+
+    update(t) {
+        this.checkerAnimator.update(t);
     }
 
 	/**

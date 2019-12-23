@@ -15,6 +15,8 @@ class KeyframeAnimation extends Animation {
         // Initial keyframe at instant 0, with no transformations
         this.addKeyframe(new Keyframe(0, vec3.fromValues(0, 0, 0), vec3.fromValues(0, 0, 0), vec3.fromValues(1, 1, 1)));
         // Initiate needed variables to their default values
+        this.over = false;
+        this.repeat = false;
         this.reset();
     }
 
@@ -48,7 +50,11 @@ class KeyframeAnimation extends Animation {
         this.previousKeyframe = this.activeKeyframe++;
         if (this.activeKeyframe < this.keyframes.length)
             this.keyframeDuration = this.keyframes[this.activeKeyframe].instant - this.keyframes[this.previousKeyframe].instant;
-        else this.reset(); // End of animation
+        else {
+            if (this.repeat)
+                this.reset();
+            else this.over = true;
+        }
         this.update(t);
     }
 
@@ -59,5 +65,6 @@ class KeyframeAnimation extends Animation {
         this.previousKeyframe = 0;
         this.keyframeDuration = 0;
         this.firstFrame = 0;
+        this.over = false;
     }
 }

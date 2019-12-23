@@ -20,18 +20,23 @@ class CheckerLogic {
     }
 
     deselectPiece() {
-        for (let i = 0; i < this.availableMoves.length; ++i)
-            this.tiles[this.availableMoves[i]].highlight = false;
-
-        this.selectedPiece = null;
+        if (this.selectedPiece != null) {
+            for (let i = 0; i < this.availableMoves.length; ++i)
+                this.tiles[this.availableMoves[i]].highlight = false;
+            this.pieces[this.selectedPiece].deselect();
+            this.selectedPiece = null;
+        }
     }
 
     selectPiece(pickResult) {
-        this.deselectPiece();
-        this.selectedPiece = pickResult - 1;
-        this.availableMoves = this.generateAvailableMoves(this.selectedPiece);
-        for (let i = 0; i < this.availableMoves.length; ++i)
-            this.tiles[this.availableMoves[i]].highlight = true;
+        if (pickResult - 1 != this.selectedPiece) {
+            this.deselectPiece();
+            this.selectedPiece = pickResult - 1;
+            this.pieces[this.selectedPiece].select();
+            this.availableMoves = this.generateAvailableMoves(this.selectedPiece);
+            for (let i = 0; i < this.availableMoves.length; ++i)
+                this.tiles[this.availableMoves[i]].highlight = true;
+        }
     }
 
     onTileSelection(tileName) {

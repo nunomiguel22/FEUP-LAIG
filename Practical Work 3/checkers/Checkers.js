@@ -10,6 +10,7 @@ class Checkers {
 
         // Checkers Logic
         this.checkerLogic = new CheckerLogic(this.scene);
+
         // Checkers move sequence
         this.checkerSequence = new CheckerSequence(this.checkerBoard);
     }
@@ -44,10 +45,15 @@ class Checkers {
         }
     }
 
+    update(t) {
+        this.checkerBoard.update(t);
+    }
+
     undoMove() {
         let move = this.checkerSequence.popMove();
         if (move != null) {
             this.checkerLogic.movePiece(move.piece, move.originTile);
         }
     }
+
 }

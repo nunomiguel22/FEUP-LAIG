@@ -129,8 +129,7 @@ class XMLscene extends CGFscene {
 
     update(t) {
         if (this.sceneInited) {
-            for (let key in this.graph.animations)
-                this.graph.animations[key].update(t);
+            this.checkers.update(t);
         }
     }
 
