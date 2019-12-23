@@ -18,10 +18,6 @@ class CheckerPiece {
 
     setModelComponent(modelComponent) { this.modelComponent = modelComponent; }
 
-    select() { this.selected = true; }
-    deselect() { this.selected = false; }
-
-
     display() {
         this.scene.registerForPick(this.ID, this);
         this.modelComponent.display(null, null, null, null);

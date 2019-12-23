@@ -14,6 +14,7 @@ class CheckerTile {
         this.topLeft = this.getTopLeftTile(this.name);
         this.bottomLeft = this.getBottomLeftTile(this.name);
         this.bottomRight = this.getBottomRightTile(this.name);
+        this.highlight = false;
 
         this.piece = null;
     }
@@ -87,12 +88,19 @@ class CheckerTile {
 
     display() {
         this.scene.registerForPick(this.ID, this);
+
+        if (this.highlight) {
+            this.scene.graph.materials["piecehighlight"].apply();
+        }
         this.tileRect.display();
+
+        if (this.highlight)
+            this.scene.graph.materials["boardMat"].apply();
     }
 
     displayPiece() {
         this.scene.pushMatrix();
-        this.scene.translate(this.centery, this.centerx, 0);
+        this.scene.translate(this.centerx, this.centery, 0);
 
         if (this.piece != null)
             this.piece.display();

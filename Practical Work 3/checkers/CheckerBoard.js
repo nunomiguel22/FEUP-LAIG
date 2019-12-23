@@ -27,12 +27,12 @@ class CheckerBoard extends CGFobject {
         const eightSize = this.size / 8.0;
         const halfSize = this.size / 2.0;
 
-        for (let i = 0; i < 8; ++i)
-            for (let j = 0; j < 8; ++j) {
+        for (let j = 0; j < 8; ++j)
+            for (let i = 0; i < 8; ++i) {
                 let x1 = -halfSize + i * eightSize;
                 let x2 = -halfSize + i * eightSize + eightSize;
-                let y1 = halfSize - j * eightSize - eightSize;
-                let y2 = halfSize - j * eightSize;
+                let y1 = -halfSize + j * eightSize;
+                let y2 = -halfSize + j * eightSize + eightSize;
                 let u1 = 0.125 * i;
                 let v1 = 0.125 * j;
                 let u2 = 0.125 * i + 0.125;
@@ -44,7 +44,7 @@ class CheckerBoard extends CGFobject {
                     u2, v2
                 ]
 
-                let tileName = String.fromCharCode('A'.charCodeAt(0) + (7 - i)) + (8 - j);
+                let tileName = String.fromCharCode('H'.charCodeAt(0) - (7 - i)) + (j + 1);
 
                 let rect = new MyRectangle(this.scene, null, x1, x2, y1, y2);
                 rect.updateTexCoords(texCoords);
@@ -70,6 +70,9 @@ class CheckerBoard extends CGFobject {
 
 
     init() {
+        //tile hightlight prep  
+        this.scene.graph.materials["piecehighlight"].setTexture(this.scene.graph.textures["checkerfloortex"]);
+
         this.initTiles();
         this.initPieces();
     }

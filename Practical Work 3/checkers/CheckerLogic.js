@@ -3,7 +3,7 @@ class CheckerLogic {
     constructor(scene) {
         this.scene = scene;
         this.selectedPiece = null;
-        this.availableMoves;
+        this.availableMoves = [];
         this.init();
     }
 
@@ -19,19 +19,25 @@ class CheckerLogic {
         this.fillStartBlock("black");
     }
 
-    selectPiece(pickResult) {
-        if (this.selectedPiece != null)
-            this.pieces[this.selectedPiece].deselect();
+    deselectPiece() {
+        for (let i = 0; i < this.availableMoves.length; ++i)
+            this.tiles[this.availableMoves[i]].highlight = false;
 
+        this.selectedPiece = null;
+    }
+
+    selectPiece(pickResult) {
+        this.deselectPiece();
         this.selectedPiece = pickResult - 1;
-        this.pieces[this.selectedPiece].select();
         this.availableMoves = this.generateAvailableMoves(this.selectedPiece);
+        for (let i = 0; i < this.availableMoves.length; ++i)
+            this.tiles[this.availableMoves[i]].highlight = true;
     }
 
     onTileSelection(tileName) {
         if (this.isMoveValid(this.selectedPiece, tileName)) {
             this.movePiece(this.selectedPiece, tileName);
-            this.selectedPiece = null;
+            this.deselectPiece();
         }
     }
 
@@ -103,9 +109,6 @@ class CheckerLogic {
         this.tile = tile;
     }
 
-    select() { this.selected = true; }
-    deselect() { this.selected = false; }
-
 
     display() {
         this.scene.registerForPick(this.uID, this);
@@ -116,10 +119,10 @@ class CheckerLogic {
         this.tiles = [];
 
         let ID = 30;
-        for (let i = 0; i < 8; ++i)
-            for (let j = 0; j < 8; ++j) {
+        for (let j = 0; j < 8; ++j)
+            for (let i = 0; i < 8; ++i) {
 
-                let tileName = String.fromCharCode('A'.charCodeAt(0) + (7 - i)) + (8 - j);
+                let tileName = String.fromCharCode('H'.charCodeAt(0) - (7 - i)) + (j + 1);
                 let checkerTile = new CheckerTile(this.scene, tileName, ID++);
                 this.tiles[tileName] = checkerTile;
             }
@@ -143,6 +146,7 @@ class CheckerLogic {
         }
 
         const jstop = j + 3;
+
         for (; j < jstop; ++j)
             for (let i = 0; i < 8; i += 2) {
                 let startCollumn;

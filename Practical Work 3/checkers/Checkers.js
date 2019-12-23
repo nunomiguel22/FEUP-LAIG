@@ -31,13 +31,16 @@ class Checkers {
     handlePick(pickResult) {
         if (pickResult < 25)
             this.checkerLogic.selectPiece(pickResult);
-        else if (this.checkerLogic.selectedPiece != null) {
-            let tileName = CheckerTile.IDtoName(pickResult);
-            let move = new CheckerMove(this.checkerLogic.selectedPiece,
-                this.checkerLogic.getTileFromPiece(this.checkerLogic.selectedPiece).name,
-                tileName);
-            this.checkerSequence.addMove(move);
-            this.checkerLogic.onTileSelection(tileName);
+        else {
+            console.log(CheckerTile.IDtoName(pickResult));
+            if (this.checkerLogic.selectedPiece != null) {
+                let tileName = CheckerTile.IDtoName(pickResult);
+                let move = new CheckerMove(this.checkerLogic.selectedPiece,
+                    this.checkerLogic.getTileFromPiece(this.checkerLogic.selectedPiece).name,
+                    tileName);
+                this.checkerSequence.addMove(move);
+                this.checkerLogic.onTileSelection(tileName);
+            }
         }
     }
 

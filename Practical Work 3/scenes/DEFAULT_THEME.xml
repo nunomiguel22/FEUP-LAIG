@@ -3,7 +3,7 @@
 
     <views default="normal">
         <perspective id="normal" near="0.1" far="1000" angle="45">
-            <from x="-50" y="160" z="0" />
+            <from x="0" y="160" z="50" />
             <to x="0" y="70" z="0" />
         </perspective>
     </views>
@@ -37,6 +37,18 @@
             <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        </material>
+        <material id="boardMat" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.5" g="0.5" b="0.5" a="1.0" />
+            <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
+            <specular r="0.5" g="0.5" b="0.5" a="1.0" />
+        </material>
+        <material id="piecehighlight" shininess="10">
+            <emission r="0.0" g="0.0" b="0.0" a="1.0" />
+            <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+            <diffuse r="0.2" g="0.6" b="0.2" a="1.0" />
+            <specular r="0.2" g="0.6" b="0.2" a="1.0" />
         </material>
         <material id="matteMat" shininess="1">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
@@ -108,8 +120,7 @@
      <components>
         <component id="checkerboardbase">
             <transformation>
-                <rotate axis="x" angle="270"/>
-                <rotate axis="z" angle="270"/>
+                <rotate axis="x" angle="-90"/>
             </transformation>
             <materials>
                 <material id="defaultMat" />
@@ -126,7 +137,7 @@
                 <rotate axis="x" angle="270"/>
             </transformation>
             <materials>
-                <material id="defaultMat" />
+                <material id="boardMat" />
             </materials>
             <texture id="checkerfloortex" length_s="1" length_t="1" />
             <children>
@@ -178,7 +189,7 @@
 
         <component id="table">
             <transformation>
-                <translate x="0.0" y="0.0" z="0.0" />
+                <rotate axis="y" angle="90"/>
                 <scale x="0.1" y="0.1" z="0.1" />
             </transformation>
             <materials>
