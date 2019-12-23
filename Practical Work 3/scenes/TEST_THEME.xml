@@ -6,6 +6,14 @@
             <from x="-50" y="160" z="0" />
             <to x="0" y="70" z="0" />
         </perspective>
+        <perspective id="normal2" near="0.1" far="1000" angle="45">
+            <from x="-50" y="160" z="0" />
+            <to x="0" y="70" z="0" />
+        </perspective>
+                <perspective id="normal3" near="0.1" far="1000" angle="45">
+            <from x="-50" y="160" z="0" />
+            <to x="0" y="70" z="0" />
+        </perspective>
     </views>
 
     <globals>
@@ -15,10 +23,10 @@
 
     <lights>
         <omni id="demoLight" enabled="1">
-            <location x="0.0" y="200.0" z="-100.0" w="1.0" />
+            <location x="0.0" y="450.0" z="0.0" w="1.0" />
             <ambient r="0" g="0" b="0" a="1.0" />
-            <diffuse r="0.3" g="0.3" b="0.3" a="1.0" />
-            <specular r="0.3" g="0.3" b="0.3" a="1.0" />
+            <diffuse r="0.7" g="0.7" b="0.7" a="1.0" />
+            <specular r="0.8" g="0.8" b="0.8" a="1.0" />
             <attenuation constant="0.2" linear="0.0" quadratic="0.0" />  
         </omni>
     </lights>
@@ -98,7 +106,7 @@
             <model file="models/chessboard.obj" />
         </primitive>
         <primitive id="checkerboardp">
-             <checkerBoard size="43.0" />
+             <checkerBoard size="52.0" />
         </primitive>
         <primitive id="checkerpiecep">
              <model file="models/piece.obj" />

@@ -36,7 +36,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
         // create and load graph, and associate it to scene. 
         // Check console for loading errors
         myScene.checkers = new Checkers(myScene);
-        myScene.checkers.setTheme("DEFAULT_THEME.xml");
+        myScene.checkers.checkerLogic.newGame();
 
         // start
         app.run();

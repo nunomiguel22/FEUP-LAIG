@@ -25,11 +25,23 @@ class MyInterface extends CGFinterface {
         return true;
     }
 
-    onGraphLoaded() {
+    onThemerLoaded() {
+        let checkerThemer = this.scene.checkers.checkerThemer;
+
+        this.gui.add(checkerThemer, 'activeTheme',
+            Object.keys(checkerThemer.themes)).onChange(checkerThemer.onThemeChange.bind(checkerThemer)).name('Theme');
 
         this.gui.add(this.scene, 'scaleFactor', 0.1, 10.0).name('Scale');
 
-        this.gui.add(this.scene, 'selectedCamera', this.scene.cameraIds).onChange(this.scene.onCameraChanged.bind(this.scene)).name('Camera');
+
+    }
+
+    onGraphLoaded() {
+        if (this.cameras != null)
+            this.gui.remove(this.cameras);
+
+        this.cameras = this.gui.add(this.scene, 'selectedCamera',
+            this.scene.cameraIds).onChange(this.scene.onCameraChanged.bind(this.scene)).name('Camera');
     }
 
     /**

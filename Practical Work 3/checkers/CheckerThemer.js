@@ -14,9 +14,7 @@ class CheckerThemer {
         var rootElement = this.reader.xmlDoc.documentElement;
         this.parseXML(rootElement);
 
-
         this.loadedOk = true;
-
     }
 
     onXMLError(message) {
@@ -54,6 +52,18 @@ class CheckerThemer {
                 break;
             }
         }
-        else this.activeTheme = this.themes[this.defaultID];
+        else this.activeTheme = defaultID;
+        this.scene.interface.onThemerLoaded();
+
+        this.onThemeChange();
+
+    }
+
+    onThemeChange() {
+        if (this.themes[this.activeTheme] != null) {
+            this.scene.sceneInited = false;
+            let filename = getUrlVars()['file'] || this.themes[this.activeTheme];
+            this.sceneGraph = new MySceneGraph(filename, this.scene);
+        }
     }
 }

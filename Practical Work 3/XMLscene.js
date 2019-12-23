@@ -67,6 +67,7 @@ class XMLscene extends CGFscene {
             if (this.graph.lights.hasOwnProperty(key)) {
                 var light = this.graph.lights[key];
 
+
                 this.lights[i].setPosition(light[2][0], light[2][1], light[2][2], light[2][3]);
                 this.lights[i].setAmbient(light[3][0], light[3][1], light[3][2], light[3][3]);
                 this.lights[i].setDiffuse(light[4][0], light[4][1], light[4][2], light[4][3]);
@@ -115,7 +116,6 @@ class XMLscene extends CGFscene {
         this.initLights();
 
         this.checkers.checkerBoard.init();
-        this.checkers.checkerLogic.newGame();
 
         this.sceneInited = true;
     }
@@ -129,9 +129,10 @@ class XMLscene extends CGFscene {
     }
 
     update(t) {
-        for (let key in this.graph.animations)
-            this.graph.animations[key].update(t);
-
+        if (this.sceneInited) {
+            for (let key in this.graph.animations)
+                this.graph.animations[key].update(t);
+        }
     }
 
     logPicking() {
@@ -158,6 +159,7 @@ class XMLscene extends CGFscene {
         if (this.gui.isKeyPressed("KeyM")) {
             this.checkers.undoMove();
         }
+        // ---- BEGIN Background, camera and axis setup
         if (camera != null)
             this.camera = camera;
 
@@ -177,10 +179,9 @@ class XMLscene extends CGFscene {
 
         this.pushMatrix();
         this.axis.display();
-        for (var i = 0; i < this.lights.length; i++) {
-            this.lights[i].setVisible(true);
-            this.lights[i].enable();
-        }
+        for (var i = 0; i < this.lights.length; i++)
+            this.lights[i].update();
+
 
         this.objid = 0;
         if (this.sceneInited) {

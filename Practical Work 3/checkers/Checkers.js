@@ -3,7 +3,6 @@ class Checkers {
     constructor(scene) {
         this.scene = scene;
         // CheckerBoard Theme
-        this.checkerTheme = null;
         this.checkerThemer = new CheckerThemer(this.scene);
 
         // CheckerBoard Visual Representation
@@ -17,11 +16,6 @@ class Checkers {
 
     setCheckerBoard(checkerBoard) {
         this.checkerBoard = checkerBoard;
-    }
-
-    setTheme(filename) {
-        getUrlVars()['file'] || filename;
-        this.checkerTheme = new MySceneGraph(filename, this.scene);
     }
 
     onTileSelection(pickResult) {
