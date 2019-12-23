@@ -52,7 +52,7 @@
             <diffuse r="0.5" g="0.5" b="0.5" a="1.0" />
             <specular r="0.5" g="0.5" b="0.5" a="1.0" />
         </material>
-        <material id="piecehightlight" shininess="10">
+        <material id="piecehighlight" shininess="10">
             <emission r="0.0" g="0.0" b="0.0" a="1.0" />
             <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
             <diffuse r="0.2" g="0.6" b="0.2" a="1.0" />
@@ -146,7 +146,7 @@
                 <rotate axis="x" angle="270"/>
             </transformation>
             <materials>
-                <material id="defaultMat" />
+                <material id="boardMat" />
             </materials>
             <texture id="checkerfloortex" length_s="1" length_t="1" />
             <children>

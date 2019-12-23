@@ -70,7 +70,7 @@ class CheckerBoard extends CGFobject {
 
 
     init() {
-        //tile hightlight prep  
+        //tile hightlight prep   
         this.scene.graph.materials["piecehighlight"].setTexture(this.scene.graph.textures["checkerfloortex"]);
 
         this.initTiles();
