@@ -14,10 +14,7 @@ class CheckerLogic {
         this.tiles[tile].attachPiece(this.pieces[piece]);
     }
 
-    movePieceFromOBJ(piece, tile) {
-        tile.attachPiece(piece);
-    }
-
+    movePieceFromOBJ(piece, tile) { tile.attachPiece(piece); }
 
     newGame() {
         this.fillStartBlock("white");
@@ -47,13 +44,6 @@ class CheckerLogic {
             this.pieces[this.selectedPiece].select();
             this.availableMoves = this.generateAvailableMoves(this.selectedPiece);
             this.highlightAvailableMoves();
-        }
-    }
-
-    onTileSelection(tileName) {
-        if (this.isMoveValid(this.selectedPiece, tileName)) {
-            this.movePiece(this.selectedPiece, tileName);
-            this.deselectPiece();
         }
     }
 

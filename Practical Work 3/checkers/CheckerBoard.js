@@ -11,6 +11,7 @@ class CheckerBoard extends CGFobject {
     }
 
     display() {
+        this.scene.setPickEnabled(!this.checkerAnimator.moveAnimations.length);
         this.scene.logPicking();
 
         for (let key in this.checkerLogic.tiles)

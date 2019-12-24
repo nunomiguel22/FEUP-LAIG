@@ -37,8 +37,6 @@ class XMLscene extends CGFscene {
         this.setUpdatePeriod(20);
 
         this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl", "shaders/test.frag");
-        this.setPickEnabled(true);
-        this.objid = 0;
     }
 
     /**
