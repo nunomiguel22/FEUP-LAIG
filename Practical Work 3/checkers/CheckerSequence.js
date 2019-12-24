@@ -1,11 +1,16 @@
 class CheckerSequence {
 
-    constructor() {
+    constructor(checkerLogic) {
+        this.checkerLogic = checkerLogic;
         this.checkerMoves = [];
         this.moves = 0;
     }
 
-    addMove(move) {
+    addMove(tileName) {
+        let move = new CheckerMove(this.checkerLogic.selectedPiece,
+            this.checkerLogic.getTileFromPiece(this.checkerLogic.selectedPiece).name,
+            tileName);
+
         ++this.moves;
         this.checkerMoves.push(move);
     }

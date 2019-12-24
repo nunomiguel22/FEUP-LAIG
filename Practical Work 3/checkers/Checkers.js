@@ -12,42 +12,43 @@ class Checkers {
         this.checkerLogic = new CheckerLogic(this.scene);
 
         // Checkers move sequence
-        this.checkerSequence = new CheckerSequence(this.checkerBoard);
+        this.checkerSequence = new CheckerSequence(this.checkerLogic);
     }
 
-    setCheckerBoard(checkerBoard) {
-        this.checkerBoard = checkerBoard;
-    }
+    setCheckerBoard(checkerBoard) { this.checkerBoard = checkerBoard; }
 
-    onTileSelection(pickResult) {
-        let tileID = this.checkerBoard.tileUIDtoID(pickResult);
-        if (this.isValidMove(this.selectedPiece, tileID)) {
-            let move = new CheckerMove(this.selectedPiece, this.checkerBoard.getTileFromPiece(this.selectedPiece).id, tileID);
-            this.checkerSequence.addMove(move);
-            this.checkerBoard.movePiece(this.selectedPiece, tileID);
-            this.selectedPiece = null;
-        }
+    isPickPiece(pickResult) { return pickResult < 25; }
+
+    movePiece(pieceID, tileName) {
+        // Get Tile and Piece
+        let piece = this.checkerLogic.getPieceFromID(pieceID);
+        let tile = this.checkerLogic.getTileFromName(tileName);
+        // Play Animation
+        let anim = this.checkerBoard.movePiece(piece, tile);
+        // Attach Piece to tile when animation is over
+        anim.onAnimationOver(this.checkerLogic.movePieceFromOBJ, piece, tile);
+        // Register move
+        this.checkerSequence.addMove(tile);
+        // Cleanup
+        this.checkerLogic.deselectPiece();
     }
 
     handlePick(pickResult) {
-        if (pickResult < 25)
+        if (this.isPickPiece(pickResult))
             this.checkerLogic.selectPiece(pickResult);
         else {
-            console.log(CheckerTile.IDtoName(pickResult));
-            if (this.checkerLogic.selectedPiece != null) {
-                let tileName = CheckerTile.IDtoName(pickResult);
-                let move = new CheckerMove(this.checkerLogic.selectedPiece,
-                    this.checkerLogic.getTileFromPiece(this.checkerLogic.selectedPiece).name,
-                    tileName);
-                this.checkerSequence.addMove(move);
-                this.checkerLogic.onTileSelection(tileName);
-            }
+            let tileName = CheckerTile.IDtoName(pickResult);
+            this.logTile(tileName);
+            if (this.checkerLogic.isMoveValid(tileName))
+                this.movePiece(this.checkerLogic.selectedPiece, tileName);
         }
     }
 
     update(t) {
         this.checkerBoard.update(t);
     }
+
+    logTile(tileName) { console.log("Selected Tile: " + tileName); }
 
     undoMove() {
         let move = this.checkerSequence.popMove();

@@ -10,8 +10,19 @@ class CheckerAnimator {
 
     setSelectAnimation(anim) { this.selectedAnimation = anim; }
 
+    playAnimation(anim) {
+        anim.reset();
+        this.moveAnimations.push(anim);
+    }
+
     update(t) {
         //if (this.selectedPiece != null)
         this.selectedAnimation.update(t);
+        for (let i = 0; i < this.moveAnimations.length; ++i) {
+            this.moveAnimations[i].update(t);
+            if (this.moveAnimations[i].over) {
+                this.moveAnimations.splice(i, 1);
+            }
+        }
     }
 }

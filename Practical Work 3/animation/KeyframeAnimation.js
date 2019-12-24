@@ -15,14 +15,15 @@ class KeyframeAnimation extends Animation {
         // Initial keyframe at instant 0, with no transformations
         this.addKeyframe(new Keyframe(0, vec3.fromValues(0, 0, 0), vec3.fromValues(0, 0, 0), vec3.fromValues(1, 1, 1)));
         // Initiate needed variables to their default values
-        this.over = false;
-        this.repeat = false;
+
         this.reset();
     }
 
     addKeyframe(keyframe) { this.keyframes.push(keyframe); }
 
     update(t) {
+        if (this.over)
+            return;
         // Get time into current keyframe
         let instantMS = t - this.firstFrame;
         // Reset transformation matrix
@@ -53,7 +54,7 @@ class KeyframeAnimation extends Animation {
         else {
             if (this.repeat)
                 this.reset();
-            else this.over = true;
+            else this.endAnimation();
         }
         this.update(t);
     }
