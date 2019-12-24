@@ -7,7 +7,7 @@ class CheckerBoard extends CGFobject {
         this.size = size;
         this.checkerLogic = checkerLogic;
         // Checker piece animator
-        this.checkerAnimator = new CheckerAnimator(this.scene, this.checkerLogic.selectedPiece);
+        this.checkerAnimator = new CheckerAnimator(this.scene, this.checkerLogic);
     }
 
     display() {

@@ -1,9 +1,9 @@
 
 class CheckerAnimator {
 
-    constructor(scene, selectedPiece) {
+    constructor(scene, checkerLogic) {
         this.scene = scene;
-        this.selectedPiece = selectedPiece;
+        this.checkerLogic = checkerLogic;
         this.selectedAnimation = null;
         this.moveAnimations = [];
     }
@@ -16,8 +16,8 @@ class CheckerAnimator {
     }
 
     update(t) {
-        //if (this.selectedPiece != null)
-        this.selectedAnimation.update(t);
+        if (this.checkerLogic.selectedPiece != null)
+            this.selectedAnimation.update(t);
         for (let i = 0; i < this.moveAnimations.length; ++i) {
             this.moveAnimations[i].update(t);
             if (this.moveAnimations[i].over) {
