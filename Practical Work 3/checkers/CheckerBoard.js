@@ -78,9 +78,15 @@ class CheckerBoard extends CGFobject {
         let vecx = destination.centerx - piece.tile.centerx;
         let vecy = destination.centery - piece.tile.centery;
         let anim = new KeyframeAnimation(this.scene.graph);
-        let key = new Keyframe(1.0, vec3.fromValues(vecx, vecy, 0), vec3.fromValues(0, 0, 0),
+        let key1 = new Keyframe(0.3, vec3.fromValues(0, 0, 3.0), vec3.fromValues(0, 0, 0),
             vec3.fromValues(1, 1, 1));
-        anim.addKeyframe(key);
+        anim.addKeyframe(key1);
+        let key2 = new Keyframe(1.0, vec3.fromValues(vecx, vecy, 3.0), vec3.fromValues(0, 0, 0),
+            vec3.fromValues(1, 1, 1));
+        anim.addKeyframe(key2);
+        let key3 = new Keyframe(1.3, vec3.fromValues(vecx, vecy, 0), vec3.fromValues(0, 0, 0),
+            vec3.fromValues(1, 1, 1));
+        anim.addKeyframe(key3);
         piece.setAnimation(anim);
         this.checkerAnimator.playAnimation(anim);
         return anim;
