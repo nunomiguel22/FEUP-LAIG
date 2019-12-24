@@ -20,7 +20,7 @@ class CheckerBoard extends CGFobject {
         for (let key in this.checkerLogic.tiles)
             this.checkerLogic.tiles[key].displayPiece();
 
-        this.scene.clearPickRegistration();
+
     }
     // Initializing functions
 

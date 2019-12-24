@@ -49,12 +49,4 @@ class Checkers {
     }
 
     logTile(tileName) { console.log("Selected Tile: " + tileName); }
-
-    undoMove() {
-        let move = this.checkerSequence.popMove();
-        if (move != null) {
-            this.checkerLogic.movePiece(move.piece, move.originTile);
-        }
-    }
-
 }

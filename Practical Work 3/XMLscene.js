@@ -29,14 +29,22 @@ class XMLscene extends CGFscene {
         this.enableTextures(true);
 
         this.gl.clearDepth(8000.0);
+        this.gl.enable(this.gl.BLEND);
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
+        this.gl.blendFunc(this.gl.SRC_ALPHA, this.gl.ONE_MINUS_SRC_ALPHA);
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(20);
 
         this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl", "shaders/test.frag");
+        this.textRenderer = new TextRenderer(this, "scenes/images/fontAtlas.jpg");
+        this.testString = new GLString(this, "New Game");
+        this.testString.setPosition([-50.0, 90.0, 0.0]);
+        this.testString.setSize(10.0);
+        this.testString.setColor([0, 0.2, 0.5, 0.8]);
+        this.testString.rotateDegrees([0, 15.0, 0.0]);
     }
 
     /**
@@ -126,9 +134,9 @@ class XMLscene extends CGFscene {
     }
 
     update(t) {
-        if (this.sceneInited) {
+        if (this.sceneInited)
             this.checkers.update(t);
-        }
+
     }
 
     logPicking() {
@@ -139,6 +147,7 @@ class XMLscene extends CGFscene {
                     if (obj) {
                         var customId = this.pickResults[i][1];
                         this.checkers.handlePick(customId);
+                        console.log(customId);
                     }
                 }
                 this.pickResults.splice(0, this.pickResults.length);
@@ -152,8 +161,9 @@ class XMLscene extends CGFscene {
     render(camera) {
         // ---- BEGIN Background, camera and axis setup
         if (this.gui.isKeyPressed("KeyM")) {
-            this.checkers.undoMove();
+
         }
+
         // ---- BEGIN Background, camera and axis setup
         if (camera != null)
             this.camera = camera;
@@ -163,6 +173,7 @@ class XMLscene extends CGFscene {
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+
 
         // Initialize Model-View matrix as identity (no transformation
         this.updateProjectionMatrix();
@@ -176,20 +187,23 @@ class XMLscene extends CGFscene {
         for (var i = 0; i < this.lights.length; i++)
             this.lights[i].update();
 
-
-        this.objid = 0;
         if (this.sceneInited) {
             this.setDefaultAppearance();
 
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
         }
+        this.testString.display();
         this.popMatrix();
-
-
+        this.clearPickRegistration();
         // ---- END Background, camera and axis setup
     }
     display() {
         this.render(this.mainCamera);
+    }
+    setDepthTest(type) {
+        if (type)
+            this.gl.enable(this.gl.DEPTH_TEST);
+        else this.gl.disable(this.gl.DEPTH_TEST);
     }
 }
