@@ -16,6 +16,10 @@ class Checkers {
 
         // Checkers move sequence
         this.checkerSequence = new CheckerSequence(this.checkerLogic);
+
+        // Game Settings
+        this.whitePlayerName = "player1";
+        this.blackPlayerName = "player2";
     }
 
     setCheckerBoard(checkerBoard) { this.checkerBoard = checkerBoard; }

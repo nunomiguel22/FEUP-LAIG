@@ -37,6 +37,12 @@ class MyInterface extends CGFinterface {
 
         worldFolder.add(this.scene, "scaleFactor", 0.1, 10.0).name("Scale");
         worldFolder.open();
+
+        let gameFolder = this.gui.addFolder("Game Settings");
+        gameFolder.add(this.scene.checkers, "whitePlayerName").name("White Player");
+        gameFolder.add(this.scene.checkers, "blackPlayerName").name("Black Player");
+
+        gameFolder.open();
     }
 
     updateComponents() {
@@ -70,8 +76,6 @@ class MyInterface extends CGFinterface {
 
         }
     }
-
-
 
     /**
      * initKeys

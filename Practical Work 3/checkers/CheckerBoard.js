@@ -26,8 +26,8 @@ class CheckerBoard extends CGFobject {
             this.checkers.checkerLogic.auxiliarTiles[i].displayPiece();
         this.scene.popMatrix();
     }
-    // Initializing functions
 
+    // Initializing functions
     initTiles() {
         this.tiles = [];
 
@@ -58,6 +58,11 @@ class CheckerBoard extends CGFobject {
 
                 this.checkers.checkerLogic.tiles[tileName].setRectangle(rect);
             }
+    }
+
+    initAuxBoard() {
+        const halfSize = this.size / 2.0;
+        const eightSize = this.size / 8.0;
 
         let auxID = 0;
         for (let j = 0; j < 4; ++j)
@@ -104,6 +109,7 @@ class CheckerBoard extends CGFobject {
 
                 this.checkers.checkerLogic.auxiliarTiles[auxID++].setRectangle(rect);
             }
+
     }
 
     initPieces() {
@@ -148,6 +154,7 @@ class CheckerBoard extends CGFobject {
 
         this.initTiles();
         this.initPieces();
+        this.initAuxBoard();
     }
 
 
