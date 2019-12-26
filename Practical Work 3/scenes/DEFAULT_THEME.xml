@@ -1,15 +1,19 @@
 <lxs>
     <scene root="scene" axis_length="5"/>
 
-    <views default="normal">
-        <perspective id="normal" near="0.1" far="1000" angle="45">
+    <views default="default">
+        <perspective id="default" near="0.1" far="1000" angle="45">
             <from x="0" y="160" z="50" />
             <to x="0" y="70" z="0" />
         </perspective>
         
-        <perspective id="topView" near="0.1" far="1000" angle="45">
+        <perspective id="top view" near="0.1" far="1000" angle="45">
             <from x="0" y="135" z="0.1" />
             <to x="0" y="0" z="0" />
+        </perspective>
+        <perspective id="side view" near="0.1" far="1000" angle="45">
+            <from x="-50" y="160" z="0" />
+            <to x="0" y="70" z="0" />
         </perspective>
     </views>
 
