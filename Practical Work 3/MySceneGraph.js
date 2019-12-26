@@ -860,8 +860,15 @@ class MySceneGraph {
                 }
                 case 'checkerBoard': {
                     let size = this.reader.getFloat(grandChildren[0], 'size');
+                    let auxheight = this.reader.getFloat(grandChildren[0], 'auxheight');
 
-                    prim = new CheckerBoard(this.scene, size, this.scene.checkers);
+                    if (size == null)
+                        return "CheckerBoard missing size value";
+
+                    if (auxheight == null)
+                        return "Checkerboard missing auxiliar board height";
+
+                    prim = new CheckerBoard(this.scene, size, auxheight, this.scene.checkers);
                     this.scene.checkers.setCheckerBoard(prim);
                     break;
                 }

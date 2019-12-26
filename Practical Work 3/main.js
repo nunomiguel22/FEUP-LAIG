@@ -12,13 +12,17 @@ function getUrlVars() {
 }
 //Include additional files here
 serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js',
-    'primitives/MyRectangle.js', 'primitives/MyTriangle.js', 'primitives/MySphere.js', 'primitives/MyCylinder.js',
-    'primitives/MyTorus.js', 'GraphNode.js', 'animation/Animation.js', 'animation/Keyframe.js', 'animation/KeyframeAnimation.js',
-    'primitives/MyPlane.js', 'primitives/MyPatch.js', 'primitives/MyNurbsCylinder.js', 'CGF/CGFOBJModel.js',
-    'CGF/CGFResourceReader.js', 'checkers/CheckerBoard.js', 'checkers/CheckerTile.js', 'checkers/CheckerPiece.js',
-    'checkers/CheckerMove.js', 'checkers/CheckerSequence.js', 'checkers/Checkers.js', 'checkers/CheckerLogic.js',
-    'checkers/CheckerThemer.js', 'checkers/CheckerAnimator.js', 'ui/TextRenderer.js', 'ui/GLString.js', 'CGF/CGFextendedCamera.js',
-
+    'primitives/MyRectangle.js', 'primitives/MyTriangle.js', 'primitives/MySphere.js',
+    'primitives/MyCylinder.js', 'primitives/MyTorus.js', 'GraphNode.js',
+    'animation/Animation.js', 'animation/Keyframe.js', 'animation/KeyframeAnimation.js',
+    'primitives/MyPlane.js', 'primitives/MyPatch.js', 'primitives/MyNurbsCylinder.js',
+    'CGF/CGFOBJModel.js', 'CGF/CGFResourceReader.js', 'checkers/CheckerBoard.js',
+    'checkers/checkerlogic/CheckerTile.js', 'checkers/checkerlogic/CheckerPiece.js',
+    'checkers/checkersequence/CheckerMove.js', 'checkers/checkersequence/CheckerSequence.js',
+    'checkers/Checkers.js', 'checkers/checkerlogic/CheckerLogic.js',
+    'checkers/CheckerThemer.js', 'checkers/CheckerAnimator.js', 'ui/TextRenderer.js',
+    'ui/GLString.js', 'CGF/CGFextendedCamera.js', 'checkers/checkerlogic/CheckerMode.js',
+    'checkers/checkerlogic/CheckerHvH.js',
 
     main = function () {
         // Standard application, scene and interface setup
@@ -36,7 +40,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
         // create and load graph, and associate it to scene. 
         // Check console for loading errors
         myScene.checkers = new Checkers(myScene);
-        myScene.checkers.checkerLogic.newGame();
+        myScene.checkers.checkerLogic.newGame("HvH");
 
         // start
         app.run();

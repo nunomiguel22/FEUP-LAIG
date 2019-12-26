@@ -1,11 +1,12 @@
 
 class CheckerBoard extends CGFobject {
 
-    constructor(scene, size, checkers) {
+    constructor(scene, size, auxheight, checkers) {
         super(scene);
         this.scene = scene;
         this.size = size;
         this.checkers = checkers;
+        this.auxheight = auxheight;
     }
 
     display() {
@@ -19,7 +20,11 @@ class CheckerBoard extends CGFobject {
         for (let key in this.checkers.checkerLogic.tiles)
             this.checkers.checkerLogic.tiles[key].displayPiece();
 
-
+        this.scene.pushMatrix();
+        this.scene.translate(0, 0, this.auxheight);
+        for (let i in this.checkers.checkerLogic.auxiliarTiles)
+            this.checkers.checkerLogic.auxiliarTiles[i].displayPiece();
+        this.scene.popMatrix();
     }
     // Initializing functions
 
@@ -51,8 +56,53 @@ class CheckerBoard extends CGFobject {
                 let rect = new MyRectangle(this.scene, null, x1, x2, y1, y2);
                 rect.updateTexCoords(texCoords);
 
-
                 this.checkers.checkerLogic.tiles[tileName].setRectangle(rect);
+            }
+
+        let auxID = 0;
+        for (let j = 0; j < 4; ++j)
+            for (let i = 0; i < 3; ++i) {
+                let x1 = -halfSize * 2 + i * eightSize;
+                let x2 = -halfSize * 2 + i * eightSize + eightSize;
+                let y1 = -halfSize + j * eightSize;
+                let y2 = -halfSize + j * eightSize + eightSize;
+                let u1 = 0.125 * i;
+                let v1 = 0.125 * j;
+                let u2 = 0.125 * i + 0.125;
+                let v2 = 0.125 * j + 0.125;
+                let texCoords = [
+                    u1, v1,
+                    u2, v1,
+                    u1, v2,
+                    u2, v2
+                ]
+
+                let rect = new MyRectangle(this.scene, null, x1, x2, y1, y2);
+                rect.updateTexCoords(texCoords);
+
+                this.checkers.checkerLogic.auxiliarTiles[auxID++].setRectangle(rect);
+            }
+        for (let j = 0; j < 4; ++j)
+            for (let i = 0; i < 3; ++i) {
+                let x1 = halfSize * 1.25 + i * eightSize;
+                let x2 = halfSize * 1.25 + i * eightSize + eightSize;
+                let y1 = j * eightSize;
+                let y2 = j * eightSize + eightSize;
+                let u1 = 0.125 * i;
+                let v1 = 0.125 * j;
+                let u2 = 0.125 * i + 0.125;
+                let v2 = 0.125 * j + 0.125;
+                let texCoords = [
+                    u1, v1,
+                    u2, v1,
+                    u1, v2,
+                    u2, v2
+                ]
+
+                let rect = new MyRectangle(this.scene, null, x1, x2, y1, y2);
+                rect.updateTexCoords(texCoords);
+
+                this.checkers.checkerLogic.auxiliarTiles[auxID++].setRectangle(rect);
             }
     }
 

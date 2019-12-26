@@ -1,9 +1,12 @@
 class CheckerLogic {
 
-    constructor(scene) {
+    constructor(scene, checkers) {
         this.scene = scene;
+        this.checkers = checkers;
         this.selectedPiece = null;
         this.availableMoves = [];
+        this.nextFreeAuxWhiteTile = 0;
+        this.nextFreeAuxBlackTile = 12;
         this.init();
     }
 
@@ -16,9 +19,57 @@ class CheckerLogic {
 
     movePieceFromOBJ(piece, tile) { tile.attachPiece(piece); }
 
-    newGame() {
+    makePlay(piece, tile) {
+        let tileRange = Math.abs(tile.name.charCodeAt(1) - piece.tile.name.charCodeAt(1));
+        if (tileRange > 1) {
+            if (piece.type == "white") {
+                let topLeft = this.getTileFromName(piece.tile.topLeft);
+                if (topLeft != null && topLeft.topLeft == tile.name)
+                    this.checkers.moveBlackPieceOut(topLeft.piece);
+                else {
+                    let topRight = this.getTileFromName(piece.tile.topRight);
+                    this.checkers.moveBlackPieceOut(topRight.piece);
+                };
+            }
+            else {
+                let bottomLeft = this.getTileFromName(piece.tile.bottomLeft);
+                if (bottomLeft != null && bottomLeft.bottomLeft == tile.name)
+                    this.checkers.moveWhitePieceOut(bottomLeft.piece);
+                else {
+                    let bottomRight = this.getTileFromName(piece.tile.bottomRight);
+                    this.checkers.moveWhitePieceOut(bottomRight.piece);
+                }
+            }
+        }
+
+        this.movePieceFromOBJ(piece, tile);
+        this.gameMode.onTurn();
+    }
+
+    getNextFreeWhiteAuxTile() {
+        return this.auxiliarTiles[this.nextFreeAuxWhiteTile];
+    }
+    getNextFreeBlackAuxTile() {
+        return this.auxiliarTiles[this.nextFreeAuxBlackTile];
+    }
+
+    moveWhitePieceOut(piece) {
+        piece.tile.piece = null;
+        piece.tile = null;
+        this.auxiliarTiles[this.nextFreeAuxWhiteTile++].attachPiece(piece);
+
+    }
+    moveBlackPieceOut(piece) {
+        piece.tile.piece = null;
+        piece.tile = null;
+        this.auxiliarTiles[this.nextFreeAuxBlackTile++].attachPiece(piece);
+    }
+
+    newGame(type) {
         this.fillStartBlock("white");
         this.fillStartBlock("black");
+        if (type == "HvH")
+            this.gameMode = new CheckerHvH(this.scene, this);
     }
 
     deselectPiece() {
@@ -37,10 +88,15 @@ class CheckerLogic {
             this.tiles[this.availableMoves[i]].highlight = true;
     }
 
+    getPickType(pickResult) {
+        return this.pieces[pickResult - 1].type;
+    }
+
     selectPiece(pickResult) {
-        if (!this.isSamePick(pickResult)) {
+        let pickID = pickResult - 1;
+        if (!this.isSamePick(pickResult) && this.gameMode.isPickable(pickID)) {
             this.deselectPiece();
-            this.selectedPiece = pickResult - 1;
+            this.selectedPiece = pickID;
             this.pieces[this.selectedPiece].select();
             this.availableMoves = this.generateAvailableMoves(this.selectedPiece);
             this.highlightAvailableMoves();
@@ -134,6 +190,18 @@ class CheckerLogic {
 
         for (let i = 0; i < 12; ++i)
             this.pieces.push(new CheckerPiece(this.scene, "black", 13 + i));
+
+        // Auxiliar tiles for pieces out of play
+        this.auxiliarTiles = [];
+        for (let i = 0; i < 12; ++i) {
+            let tileName = "W" + i;
+            this.auxiliarTiles.push(new CheckerTile(this.scene, tileName, null));
+        }
+
+        for (let i = 12; i < 24; ++i) {
+            let tileName = "B" + i;
+            this.auxiliarTiles.push(new CheckerTile(this.scene, tileName, null));
+        }
     }
 
     fillStartBlock(type) {

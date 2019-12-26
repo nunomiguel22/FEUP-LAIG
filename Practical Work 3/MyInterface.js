@@ -26,24 +26,17 @@ class MyInterface extends CGFinterface {
         return true;
     }
 
-    removeFolder(folderName) {
-        let folder = this.gui._folders[folderName];
-        if (!folder)
-            return;
-        folder.close();
-        this.gui._ul.removeChild(folder.domElement.parentNode);
-        delete this.gui._folders[folderName];
-        this.gui.onResize();
-
-    }
 
     onThemerLoaded() {
         let checkerThemer = this.scene.checkers.checkerThemer;
+        let worldFolder = this.gui.addFolder("World Settings");
 
-        this.gui.add(checkerThemer, "activeTheme",
+        worldFolder.add(checkerThemer, "activeTheme",
             Object.keys(checkerThemer.themes)).onChange(checkerThemer.onThemeChange.bind(checkerThemer)).name("Theme");
 
-        this.gui.add(this.scene, "scaleFactor", 0.1, 10.0).name("Scale");
+
+        worldFolder.add(this.scene, "scaleFactor", 0.1, 10.0).name("Scale");
+        worldFolder.open();
     }
 
     updateComponents() {

@@ -22,7 +22,7 @@ class XMLscene extends CGFscene {
         super.init(application);
 
         this.sceneInited = false;
-        this.scaleFactor = 1;
+        this.scaleFactor = 1.0;
 
         this.initCameras();
 
@@ -106,6 +106,9 @@ class XMLscene extends CGFscene {
         this.setSpecular(0.2, 0.4, 0.8, 1.0);
         this.setShininess(10.0);
     }
+
+
+
     /** Handler called when the graph is finally loaded. 
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
@@ -149,7 +152,7 @@ class XMLscene extends CGFscene {
     logPicking() {
         if (this.pickMode == false) {
             if (this.pickResults != null && this.pickResults.length > 0) {
-                for (var i = 0; i < this.pickResults.length; i++) {
+                for (let i in this.pickResults) {
                     var obj = this.pickResults[i][0];
                     if (obj) {
                         var customId = this.pickResults[i][1];
@@ -157,7 +160,7 @@ class XMLscene extends CGFscene {
                         console.log(customId);
                     }
                 }
-                this.pickResults.splice(0, this.pickResults.length);
+                this.pickResults = [];
             }
         }
     }
@@ -168,19 +171,7 @@ class XMLscene extends CGFscene {
     render(camera) {
         // ---- BEGIN Background, camera and axis setup
         if (this.gui.isKeyPressed("KeyM")) {
-            if (!this.checkers.checkerAnimator.cameraAnimations.length) {
-                this.mainCamera.animateToCamera(this.graph.cameras["topView"], 2000);
-                this.mainCamera.onAnimationOver(this.swapCamera.bind(this), this.graph.cameras["topView"]);
-                this.checkers.checkerAnimator.playCameraAnimation(this.mainCamera);
-            }
-        }
 
-        if (this.gui.isKeyPressed("KeyN")) {
-            if (!this.checkers.checkerAnimator.cameraAnimations.length) {
-                this.mainCamera.animateToCamera(this.graph.cameras["normal"], 2000);
-                this.mainCamera.onAnimationOver(this.swapCamera.bind(this), this.graph.cameras["normal"]);
-                this.checkers.checkerAnimator.playCameraAnimation(this.mainCamera);
-            }
         }
 
         // ---- BEGIN Background, camera and axis setup
@@ -203,7 +194,7 @@ class XMLscene extends CGFscene {
         this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
         this.pushMatrix();
-        for (let i = 0; i < this.lights.length; ++i)
+        for (let i in this.lights)
             this.lights[i].update();
 
         if (this.sceneInited) {

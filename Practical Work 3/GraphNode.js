@@ -91,14 +91,14 @@ class GraphNode {
             currentMat.apply();
         }
         //Draw child primitives
-        for (let i = 0; i < this.primitives.length; ++i) {
+        for (let i in this.primitives) {
             this.graph.primitives[this.primitives[i]].amplifyTexCoords(compLength_s, compLength_t);
             this.graph.primitives[this.primitives[i]].display();
             this.graph.primitives[this.primitives[i]].resetTexCoords();
         }
 
         //Draw child components
-        for (let i = 0; i < this.children.length; ++i)
+        for (let i in this.children)
             this.graph.components[this.children[i]].display(compMat, compTex, compLength_s, compLength_t);
 
         this.graph.scene.popMatrix();

@@ -118,7 +118,7 @@
             <model file="models/chessboard.obj" />
         </primitive>
         <primitive id="checkerboardp">
-             <checkerBoard size="52.0" />
+             <checkerBoard size="52.0" auxheight="-2.0" />
         </primitive>
         <primitive id="checkerpiecep">
              <model file="models/piece.obj" />
