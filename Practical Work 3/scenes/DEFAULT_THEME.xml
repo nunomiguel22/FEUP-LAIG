@@ -6,6 +6,11 @@
             <from x="0" y="160" z="50" />
             <to x="0" y="70" z="0" />
         </perspective>
+        
+        <perspective id="topView" near="0.1" far="1000" angle="45">
+            <from x="0" y="135" z="0.1" />
+            <to x="0" y="0" z="0" />
+        </perspective>
     </views>
 
     <globals>

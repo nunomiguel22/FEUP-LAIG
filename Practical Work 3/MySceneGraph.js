@@ -221,6 +221,7 @@ class MySceneGraph {
     parseView(viewsNode) {
 
         this.cameras = [];
+        this.cameraIds = [];
         let defaultCam = viewsNode.attributes[0].nodeValue;
 
         let children = viewsNode.children;
@@ -256,7 +257,7 @@ class MySceneGraph {
                 if (!(fov != null && !isNaN(fov)))
                     return "unable to parse fov value for view " + chid;
                 fov *= DEGREE_TO_RAD;
-                cam = new CGFcamera(fov, near, far, position, target);
+                cam = new CGFextendedCamera(fov, near, far, position, target);
                 // Ortho views
             } else if (children[i].nodeName == 'ortho') {
                 let left = this.reader.getFloat(children[i], 'left');
@@ -282,20 +283,20 @@ class MySceneGraph {
                 cam = new CGFcameraOrtho(left, right, bottom, top, near, far, position, target, up);
             }
             // Add camera ID to ID array for interface purposes
-            this.scene.cameraIds.push(chid);
+            this.cameraIds.push(chid);
             // Add camera to camera array and activate if default camera
             this.cameras[chid] = cam;
 
             if (chid == defaultCam) {
                 this.scene.selectedCamera = defaultCam;
                 this.scene.selectedSecurityCamera = defaultCam;
-                this.scene.onCameraChanged();
+                this.scene.mainCamera = this.cameras[defaultCam];
             }
         }
         //If no default camera found use the first camera read
         if (this.cameras[defaultCam] == null) {
             this.onXMLMinorError("Default Camera not found, using first camera element");
-            this.scene.selectedCamera = this.scene.cameraIds[0];
+            this.scene.selectedCamera = this.cameraIds[0];
             this.scene.onCameraChanged();
         }
         return null;
@@ -860,7 +861,7 @@ class MySceneGraph {
                 case 'checkerBoard': {
                     let size = this.reader.getFloat(grandChildren[0], 'size');
 
-                    prim = new CheckerBoard(this.scene, size, this.scene.checkers.checkerLogic);
+                    prim = new CheckerBoard(this.scene, size, this.scene.checkers);
                     this.scene.checkers.setCheckerBoard(prim);
                     break;
                 }

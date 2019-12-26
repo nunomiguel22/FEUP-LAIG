@@ -1,28 +1,37 @@
 
 class CheckerAnimator {
 
-    constructor(scene, checkerLogic) {
+    constructor(scene, checkers) {
         this.scene = scene;
-        this.checkerLogic = checkerLogic;
+        this.checkers = checkers;
         this.selectedAnimation = null;
         this.moveAnimations = [];
+        this.cameraAnimations = [];
     }
 
     setSelectAnimation(anim) { this.selectedAnimation = anim; }
 
-    playAnimation(anim) {
+    playMoveAnimation(anim) {
         anim.reset();
         this.moveAnimations.push(anim);
     }
 
+    playCameraAnimation(camera) { this.cameraAnimations.push(camera); }
+
     update(t) {
-        if (this.checkerLogic.selectedPiece != null)
+        if (this.checkers.checkerLogic.selectedPiece != null)
             this.selectedAnimation.update(t);
-        for (let i = 0; i < this.moveAnimations.length; ++i) {
+
+        for (let i in this.moveAnimations) {
             this.moveAnimations[i].update(t);
-            if (this.moveAnimations[i].over) {
+            if (this.moveAnimations[i].over)
                 this.moveAnimations.splice(i, 1);
-            }
+        }
+
+        for (let i in this.cameraAnimations) {
+            this.cameraAnimations[i].update(t);
+            if (!this.cameraAnimations[i].animate)
+                this.cameraAnimations.splice(i, 1);
         }
     }
 }

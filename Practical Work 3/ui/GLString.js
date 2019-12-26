@@ -13,12 +13,12 @@ class GLString {
         this.rotation = [0.0, 0.0, 0.0];
     }
 
-    hasRotation() { return this.rotation[0] || this.rotation[1] || this.hasRotation[2]; }
 
     setSize(size) { this.size = size; }
     setPosition(position) { this.position = position; }
-    rotateRadians(rotation) { this.rotation = rotation; }
 
+    hasRotation() { return this.rotation[0] || this.rotation[1] || this.hasRotation[2]; }
+    rotateRadians(rotation) { this.rotation = rotation; }
     rotateDegrees(rotation) {
         const degreesToRadians = Math.PI / 180;
         rotation[0] *= degreesToRadians;
@@ -31,6 +31,7 @@ class GLString {
         this.alignment = alignment;
         this.updateString(this.string);
     }
+
     setColor(color) { this.color = color; }
 
     updateString(string) {

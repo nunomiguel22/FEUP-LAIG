@@ -7,6 +7,7 @@ class MyInterface extends CGFinterface {
      */
     constructor() {
         super();
+        this.lookAround = false;
     }
 
     /**
@@ -25,24 +26,59 @@ class MyInterface extends CGFinterface {
         return true;
     }
 
+    removeFolder(folderName) {
+        let folder = this.gui._folders[folderName];
+        if (!folder)
+            return;
+        folder.close();
+        this.gui._ul.removeChild(folder.domElement.parentNode);
+        delete this.gui._folders[folderName];
+        this.gui.onResize();
+
+    }
+
     onThemerLoaded() {
         let checkerThemer = this.scene.checkers.checkerThemer;
 
-        this.gui.add(checkerThemer, 'activeTheme',
-            Object.keys(checkerThemer.themes)).onChange(checkerThemer.onThemeChange.bind(checkerThemer)).name('Theme');
+        this.gui.add(checkerThemer, "activeTheme",
+            Object.keys(checkerThemer.themes)).onChange(checkerThemer.onThemeChange.bind(checkerThemer)).name("Theme");
 
-        this.gui.add(this.scene, 'scaleFactor', 0.1, 10.0).name('Scale');
+        this.gui.add(this.scene, "scaleFactor", 0.1, 10.0).name("Scale");
+    }
 
-
+    updateComponents() {
+        for (let i in this.gui.__controllers) {
+            this.gui.__controllers[i].updateDisplay();
+        }
     }
 
     onGraphLoaded() {
-        if (this.cameras != null)
-            this.gui.remove(this.cameras);
+        if (this.cameraFolder != null)
+            this.gui.removeFolder(this.cameraFolder);
 
-        this.cameras = this.gui.add(this.scene, 'selectedCamera',
-            this.scene.cameraIds).onChange(this.scene.onCameraChanged.bind(this.scene)).name('Camera');
+        this.cameraFolder = this.gui.addFolder("Cameras");
+
+        this.cameraFolder.add(this.scene, "selectedCamera",
+            this.scene.graph.cameraIds).onChange(this.scene.onCameraChanged.bind(this.scene)).name("Camera");
+
+        this.cameraFolder.add(this.scene, "animationDuration").min(0).name("Swap Time (ms)");
+
+        this.cameraFolder.add(this, "lookAround").onChange(this.onLookAroundChange.bind(this)).name("Look Around").listen();
+
+        this.cameraFolder.open();
     }
+
+    onLookAroundChange() {
+        if (this.lookAround)
+            this.setActiveCamera(this.scene.mainCamera);
+        else {
+            this.scene.mainCamera.reset();
+            this.setActiveCamera(null);
+
+        }
+    }
+
+
 
     /**
      * initKeys

@@ -8,6 +8,9 @@ class Checkers {
         // CheckerBoard Visual Representation
         this.checkerBoard = null;
 
+        // Checker animations
+        this.checkerAnimator = new CheckerAnimator(this.scene, this);
+
         // Checkers Logic
         this.checkerLogic = new CheckerLogic(this.scene);
 
@@ -45,7 +48,7 @@ class Checkers {
     }
 
     update(t) {
-        this.checkerBoard.update(t);
+        this.checkerAnimator.update(t);
     }
 
     logTile(tileName) { console.log("Selected Tile: " + tileName); }

@@ -41,22 +41,21 @@ class XMLscene extends CGFscene {
         this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl", "shaders/test.frag");
         this.textRenderer = new TextRenderer(this, "scenes/images/fontAtlas.jpg");
         this.testString = new GLString(this, "New Game");
-        this.testString.setPosition([-50.0, 90.0, 0.0]);
+        this.testString.setPosition([-50.0, 79.0, 0.0]);
         this.testString.setSize(10.0);
         this.testString.setColor([0, 0.2, 0.5, 0.8]);
-        this.testString.rotateDegrees([0, 15.0, 0.0]);
+        this.testString.rotateDegrees([-90, 0.0, 0.0]);
     }
 
     /**
      * Initializes the scene cameras.
      */
     initCameras() {
-        this.cameraIds = [];
-
         this.selectedCamera = null;
         this.mainCamera = this.camera;
+        this.animationDuration = 2000;
 
-        this.camera = new CGFcamera(1.0, 0.1, 8000, vec3.fromValues(3, 400, 300), vec3.fromValues(0, 0, 0));
+        this.camera = new CGFextendedCamera(1.0, 0.1, 8000, vec3.fromValues(3, 400, 300), vec3.fromValues(0, 0, 0));
     }
     /**
      * Initializes the scene lights with the values read from the XML file.
@@ -126,11 +125,19 @@ class XMLscene extends CGFscene {
     }
 
     onCameraChanged() {
-
         if (this.graph.cameras != null && this.graph.cameras[this.selectedCamera] != null) {
-            this.mainCamera = this.graph.cameras[this.selectedCamera];
-            this.interface.setActiveCamera(this.mainCamera);
+            this.interface.lookAround = false;
+            this.interface.onLookAroundChange();
+
+            this.mainCamera.animateToCamera(this.graph.cameras[this.selectedCamera], this.animationDuration);
+            this.mainCamera.onAnimationOver(this.swapCamera.bind(this), this.graph.cameras[this.selectedCamera]);
+            this.checkers.checkerAnimator.playCameraAnimation(this.mainCamera);
         }
+    }
+
+    swapCamera(camera) {
+        this.mainCamera.reset();
+        this.mainCamera = camera;
     }
 
     update(t) {
@@ -161,7 +168,19 @@ class XMLscene extends CGFscene {
     render(camera) {
         // ---- BEGIN Background, camera and axis setup
         if (this.gui.isKeyPressed("KeyM")) {
+            if (!this.checkers.checkerAnimator.cameraAnimations.length) {
+                this.mainCamera.animateToCamera(this.graph.cameras["topView"], 2000);
+                this.mainCamera.onAnimationOver(this.swapCamera.bind(this), this.graph.cameras["topView"]);
+                this.checkers.checkerAnimator.playCameraAnimation(this.mainCamera);
+            }
+        }
 
+        if (this.gui.isKeyPressed("KeyN")) {
+            if (!this.checkers.checkerAnimator.cameraAnimations.length) {
+                this.mainCamera.animateToCamera(this.graph.cameras["normal"], 2000);
+                this.mainCamera.onAnimationOver(this.swapCamera.bind(this), this.graph.cameras["normal"]);
+                this.checkers.checkerAnimator.playCameraAnimation(this.mainCamera);
+            }
         }
 
         // ---- BEGIN Background, camera and axis setup
@@ -184,7 +203,7 @@ class XMLscene extends CGFscene {
         this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
         this.pushMatrix();
-        for (var i = 0; i < this.lights.length; i++)
+        for (let i = 0; i < this.lights.length; ++i)
             this.lights[i].update();
 
         if (this.sceneInited) {
@@ -193,7 +212,6 @@ class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
         }
-        this.testString.display();
         this.popMatrix();
         this.clearPickRegistration();
         // ---- END Background, camera and axis setup

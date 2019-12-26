@@ -49,6 +49,9 @@ class TextRenderer {
         this.characters[char].display();
     }
 
+    /**
+     * Change parameters to GLString
+     */
     displayString(string, size, color, position, alignment, rotation) {
         const halfSize = size / 3.0;
 
