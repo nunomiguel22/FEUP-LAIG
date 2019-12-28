@@ -9,11 +9,79 @@ class TextRenderer {
 
         this.characters = [];
 
-        this.createAtlas();
+        this._createAtlas();
+
+        this.ortho = new CGFcameraOrtho(-1.0, 1.0, -1.0, 1.0, 0.1, 100,
+            vec3.fromValues(0, 0, 1), vec3.fromValues(0, 0, 0), vec3.fromValues(0, 1, 0));
 
     }
 
-    createAtlas() {
+    displayChar(char) {
+        if (this.characters[char] == null)
+            char = ' ';
+
+        this.atlasTexture.bind(0);
+        this.characters[char].display();
+    }
+
+    /**
+     * Change parameters to GLString
+     */
+    displayString(uistring) {
+        // Apply Ortho Camera when required
+        let prevCamera = null;
+        if (uistring.ortho) {
+            this.scene.pushMatrix();
+            prevCamera = this.scene.camera;
+            this.scene.camera = this.ortho;
+            this.scene.updateProjectionMatrix();
+            this.scene.loadIdentity();
+            this.scene.applyViewMatrix();
+        }
+
+        // Apply text shader, temporarily disable depth test as it was causing artifacts
+        this.scene.pushMatrix();
+        this.scene.setDepthTest(false);
+        this.scene.setActiveShader(this.shader);
+
+        // Set string color
+        this.shader.setUniformsValues({ uFontColor: uistring.color });
+
+        // Transformations to entire string
+        this.scene.pushMatrix();
+        this.scene.translate(uistring.position[0] - uistring.emptySpace,
+            uistring.position[1], uistring.position[2]);
+        this.scene.rotate(uistring.rotation[1], 0, 1, 0);
+        this.scene.rotate(uistring.rotation[0], 1, 0, 0);
+        this.scene.rotate(uistring.rotation[2], 0, 0, 1);
+
+        // Draw each character
+        for (let i = 0; i < uistring.string.length; ++i) {
+
+            this.scene.pushMatrix();
+            // Set character size and width position for each character
+            let x = uistring.alignmentValue * uistring.spacingValue +
+                (uistring.spacingValue * i);
+            this.scene.translate(x, 0, 0);
+            this.scene.scale(uistring.size, uistring.size, uistring.size);
+            // Display each character
+            this.displayChar(uistring.string.charAt(i));
+            this.scene.popMatrix();
+        }
+
+        // Cleanup after drawing string
+        this.scene.popMatrix();
+        this.scene.setActiveShader(this.scene.defaultShader);
+        this.scene.setDepthTest(true);
+
+        this.scene.popMatrix();
+        if (uistring.ortho) {
+            this.scene.popMatrix();
+            this.scene.camera = prevCamera;
+        }
+    }
+
+    _createAtlas() {
         let ab = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
         ab += "abcdefghijklmnopqrstuvwxyz{|}~";
 
@@ -23,7 +91,7 @@ class TextRenderer {
         let charIndex = 0;
         for (let j = 0; j < 10; ++j)
             for (let i = 0; i < 10; ++i) {
-                let rect = new MyRectangle(this.scene, null, -0.5, 0.5, 0.0, 1.0);
+                let rect = new MyRectangle(this.scene, null, 0.0, 1.0, 0.0, 1.0);
 
                 let u1 = this.squareSize * i;
                 let v1 = this.squareSize * j;
@@ -40,43 +108,4 @@ class TextRenderer {
                 this.characters[ab.charAt(charIndex++)] = rect;
             }
     }
-
-    displayChar(char) {
-        if (this.characters[char] == null)
-            char = ' ';
-
-        this.atlasTexture.bind(0);
-        this.characters[char].display();
-    }
-
-    /**
-     * Change parameters to GLString
-     */
-    displayString(string, size, color, position, alignment, rotation) {
-        const halfSize = size / 3.0;
-
-
-        this.scene.setDepthTest(false);
-        this.scene.setActiveShader(this.shader);
-        this.shader.setUniformsValues({ uFontColor: color });
-        this.scene.pushMatrix();
-        this.scene.translate(position[0], position[1], position[2]);
-
-        this.scene.rotate(rotation[1], 0, 1, 0);
-        this.scene.rotate(rotation[0], 1, 0, 0);
-        this.scene.rotate(rotation[2], 0, 0, 1);
-
-
-        for (let i = 0; i < string.length; ++i) {
-            this.scene.pushMatrix();
-            this.scene.translate(alignment * halfSize + (halfSize * i), 0, 0);
-            this.scene.scale(size, size, size);
-            this.displayChar(string.charAt(i));
-            this.scene.popMatrix();
-        }
-        this.scene.popMatrix();
-        this.scene.setActiveShader(this.scene.defaultShader);
-        this.scene.setDepthTest(true);
-    }
-
 }

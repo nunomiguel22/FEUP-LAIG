@@ -7,6 +7,9 @@ class CheckerLogic {
         this.availableMoves = [];
         this.nextFreeAuxWhiteTile = 0;
         this.nextFreeAuxBlackTile = 12;
+        this.gameOver = false;
+        this.winner = null;
+
         this.init();
     }
 
@@ -57,12 +60,19 @@ class CheckerLogic {
         piece.tile.piece = null;
         piece.tile = null;
         this.auxiliarTiles[this.nextFreeAuxWhiteTile++].attachPiece(piece);
-
+        if (this.nextFreeAuxWhiteTile == 12) {
+            this.gameOver = true;
+            this.winner = "black";
+        }
     }
     moveBlackPieceOut(piece) {
         piece.tile.piece = null;
         piece.tile = null;
         this.auxiliarTiles[this.nextFreeAuxBlackTile++].attachPiece(piece);
+        if (this.nextFreeAuxBlackTile == 24) {
+            this.gameOver = true;
+            this.winner = "white";
+        }
     }
 
     newGame(type) {

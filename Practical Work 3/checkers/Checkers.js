@@ -2,6 +2,11 @@ class Checkers {
 
     constructor(scene) {
         this.scene = scene;
+
+        // Game Settings
+        this.whitePlayerName = "player 1";
+        this.blackPlayerName = "player 2";
+
         // CheckerBoard Theme
         this.checkerThemer = new CheckerThemer(this.scene);
 
@@ -17,9 +22,10 @@ class Checkers {
         // Checkers move sequence
         this.checkerSequence = new CheckerSequence(this.checkerLogic);
 
-        // Game Settings
-        this.whitePlayerName = "player1";
-        this.blackPlayerName = "player2";
+        // State
+        this.gameState = new GameState(this.scene, this);
+        this.menuState = new MainMenuState(this.scene, this);
+        this.state = this.gameState;
     }
 
     setCheckerBoard(checkerBoard) { this.checkerBoard = checkerBoard; }
@@ -40,6 +46,8 @@ class Checkers {
         this.checkerLogic.deselectPiece();
     }
 
+    changeState(state) { this.state = state; }
+
     moveWhitePieceOut(piece) {
         let anim = this.checkerBoard.movePiece(piece,
             this.checkerLogic.getNextFreeWhiteAuxTile());
@@ -55,20 +63,13 @@ class Checkers {
 
     }
 
-    handlePick(pickResult) {
-        if (this.isPickPiece(pickResult))
-            this.checkerLogic.selectPiece(pickResult);
-        else {
-            let tileName = CheckerTile.IDtoName(pickResult);
-            this.logTile(tileName);
-            if (this.checkerLogic.isMoveValid(tileName))
-                this.movePiece(this.checkerLogic.selectedPiece, tileName);
-        }
-    }
+    handlePick(pickResult) { this.state.handlePick(pickResult); }
 
-    update(t) {
-        this.checkerAnimator.update(t);
-    }
+    update(t) { this.state.update(t); }
+
+    display() { this.state.display(); }
+
+    processKeyDown(event) { this.state.processKeyDown(event); }
 
     logTile(tileName) { console.log("Selected Tile: " + tileName); }
 }

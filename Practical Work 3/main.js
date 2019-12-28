@@ -21,8 +21,10 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
     'checkers/checkersequence/CheckerMove.js', 'checkers/checkersequence/CheckerSequence.js',
     'checkers/Checkers.js', 'checkers/checkerlogic/CheckerLogic.js',
     'checkers/CheckerThemer.js', 'checkers/CheckerAnimator.js', 'ui/TextRenderer.js',
-    'ui/GLString.js', 'CGF/CGFextendedCamera.js', 'checkers/checkerlogic/CheckerMode.js',
-    'checkers/checkerlogic/CheckerHvH.js',
+    'ui/UIString.js', 'CGF/CGFextendedCamera.js', 'checkers/checkerlogic/CheckerMode.js',
+    'checkers/checkerlogic/CheckerHvH.js', 'ui/MainMenu.js', 'checkers/checkerstates/MainMenuState.js',
+    'checkers/checkerstates/GameState.js', 'checkers/checkerstates/GameOverState.js',
+    'ui/GameInfo.js',
 
     main = function () {
         // Standard application, scene and interface setup

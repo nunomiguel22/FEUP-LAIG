@@ -38,13 +38,12 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
         this.setUpdatePeriod(20);
 
+        this.previousTime = 0;
+        this.tickRate = 60;
+
         this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl", "shaders/test.frag");
         this.textRenderer = new TextRenderer(this, "scenes/images/fontAtlas.jpg");
-        this.testString = new GLString(this, "New Game");
-        this.testString.setPosition([-50.0, 79.0, 0.0]);
-        this.testString.setSize(10.0);
-        this.testString.setColor([0, 0.2, 0.5, 0.8]);
-        this.testString.rotateDegrees([-90, 0.0, 0.0]);
+
     }
 
     /**
@@ -146,7 +145,6 @@ class XMLscene extends CGFscene {
     update(t) {
         if (this.sceneInited)
             this.checkers.update(t);
-
     }
 
     logPicking() {
@@ -169,10 +167,6 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     render(camera) {
-        // ---- BEGIN Background, camera and axis setup
-        if (this.gui.isKeyPressed("KeyM")) {
-
-        }
 
         // ---- BEGIN Background, camera and axis setup
         if (camera != null)
@@ -203,7 +197,11 @@ class XMLscene extends CGFscene {
             // Displays the scene (MySceneGraph function).
             this.graph.displayScene();
         }
+
         this.popMatrix();
+
+        this.checkers.display();
+
         this.clearPickRegistration();
         // ---- END Background, camera and axis setup
     }

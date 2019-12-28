@@ -28,19 +28,31 @@ class MyInterface extends CGFinterface {
 
 
     onThemerLoaded() {
-        let checkerThemer = this.scene.checkers.checkerThemer;
+        let checkers = this.scene.checkers;
+        let checkerThemer = checkers.checkerThemer;
+        let gameInfo = checkers.gameState.gameInfo;
+
+
         let worldFolder = this.gui.addFolder("World Settings");
 
+        let themeChangeFun = checkerThemer.onThemeChange.bind(checkerThemer);
         worldFolder.add(checkerThemer, "activeTheme",
-            Object.keys(checkerThemer.themes)).onChange(checkerThemer.onThemeChange.bind(checkerThemer)).name("Theme");
-
+            Object.keys(checkerThemer.themes)).onChange(themeChangeFun).name("Theme");
 
         worldFolder.add(this.scene, "scaleFactor", 0.1, 10.0).name("Scale");
         worldFolder.open();
 
         let gameFolder = this.gui.addFolder("Game Settings");
-        gameFolder.add(this.scene.checkers, "whitePlayerName").name("White Player");
-        gameFolder.add(this.scene.checkers, "blackPlayerName").name("Black Player");
+
+
+
+
+
+        let updateNamesFun = gameInfo.updateNames.bind(gameInfo);
+        gameFolder.add(checkers,
+            "whitePlayerName").onChange(updateNamesFun).name("White Player");
+
+        gameFolder.add(checkers, "blackPlayerName").onChange(updateNamesFun).name("Black Player");
 
         gameFolder.open();
     }
@@ -87,6 +99,7 @@ class MyInterface extends CGFinterface {
     }
 
     processKeyDown(event) {
+        this.scene.checkers.processKeyDown(event);
         this.activeKeys[event.code] = true;
     };
 
