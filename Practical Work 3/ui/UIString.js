@@ -8,7 +8,7 @@ class UIString {
         this.setString(string);
 
         this.setColor(1.0, 1.0, 1.0, 1.0);
-        this.setSpacing(0.6); // 1.0 is a full character space
+        this.setSpacing(1.0); // 1.0 is a full character space
         this.setAlignment("left");
         this.setPosition(0.0, 0.0, 0.0);
         this.setSize(1.0);
@@ -17,18 +17,15 @@ class UIString {
 
         //Technical Values
         this._updateSpacing();
-        this._updateEmptySpace();
         this.ID = null;
     }
 
     setSize(size) {
         this.size = size;
-        this._updateEmptySpace();
         this._updateSpacing();
     }
     setPosition(x, y, z) {
         this.position = [x, y, z];
-        this._updateEmptySpace();
     }
     setString(string) {
         this.string = string;
@@ -76,9 +73,5 @@ class UIString {
     _updateSpacing() {
         this.spacingValue = (this.size * this.spacing) / 2.0;
         this.setAlignment(this.alignment);
-    }
-    _updateEmptySpace() {
-        this.emptySpace = 0.3 * this.size;
-        this.startPosition = this.position[0] - this.emptySpace;
     }
 }

@@ -36,7 +36,7 @@ class XMLscene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
 
         this.axis = new CGFaxis(this);
-        this.setUpdatePeriod(20);
+        this.setUpdatePeriod(6.95);
 
         this.previousTime = 0;
         this.tickRate = 60;
@@ -203,9 +203,6 @@ class XMLscene extends CGFscene {
 
         this.clearPickRegistration();
         // ---- END Background, camera and axis setup
-
-        ++this.currentFPS;
-
 
     }
     display() {

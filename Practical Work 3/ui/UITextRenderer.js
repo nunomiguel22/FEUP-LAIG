@@ -16,6 +16,8 @@ class UITextRenderer {
         this.strings = [];
     }
 
+    getAspectRatioScale() { return this.scene.gl.canvas.height / this.scene.gl.canvas.width; }
+
     displayChar(char) {
         if (this.characters[char] == null)
             char = ' ';
@@ -49,8 +51,7 @@ class UITextRenderer {
 
         // Transformations to entire string
         this.scene.pushMatrix();
-        this.scene.translate(uistring.startPosition,
-            uistring.position[1], uistring.position[2]);
+        this.scene.translate(...uistring.position);
         this.scene.rotate(uistring.rotation[1], 0, 1, 0);
         this.scene.rotate(uistring.rotation[0], 1, 0, 0);
         this.scene.rotate(uistring.rotation[2], 0, 0, 1);
@@ -62,7 +63,7 @@ class UITextRenderer {
             // Set character size and width position for each character
             let x = uistring.alignmentValue + (uistring.spacingValue * i);
             this.scene.translate(x, 0, 0);
-            this.scene.scale(uistring.size, uistring.size, 0);
+            this.scene.scale(uistring.size * this.getAspectRatioScale(), uistring.size, 0);
             // Display each character
             this.displayChar(uistring.string.charAt(i));
             this.scene.popMatrix();
@@ -82,7 +83,7 @@ class UITextRenderer {
         this.scene.setActiveShader(this.shader);
 
         for (let i in this.strings) {
-            //this.scene.registerForPick(this.strings[i].ID, this.strings[i]);
+            this.scene.registerForPick(this.strings[i].ID, this.strings[i]);
             this.displayString(this.strings[i]);
         }
         this.scene.setActiveShader(this.scene.defaultShader);
