@@ -6,11 +6,12 @@ class UIString {
 
         // String Info
         this.setString(string);
-        this.setAlignment("left");
-        this.setSize(1.0);
+
         this.setColor(1.0, 1.0, 1.0, 1.0);
         this.setSpacing(0.6); // 1.0 is a full character space
+        this.setAlignment("left");
         this.setPosition(0.0, 0.0, 0.0);
+        this.setSize(1.0);
         this.setRotationDegrees(0.0, 0.0, 0.0);
         this.setOrtho(false);
 
@@ -25,7 +26,10 @@ class UIString {
         this._updateEmptySpace();
         this._updateSpacing();
     }
-    setPosition(x, y, z) { this.position = [x, y, z]; }
+    setPosition(x, y, z) {
+        this.position = [x, y, z];
+        this._updateEmptySpace();
+    }
     setString(string) {
         this.string = string;
         this.setAlignment(this.alignment);
@@ -39,11 +43,11 @@ class UIString {
                 break;
             }
             case "center": {
-                this.alignmentValue = -this.string.length / 2.0;
+                this.alignmentValue = -this.string.length / 2.0 * this.spacingValue;
                 break;
             }
             case "right": {
-                this.alignmentValue = -this.string.length;
+                this.alignmentValue = -this.string.length * this.spacingValue;
                 break;
             }
             default: this.alignmentValue = 0; break;
@@ -67,15 +71,14 @@ class UIString {
         this.rotation = [xAxis, yAxis, zAxis];
     }
 
-    display() {
-        this.scene.registerForPick(this.ID, this);
-        this.textRenderer.displayString(this);
-    }
+    display() { this.textRenderer.strings.push(this); }
 
     _updateSpacing() {
         this.spacingValue = (this.size * this.spacing) / 2.0;
+        this.setAlignment(this.alignment);
     }
     _updateEmptySpace() {
         this.emptySpace = 0.3 * this.size;
+        this.startPosition = this.position[0] - this.emptySpace;
     }
 }

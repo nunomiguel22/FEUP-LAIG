@@ -1,4 +1,4 @@
-class GameState {
+class StateGame {
 
     constructor(scene, checkers) {
         this.scene = scene;
@@ -6,7 +6,7 @@ class GameState {
         this.gameOver = false;
 
         // Player 1 Information
-        this.gameInfo = new GameInfo(this.scene, this.checkers);
+        this.gameInfo = new UIGameInfo(this.scene, this.checkers);
     }
 
     handlePick(pickResult) {
@@ -30,7 +30,7 @@ class GameState {
     update(t) {
         this.checkers.checkerAnimator.update(t);
         if (this.checkers.checkerLogic.gameOver) {
-            this.checkers.changeState(new GameOverState(this.scene, this.checkers));
+            this.checkers.changeState(new StateGameOver(this.scene, this.checkers));
         }
     }
 

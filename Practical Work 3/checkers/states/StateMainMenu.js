@@ -1,16 +1,15 @@
-class MainMenuState {
+class StateMainMenu {
 
     constructor(scene, checkers) {
         this.scene = scene;
         this.checkers = checkers;
         // Menu
-        this.mainmenu = new MainMenu(this.scene, this);
-
+        this.mainMenu = new UIMainMenu(this.scene, this);
     }
 
     handlePick(pickResult) {
         switch (pickResult) {
-            case this.mainmenu.newGameString.ID: {
+            case this.mainMenu.newGameString.ID: {
                 this.checkers.checkerLogic.newGame("HvH");
                 this.checkers.changeState(this.checkers.gameState);
                 break;
@@ -32,7 +31,7 @@ class MainMenuState {
         this.scene.scale(30, 30, 30);
         this.scene.rotate(-Math.PI / 4, 1, 0, 0);
         this.scene.rotate(Math.PI / 4, 0, 1, 0);
-        this.mainmenu.display();
+        this.mainMenu.display();
         this.scene.popMatrix();
     }
 }

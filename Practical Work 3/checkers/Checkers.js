@@ -23,8 +23,8 @@ class Checkers {
         this.checkerSequence = new CheckerSequence(this.checkerLogic);
 
         // State
-        this.gameState = new GameState(this.scene, this);
-        this.menuState = new MainMenuState(this.scene, this);
+        this.gameState = new StateGame(this.scene, this);
+        this.menuState = new StateMainMenu(this.scene, this);
         this.state = this.gameState;
     }
 

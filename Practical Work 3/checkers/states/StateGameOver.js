@@ -1,4 +1,4 @@
-class GameOverState {
+class StateGameOver {
 
     constructor(scene, checkers) {
         this.scene = scene;

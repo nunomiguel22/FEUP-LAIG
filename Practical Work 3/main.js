@@ -11,20 +11,35 @@ function getUrlVars() {
     return vars;
 }
 //Include additional files here
-serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js',
+serialInclude([
+    // CGF
+    '../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js',
+    'CGF/CGFextendedCamera.js', 'CGF/CGFOBJModel.js', 'CGF/CGFResourceReader.js',
+    'GraphNode.js',
+    // Primitives
     'primitives/MyRectangle.js', 'primitives/MyTriangle.js', 'primitives/MySphere.js',
-    'primitives/MyCylinder.js', 'primitives/MyTorus.js', 'GraphNode.js',
+    'primitives/MyCylinder.js', 'primitives/MyTorus.js', 'primitives/MyPlane.js',
+    'primitives/MyPatch.js', 'primitives/MyNurbsCylinder.js',
+    // Animation
     'animation/Animation.js', 'animation/Keyframe.js', 'animation/KeyframeAnimation.js',
-    'primitives/MyPlane.js', 'primitives/MyPatch.js', 'primitives/MyNurbsCylinder.js',
-    'CGF/CGFOBJModel.js', 'CGF/CGFResourceReader.js', 'checkers/CheckerBoard.js',
-    'checkers/checkerlogic/CheckerTile.js', 'checkers/checkerlogic/CheckerPiece.js',
-    'checkers/checkersequence/CheckerMove.js', 'checkers/checkersequence/CheckerSequence.js',
-    'checkers/Checkers.js', 'checkers/checkerlogic/CheckerLogic.js',
-    'checkers/CheckerThemer.js', 'checkers/CheckerAnimator.js', 'ui/TextRenderer.js',
-    'ui/UIString.js', 'CGF/CGFextendedCamera.js', 'checkers/checkerlogic/CheckerMode.js',
-    'checkers/checkerlogic/CheckerHvH.js', 'ui/MainMenu.js', 'checkers/checkerstates/MainMenuState.js',
-    'checkers/checkerstates/GameState.js', 'checkers/checkerstates/GameOverState.js',
-    'ui/GameInfo.js',
+
+    // Checkers
+    //      Visual
+    'checkers/CheckerBoard.js', 'checkers/CheckerThemer.js', 'checkers/CheckerAnimator.js',
+    //      Logic
+    'checkers/logic/CheckerTile.js', 'checkers/logic/CheckerPiece.js',
+    'checkers/logic/CheckerLogic.js', 'checkers/logic/CheckerMode.js',
+    'checkers/logic/CheckerHvH.js',
+    //      Sequence
+    'checkers/sequence/CheckerMove.js', 'checkers/sequence/CheckerSequence.js',
+    //      States
+    'checkers/states/StateGame.js', 'checkers/states/StateMainMenu.js',
+    'checkers/states/StateGameOver.js',
+    //      Checkers
+    'checkers/Checkers.js',
+    // UI
+    'ui/UITextRenderer.js', 'ui/UIString.js', 'ui/UIMainMenu.js', 'ui/UIGameInfo.js',
+    'ui/UIFPSCounter.js',
 
     main = function () {
         // Standard application, scene and interface setup

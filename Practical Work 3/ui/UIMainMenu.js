@@ -1,4 +1,4 @@
-class MainMenu {
+class UIMainMenu {
 
     constructor(scene, checkers) {
         this.scene = scene;

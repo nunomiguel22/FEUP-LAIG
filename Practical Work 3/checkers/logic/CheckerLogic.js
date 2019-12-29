@@ -13,6 +13,9 @@ class CheckerLogic {
         this.init();
     }
 
+    getWhitePiecesLeft() { return 12 - this.nextFreeAuxWhiteTile; }
+    getBlackPiecesLeft() { return 24 - this.nextFreeAuxBlackTile; }
+
     movePieceFromID(piece, tile) {
         if (this.tiles[tile] == null || this.pieces[piece] == null)
             return;

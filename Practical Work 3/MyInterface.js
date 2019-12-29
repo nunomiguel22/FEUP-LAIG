@@ -40,13 +40,11 @@ class MyInterface extends CGFinterface {
             Object.keys(checkerThemer.themes)).onChange(themeChangeFun).name("Theme");
 
         worldFolder.add(this.scene, "scaleFactor", 0.1, 10.0).name("Scale");
+        worldFolder.add(this.scene.fpsCounter, 'enabled').name("FPS Counter");
+
         worldFolder.open();
 
         let gameFolder = this.gui.addFolder("Game Settings");
-
-
-
-
 
         let updateNamesFun = gameInfo.updateNames.bind(gameInfo);
         gameFolder.add(checkers,
@@ -57,11 +55,6 @@ class MyInterface extends CGFinterface {
         gameFolder.open();
     }
 
-    updateComponents() {
-        for (let i in this.gui.__controllers) {
-            this.gui.__controllers[i].updateDisplay();
-        }
-    }
 
     onGraphLoaded() {
         if (this.cameraFolder != null)

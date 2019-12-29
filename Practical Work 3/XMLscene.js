@@ -41,9 +41,9 @@ class XMLscene extends CGFscene {
         this.previousTime = 0;
         this.tickRate = 60;
 
+        this.textRenderer = new UITextRenderer(this, "scenes/images/fontAtlas.jpg");
+        this.fpsCounter = new UIFPSCounter(this);
         this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl", "shaders/test.frag");
-        this.textRenderer = new TextRenderer(this, "scenes/images/fontAtlas.jpg");
-
     }
 
     /**
@@ -167,12 +167,9 @@ class XMLscene extends CGFscene {
      * Displays the scene.
      */
     render(camera) {
-
         // ---- BEGIN Background, camera and axis setup
         if (camera != null)
             this.camera = camera;
-
-        this.setActiveShader(this.testShader);
 
         // Clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
@@ -201,12 +198,20 @@ class XMLscene extends CGFscene {
         this.popMatrix();
 
         this.checkers.display();
+        this.textRenderer.display();
+        this.fpsCounter.display();
 
         this.clearPickRegistration();
         // ---- END Background, camera and axis setup
+
+        ++this.currentFPS;
+
+
     }
     display() {
+        this.fpsCounter.start();
         this.render(this.mainCamera);
+        this.fpsCounter.end();
     }
     setDepthTest(type) {
         if (type)
