@@ -8,6 +8,7 @@ class CheckerLogic {
         this.nextFreeAuxWhiteTile = 0;
         this.nextFreeAuxBlackTile = 12;
         this.gameOver = false;
+        this.gameStarted = false;
         this.winner = null;
 
         this.init();

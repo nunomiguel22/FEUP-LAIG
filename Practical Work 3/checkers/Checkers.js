@@ -25,7 +25,7 @@ class Checkers {
         // State
         this.gameState = new StateGame(this.scene, this);
         this.menuState = new StateMainMenu(this.scene, this);
-        this.state = this.gameState;
+        this.state = this.menuState;
     }
 
     setCheckerBoard(checkerBoard) { this.checkerBoard = checkerBoard; }

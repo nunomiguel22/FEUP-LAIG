@@ -7,6 +7,8 @@ class StateGameOver {
             this.playerName = this.checkers.whitePlayerName;
         else this.playerName = this.checkers.blackPlayerName;
 
+        this.checkers.checkerLogic.gameStarted = false;
+
         this.message = new GLString(this.scene, this.playerName + " Wins!");
         this.message.setOrtho(true);
         this.message.setSize(0.09);

@@ -68,7 +68,10 @@ class UIString {
         this.rotation = [xAxis, yAxis, zAxis];
     }
 
-    display() { this.textRenderer.strings.push(this); }
+    display() {
+        this.transformMatrix = [...this.scene.getMatrix()];
+        this.textRenderer.strings.push(this);
+    }
 
     _updateSpacing() {
         this.spacingValue = (this.size * this.spacing) / 2.0;

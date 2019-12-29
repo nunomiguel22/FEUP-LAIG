@@ -26,35 +26,29 @@ class UITextRenderer {
         this.characters[char].display();
     }
 
-    /**
-     * Change parameters to GLString
-     */
+
     displayString(uistring) {
-        // Apply Ortho Camera when required
 
-        let prevCamera = null;
-        if (uistring.ortho) {
-            this.scene.pushMatrix();
-            prevCamera = this.scene.camera;
-            this.scene.camera = this.ortho;
-            this.scene.updateProjectionMatrix();
-            this.scene.loadIdentity();
-            this.scene.applyViewMatrix();
-        }
-
-        // Apply text shader, temporarily disable depth test as it was causing artifacts
         this.scene.pushMatrix();
-        this.scene.setDepthTest(false);
-
-        // Set string color
-        this.shader.setUniformsValues({ uFontColor: uistring.color });
+        // Apply Ortho Camera when required
+        if (uistring.ortho) {
+            CGFextendedCamera.swapSceneCamera(this.scene, this.ortho, false);
+            this.scene.setDepthTest(false);
+        }
+        // Apply transformation at time of display
+        else this.scene.setMatrix(uistring.transformMatrix);
 
         // Transformations to entire string
-        this.scene.pushMatrix();
+
         this.scene.translate(...uistring.position);
         this.scene.rotate(uistring.rotation[1], 0, 1, 0);
         this.scene.rotate(uistring.rotation[0], 1, 0, 0);
         this.scene.rotate(uistring.rotation[2], 0, 0, 1);
+
+
+
+        // Set string color
+        this.shader.setUniformsValues({ uFontColor: uistring.color });
 
         // Draw each character
         for (let i in uistring.string) {
@@ -70,12 +64,10 @@ class UITextRenderer {
         }
         // Cleanup after drawing string
         this.scene.popMatrix();
-        this.scene.setDepthTest(true);
-
-        this.scene.popMatrix();
+        //     
         if (uistring.ortho) {
-            this.scene.popMatrix();
-            this.scene.camera = prevCamera;
+            CGFextendedCamera.applyPreviousTransform(this.scene);
+            this.scene.setDepthTest(true);
         }
     }
 

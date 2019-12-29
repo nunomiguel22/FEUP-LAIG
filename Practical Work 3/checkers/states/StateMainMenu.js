@@ -12,6 +12,7 @@ class StateMainMenu {
             case this.mainMenu.newGameString.ID: {
                 this.checkers.checkerLogic.newGame("HvH");
                 this.checkers.changeState(this.checkers.gameState);
+                this.checkers.checkerLogic.gameStarted = true;
                 break;
             }
         }
@@ -20,18 +21,10 @@ class StateMainMenu {
     update(t) { this.checkers.checkerAnimator.update(t); }
 
     processKeyDown(event) {
-        if (event.code == "Escape")
+        if (event.code == "Escape" && this.checkers.checkerLogic.gameStarted)
             this.checkers.changeState(this.checkers.gameState);
     }
 
 
-    display() {
-        this.scene.pushMatrix();
-        this.scene.translate(-40, 100, 0);
-        this.scene.scale(30, 30, 30);
-        this.scene.rotate(-Math.PI / 4, 1, 0, 0);
-        this.scene.rotate(Math.PI / 4, 0, 1, 0);
-        this.mainMenu.display();
-        this.scene.popMatrix();
-    }
+    display() { this.mainMenu.display(); }
 }

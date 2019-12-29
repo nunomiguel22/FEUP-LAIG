@@ -626,7 +626,6 @@ class MySceneGraph {
 
                     let axisVec = vec3.fromValues(axis == 'x', axis == 'y', axis == 'z');
                     mat4.rotate(transfMatrix, transfMatrix, angle, axisVec);
-
                     break;
                 }
                 default: break;

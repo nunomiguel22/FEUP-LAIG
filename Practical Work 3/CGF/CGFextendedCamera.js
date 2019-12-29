@@ -19,6 +19,18 @@ class CGFextendedCamera extends CGFcamera {
         this.stopAnimation();
     }
 
+    static swapSceneCamera(scene, camera, keepModelTransform) {
+        scene.camera = camera;
+        scene.updateProjectionMatrix();
+        CGFextendedCamera.transform = scene.getMatrix();
+        scene.loadIdentity();
+        scene.applyViewMatrix();
+        if (keepModelTransform)
+            scene.multMatrix(transform);
+    }
+
+    static applyPreviousTransform(scene) { scene.multMatrix(CGFextendedCamera.transform); }
+
     reset() {
         this._viewMatrix = mat4.create(1);
         this._up = vec3.fromValues(0, 1, 0);
