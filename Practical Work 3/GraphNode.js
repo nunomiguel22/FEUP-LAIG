@@ -92,9 +92,10 @@ class GraphNode {
         }
         //Draw child primitives
         for (let i in this.primitives) {
-            this.graph.primitives[this.primitives[i]].amplifyTexCoords(compLength_s, compLength_t);
+            let amp = this.graph.primitives[this.primitives[i]].amplifyTexCoords(compLength_s, compLength_t);
             this.graph.primitives[this.primitives[i]].display();
-            this.graph.primitives[this.primitives[i]].resetTexCoords();
+            if (amp)
+                this.graph.primitives[this.primitives[i]].resetTexCoords();
         }
 
         //Draw child components

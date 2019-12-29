@@ -73,11 +73,15 @@ class MyNurbsCylinder extends CGFnurbsObject {
     }
 
     amplifyTexCoords(length_s, length_t) {
-        for (let i = 0; i < this.texCoords.length; ++i) {
-            this.texCoords[i] /= length_s;
-            this.texCoords[++i] /= length_t;
+        if (length_s != 1 || length_t != 1) {
+            for (let i = 0; i < this.texCoords.length; ++i) {
+                this.texCoords[i] /= length_s;
+                this.texCoords[++i] /= length_t;
+            }
+            this.updateTexCoordsGLBuffers();
+            return true;
         }
-        this.updateTexCoordsGLBuffers();
+        return false;
     }
 	/**
 	 * @method updateTexCoords
