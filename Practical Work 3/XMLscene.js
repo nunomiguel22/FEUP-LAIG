@@ -193,11 +193,12 @@ class XMLscene extends CGFscene {
             this.graph.displayScene();
         }
 
-        this.popMatrix();
-
         this.checkers.display();
-        this.textRenderer.display();
         this.fpsCounter.display();
+        this.textRenderer.display();
+
+
+        this.popMatrix();
 
         this.clearPickRegistration();
         // ---- END Background, camera and axis setup
