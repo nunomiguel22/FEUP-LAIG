@@ -197,17 +197,18 @@ class XMLscene extends CGFscene {
         this.fpsCounter.display();
         this.textRenderer.display();
 
-
         this.popMatrix();
 
         this.clearPickRegistration();
+
+
+
         // ---- END Background, camera and axis setup
 
     }
     display() {
-        this.fpsCounter.start();
         this.render(this.mainCamera);
-        this.fpsCounter.end();
+
     }
     setDepthTest(type) {
         if (type)

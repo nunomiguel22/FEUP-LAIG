@@ -37,7 +37,9 @@ class UIFPSCounter {
 
     display() {
         if (this.enabled) {
+            this.end();
             this.fpsString.display();
+            this.start();
         }
     }
 }
