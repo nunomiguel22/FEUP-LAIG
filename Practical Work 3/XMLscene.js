@@ -41,7 +41,7 @@ class XMLscene extends CGFscene {
         this.previousTime = 0;
         this.tickRate = 60;
 
-        this.textRenderer = new UITextRenderer(this, "scenes/images/fontAtlas.jpg");
+        this.textRenderer = new UITextRenderer(this, "scenes/images/fontAtlas.jpg", 10, 10);
         this.fpsCounter = new UIFPSCounter(this);
         this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl", "shaders/test.frag");
     }
@@ -138,6 +138,12 @@ class XMLscene extends CGFscene {
     swapCamera(camera) {
         this.mainCamera.reset();
         this.mainCamera = camera;
+    }
+
+    rotateXYZ(xRadians, yRadians, zRadians) {
+        this.rotate(yRadians, 0, 1, 0);
+        this.rotate(xRadians, 1, 0, 0);
+        this.rotate(zRadians, 0, 0, 1);
     }
 
     update(t) {

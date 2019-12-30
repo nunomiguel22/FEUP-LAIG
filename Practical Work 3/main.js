@@ -57,8 +57,6 @@ serialInclude([
         // create and load graph, and associate it to scene. 
         // Check console for loading errors
         myScene.checkers = new Checkers(myScene);
-        myScene.checkers.checkerLogic.newGame("HvH");
-
         // start
         app.run();
     }

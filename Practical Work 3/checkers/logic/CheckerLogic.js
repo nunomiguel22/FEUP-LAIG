@@ -86,6 +86,17 @@ class CheckerLogic {
             this.gameMode = new CheckerHvH(this.scene, this);
     }
 
+    endGame() {
+        for (let i in this.tiles)
+            this.tiles[i].detatchPiece();
+
+        for (let i in this.auxiliarTiles)
+            this.auxiliarTiles[i].detatchPiece();
+
+        this.gameMode = null;
+
+    }
+
     deselectPiece() {
         if (this.selectedPiece != null) {
             for (let i = 0; i < this.availableMoves.length; ++i)

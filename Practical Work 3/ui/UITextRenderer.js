@@ -1,17 +1,20 @@
 class UITextRenderer {
 
-    constructor(scene, fontAtlas) {
+    constructor(scene, fontAtlas, rows, columns) {
         this.scene = scene;
+        this.rows = rows;
+        this.columns = columns;
+
         this.atlasTexture = new CGFtexture(this.scene, fontAtlas);
         this.shader = new CGFshader(this.scene.gl, "shaders/text/text.vert",
             "shaders/text/text.frag");
         this.shader.setUniformsValues({ uSampler: 0 });
 
+        this.ortho = new CGFcameraOrtho(-1.0, 1.0, -1.0, 1.0, 0.1, 100,
+            [0, 0, 1], [0, 0, 0], [0, 1, 0]);
+
         this.characters = [];
         this._createAtlas();
-
-        this.ortho = new CGFcameraOrtho(-1.0, 1.0, -1.0, 1.0, 0.1, 100,
-            vec3.fromValues(0, 0, 1), vec3.fromValues(0, 0, 0), vec3.fromValues(0, 1, 0));
 
         this.strings = [];
     }
@@ -26,7 +29,6 @@ class UITextRenderer {
         this.characters[char].display();
     }
 
-
     displayString(uistring) {
 
         this.scene.pushMatrix();
@@ -35,20 +37,14 @@ class UITextRenderer {
             CGFextendedCamera.swapSceneCamera(this.scene, this.ortho, false);
             this.scene.setDepthTest(false);
         }
+
         // Apply transformation at time of display
         else this.scene.setMatrix(uistring.transformMatrix);
-
-        // Transformations to entire string
-
-        this.scene.translate(...uistring.position);
-        this.scene.rotate(uistring.rotation[1], 0, 1, 0);
-        this.scene.rotate(uistring.rotation[0], 1, 0, 0);
-        this.scene.rotate(uistring.rotation[2], 0, 0, 1);
-
-
-
         // Set string color
         this.shader.setUniformsValues({ uFontColor: uistring.color });
+        // Transformations to entire string
+        this.scene.translate(...uistring.position);
+        this.scene.rotateXYZ(...uistring.rotation);
 
         // Draw each character
         for (let i in uistring.string) {
@@ -62,9 +58,9 @@ class UITextRenderer {
             this.displayChar(uistring.string.charAt(i));
             this.scene.popMatrix();
         }
+
         // Cleanup after drawing string
         this.scene.popMatrix();
-        //     
         if (uistring.ortho) {
             CGFextendedCamera.applyPreviousTransform(this.scene);
             this.scene.setDepthTest(true);
@@ -83,21 +79,20 @@ class UITextRenderer {
     }
 
     _createAtlas() {
-        let ab = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`"
-        ab += "abcdefghijklmnopqrstuvwxyz{|}~";
+        const squareWidth = 1.0 / this.columns;
+        const squareHeight = 1.0 / this.rows;
 
-        this.squareSize = 1.0 / 10.0;
-        const halfSize = this.squareSize / 2.0;
+        //Stating from space(32)
+        let charIndex = 32;
 
-        let charIndex = 0;
-        for (let j = 0; j < 10; ++j)
-            for (let i = 0; i < 10; ++i) {
+        for (let j = 0; j < this.rows; ++j)
+            for (let i = 0; i < this.columns; ++i) {
                 let rect = new MyRectangle(this.scene, null, 0.0, 1.0, 0.0, 1.0);
 
-                let u1 = this.squareSize * i;
-                let v1 = this.squareSize * j;
-                let u2 = this.squareSize * i + this.squareSize;
-                let v2 = this.squareSize * j + this.squareSize;
+                let u1 = squareWidth * i;
+                let v1 = squareHeight * j;
+                let u2 = squareWidth * i + squareWidth;
+                let v2 = squareHeight * j + squareHeight;
                 let texCoords = [
                     u1, v2,
                     u2, v2,
@@ -106,7 +101,7 @@ class UITextRenderer {
                 ]
 
                 rect.updateTexCoords(texCoords);
-                this.characters[ab.charAt(charIndex++)] = rect;
+                this.characters[String.fromCharCode(charIndex++)] = rect;
             }
     }
 }
