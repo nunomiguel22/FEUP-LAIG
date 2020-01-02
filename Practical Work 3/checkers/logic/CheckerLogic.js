@@ -3,14 +3,16 @@ class CheckerLogic {
     constructor(scene, checkers) {
         this.scene = scene;
         this.checkers = checkers;
-        this.selectedPiece = null;
         this.availableMoves = [];
 
         this.capturedWhitePieces = 0;
         this.capturedBlackPieces = 0;
 
         this.playerTurn = 1;
-        this.lockPicking = false;
+        this.player1 = null;
+        this.player2 = null;
+        this.activePlayer = null;;
+
 
         this.gameOver = false;
         this.gameStarted = false;
@@ -23,53 +25,11 @@ class CheckerLogic {
 
     switchTurn() {
         this.playerTurn ^= 1;
-        this.unlockSelection();
+        this.activePlayer = (this.playerTurn) ? this.player1 : this.player2;
+        this.activePlayer.onTurn();
     }
 
-    isPiecePickable(ID) {
-        if (this.lockPicking)
-            return false;
-
-        if (this.playerTurn)
-            return ID >= 12;
-        else return ID < 12;
-    }
-
-    selectPiece(pickResult, captureOnly) {
-        let pickID = pickResult - 1;
-        if (!this.isSamePick(pickResult) && this.isPiecePickable(pickID)) {
-            this.deselectPiece();
-            this.selectedPiece = pickID;
-            this.pieces[this.selectedPiece].select();
-            this.availableMoves = this.generatePossibleMoves(this.selectedPiece, captureOnly);
-            this.highlightAvailableMoves();
-        }
-    }
-
-    deselectPiece() {
-        if (this.selectedPiece != null) {
-            for (let i in this.availableMoves)
-                this.availableMoves[i].destinationTile.highlight = false;
-            this.pieces[this.selectedPiece].deselect();
-            this.selectedPiece = null;
-        }
-    }
-
-    lockSelection(pieceID) {
-        this.selectPiece(pieceID, true);
-        this.lockPicking = true;
-    }
-
-    unlockSelection() {
-        this.deselectPiece();
-        this.lockPicking = false;
-    }
-
-    isSamePick(pickResult) { return (pickResult - 1) == this.selectedPiece; }
-
-    getPickType(pickResult) {
-        return this.pieces[pickResult - 1].type;
-    }
+    handlePick(pickResult) { this.activePlayer.handlePick(pickResult); }
 
     // CAPTURING PIECES
 
@@ -115,13 +75,8 @@ class CheckerLogic {
             this.availableMoves[i].destinationTile.highlight = true;
     }
 
-
-
     getValidMove(tileName) {
-        if (this.selectedPiece == null || tileName == null)
-            return null;
-
-        for (let i = 0; i < this.availableMoves.length; ++i)
+        for (let i in this.availableMoves)
             if (this.availableMoves[i].destinationTile.name == tileName)
                 return this.availableMoves[i];
 
@@ -277,7 +232,7 @@ class CheckerLogic {
         if (tileRange > 1)
             this.checkers.capturePiece(move.capturedPiece);
 
-        this.movePieceFromOBJ(piece, tile);
+        this.movePiece(piece, tile);
 
         // Check if game is over
         this.winner = this.winConditionsMet();
@@ -288,18 +243,10 @@ class CheckerLogic {
 
         if (!(move.capturedPiece && this.canPieceCapture(piece)))
             this.switchTurn();
-        else this.lockSelection(move.piece.ID);
+        else this.activePlayer.onJump(move.piece);
     }
 
-
-    movePieceFromID(piece, tile) {
-        if (this.tiles[tile] == null || this.pieces[piece] == null)
-            return;
-
-        this.tiles[tile].attachPiece(this.pieces[piece]);
-    }
-
-    movePieceFromOBJ(piece, tile) { tile.attachPiece(piece); }
+    movePiece(piece, tile) { tile.attachPiece(piece); }
 
     // OTHERS
 
@@ -316,8 +263,11 @@ class CheckerLogic {
     newGame(type) {
         this.fillStartBlock("white");
         this.fillStartBlock("black");
-        if (type == "HvH")
-            this.gameMode = new CheckerHvH(this.scene, this);
+        if (type == "HvH") {
+            this.player1 = new CheckerHuman(this.scene, this.checkers, this);
+            this.player2 = new CheckerHuman(this.scene, this.checkers, this);
+            this.activePlayer = this.player1;
+        }
     }
 
     endGame() {
@@ -326,14 +276,6 @@ class CheckerLogic {
 
         for (let i in this.auxiliarTiles)
             this.auxiliarTiles[i].detatchPiece();
-
-        this.gameMode = null;
-
-    }
-
-    display() {
-        this.scene.registerForPick(this.uID, this);
-        this.model.display(null, null, null, null);
     }
 
     init() {

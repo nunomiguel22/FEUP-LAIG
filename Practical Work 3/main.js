@@ -29,7 +29,7 @@ serialInclude([
     //      Logic
     'checkers/logic/CheckerTile.js', 'checkers/logic/CheckerPiece.js',
     'checkers/logic/CheckerLogic.js', 'checkers/logic/CheckerMode.js',
-    'checkers/logic/CheckerHvH.js',
+    'checkers/logic/CheckerHuman.js',
     //      Sequence
     'checkers/sequence/CheckerMove.js', 'checkers/sequence/CheckerSequence.js',
     //      States

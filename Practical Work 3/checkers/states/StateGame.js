@@ -10,18 +10,7 @@ class StateGame {
         this.gameInfo = new UIGameInfo(this.scene, this.checkers);
     }
 
-    handlePick(pickResult) {
-        if (this.checkers.isPickPiece(pickResult))
-            this.checkers.checkerLogic.selectPiece(pickResult, false);
-        else {
-            let tileName = CheckerTile.IDtoName(pickResult);
-            this.checkers.logTile(tileName);
-
-            let move = this.checkerLogic.getValidMove(tileName);
-            if (move)
-                this.checkers.movePiece(move);
-        }
-    }
+    handlePick(pickResult) { this.checkerLogic.handlePick(pickResult); }
 
     processKeyDown(event) {
         if (event.code == "Escape")

@@ -19,7 +19,7 @@ class CheckerAnimator {
     playCameraAnimation(camera) { this.cameraAnimations.push(camera); }
 
     update(t) {
-        if (this.checkers.checkerLogic.selectedPiece != null)
+        if (CheckerHuman.selectedPiece != null)
             this.selectedAnimation.update(t);
 
         for (let i in this.moveAnimations) {

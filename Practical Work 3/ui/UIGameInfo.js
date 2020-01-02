@@ -58,7 +58,7 @@ class UIGameInfo {
 
     display() {
 
-        if (this.checkers.checkerLogic.gameMode.playerTurn) {
+        if (this.checkerLogic.playerTurn) {
             this.turn.setPosition(0.7, 0.6, 0.0);
             this.turn.setAlignment("right");
         }
