@@ -6,31 +6,33 @@ class UIString {
 
         // String Info
         this.setString(string);
-
         this.setColor(1.0, 1.0, 1.0, 1.0);
-        this.setSpacing(1.0); // 1.0 is a full character space
+        this.setSpacing(1.0);
         this.setAlignment("left");
         this.setPosition(0.0, 0.0, 0.0);
         this.setSize(1.0);
         this.setRotationDegrees(0.0, 0.0, 0.0);
         this.setOrtho(false);
-
-        //Technical Values
-        this._updateSpacing();
-        this.ID = null;
+        this.setPickID(null);
     }
 
-    setSize(size) {
-        this.size = size;
-        this._updateSpacing();
+    display() {
+        this.transformMatrix = [...this.scene.getMatrix()];
+        this.textRenderer.strings.push(this);
     }
-    setPosition(x, y, z) {
-        this.position = [x, y, z];
-    }
+
     setString(string) {
         this.string = string;
         this.setAlignment(this.alignment);
     }
+
+    setColor(red, green, blue, alpha) { this.color = [red, green, blue, alpha]; }
+
+    setSpacing(spacing) {
+        this.spacing = spacing;
+        this._updateSpacing();
+    }
+
     setAlignment(alignment) {
         this.alignment = alignment;
 
@@ -50,16 +52,14 @@ class UIString {
             default: this.alignmentValue = 0; break;
         }
     }
-    setPickID(ID) { this.ID = ID; }
-    setColor(red, green, blue, alpha) { this.color = [red, green, blue, alpha]; }
-    setOrtho(ortho) { this.ortho = ortho; }
-    setSpacing(spacing) {
-        this.spacing = spacing;
+
+    setPosition(x, y, z) { this.position = [x, y, z]; }
+
+    setSize(size) {
+        this.size = size;
         this._updateSpacing();
     }
 
-    hasRotation() { return this.rotation[0] || this.rotation[1] || this.hasRotation[2]; }
-    setRotationRadians(xAxis, yAxis, zAxis) { this.rotation = [xAxis, yAxis, zAxis]; }
     setRotationDegrees(xAxis, yAxis, zAxis) {
         const degreesToRadians = Math.PI / 180;
         xAxis *= degreesToRadians;
@@ -68,10 +68,13 @@ class UIString {
         this.rotation = [xAxis, yAxis, zAxis];
     }
 
-    display() {
-        this.transformMatrix = [...this.scene.getMatrix()];
-        this.textRenderer.strings.push(this);
-    }
+    setRotationRadians(xAxis, yAxis, zAxis) { this.rotation = [xAxis, yAxis, zAxis]; }
+
+    hasRotation() { return this.rotation[0] || this.rotation[1] || this.hasRotation[2]; }
+
+    setOrtho(ortho) { this.ortho = ortho; }
+
+    setPickID(ID) { this.ID = ID; }
 
     _updateSpacing() {
         this.spacingValue = (this.size * this.spacing) / 2.0;

@@ -8,7 +8,7 @@ class CheckerSequence {
 
     addMove(tileName) {
         let move = new CheckerMove(this.checkerLogic.selectedPiece,
-            this.checkerLogic.getTileFromPiece(this.checkerLogic.selectedPiece).name,
+            this.checkerLogic.getTileFromPieceID(this.checkerLogic.selectedPiece).name,
             tileName);
 
         ++this.moves;

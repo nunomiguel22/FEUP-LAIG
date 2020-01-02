@@ -32,35 +32,27 @@ class Checkers {
 
     isPickPiece(pickResult) { return pickResult < 25; }
 
-    movePiece(pieceID, tileName) {
+    movePiece(move) {
         // Get Tile and Piece
-        let piece = this.checkerLogic.getPieceFromID(pieceID);
-        let tile = this.checkerLogic.getTileFromName(tileName);
+        let piece = move.piece;
+        let tile = move.destinationTile;
         // Play Animation
         let anim = this.checkerBoard.movePiece(piece, tile);
         // Attach Piece to tile when animation is over
-        anim.onAnimationOver(this.checkerLogic.makePlay.bind(this.checkerLogic), piece, tile);
+        anim.onAnimationOver(this.checkerLogic.makePlay.bind(this.checkerLogic), move);
         // Register move
-        this.checkerSequence.addMove(tile);
         // Cleanup
         this.checkerLogic.deselectPiece();
     }
 
     changeState(state) { this.state = state; }
 
-    moveWhitePieceOut(piece) {
+    capturePiece(piece) {
+
         let anim = this.checkerBoard.movePiece(piece,
-            this.checkerLogic.getNextFreeWhiteAuxTile());
+            this.checkerLogic.getFreeAuxTile(piece.type));
 
-        anim.onAnimationOver(this.checkerLogic.moveWhitePieceOut.bind(this.checkerLogic), piece);
-    }
-
-    moveBlackPieceOut(piece) {
-        let anim = this.checkerBoard.movePiece(piece,
-            this.checkerLogic.getNextFreeBlackAuxTile());
-
-        anim.onAnimationOver(this.checkerLogic.moveBlackPieceOut.bind(this.checkerLogic), piece);
-
+        anim.onAnimationOver(this.checkerLogic.capturePiece.bind(this.checkerLogic), piece);
     }
 
     handlePick(pickResult) { this.state.handlePick(pickResult); }

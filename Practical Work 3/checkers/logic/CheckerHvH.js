@@ -5,7 +5,7 @@ class CheckerHvH extends CheckerMode {
 
     constructor(scene, checkerLogic) {
         super(scene, checkerLogic);
-        this.playerTurn = 0;
+        this.playerTurn = 1;
     }
 
     isPickable(ID) {

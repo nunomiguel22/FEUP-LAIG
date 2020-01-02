@@ -3,6 +3,7 @@ class StateGame {
     constructor(scene, checkers) {
         this.scene = scene;
         this.checkers = checkers;
+        this.checkerLogic = checkers.checkerLogic;
         this.gameOver = false;
 
         // Player 1 Information
@@ -15,10 +16,10 @@ class StateGame {
         else {
             let tileName = CheckerTile.IDtoName(pickResult);
             this.checkers.logTile(tileName);
-            if (this.checkers.checkerLogic.isMoveValid(tileName)) {
-                this.checkers.movePiece(this.checkers.checkerLogic.selectedPiece, tileName);
 
-            }
+            let move = this.checkerLogic.getValidMove(tileName);
+            if (move)
+                this.checkers.movePiece(move);
         }
     }
 

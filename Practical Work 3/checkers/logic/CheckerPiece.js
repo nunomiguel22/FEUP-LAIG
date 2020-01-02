@@ -9,6 +9,8 @@ class CheckerPiece {
         this.anim = null;
         this.tile = null;
         this.ID = ID;
+
+        this.availableMoves = [];
     }
 
     setSelectionAnimation(anim) { this.selectAnim = anim; }

@@ -1,8 +1,12 @@
 class CheckerMove {
 
-    constructor(piece, originTile, destinationTile) {
+    constructor(piece, destinationTile, capturedPiece) {
         this.piece = piece;
-        this.originTile = originTile;
+        this.originTile = this.piece.tile;
         this.destinationTile = destinationTile;
+
+        this.capturedPiece = capturedPiece;
+        if (this.capturedPiece != null)
+            this.capturedTile = this.capturedPiece.tile;
     }
 }

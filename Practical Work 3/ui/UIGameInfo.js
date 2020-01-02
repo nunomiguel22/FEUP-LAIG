@@ -3,7 +3,7 @@ class UIGameInfo {
     constructor(scene, checkers) {
         this.scene = scene;
         this.checkers = checkers;
-
+        this.checkerLogic = checkers.checkerLogic;
 
         this.player1 = new UIString(this.scene, this.checkers.whitePlayerName);
         this.player1.setOrtho(true);
@@ -45,13 +45,13 @@ class UIGameInfo {
     }
 
     displayPlayer1Info() {
-        this.p1Pieces.setString(" Pieces " + this.checkers.checkerLogic.getWhitePiecesLeft());
+        this.p1Pieces.setString(" Pieces " + this.checkerLogic.whitePiecesRemaining());
         this.p1Pieces.display();
         this.player1.display();
     }
 
     displayPlayer2Info() {
-        this.p2Pieces.setString(" Pieces " + this.checkers.checkerLogic.getBlackPiecesLeft());
+        this.p2Pieces.setString(" Pieces " + this.checkerLogic.blackPiecesRemaining());
         this.p2Pieces.display();
         this.player2.display();
     }

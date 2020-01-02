@@ -19,6 +19,12 @@ class CheckerTile {
         this.piece = null;
     }
 
+    hasPiece() { return this.piece != null; }
+    hasTopLeftTile() { return this.topLeft != null; }
+    hasBottomLeftTile() { return this.bottomLeft != null; }
+    hasTopRightTile() { return this.topRight != null; }
+    hasBottomRightTile() { return this.bottomRight != null; }
+
     setRectangle(rectangle) {
         this.tileRect = rectangle;
         this.updateCenterPoints();
