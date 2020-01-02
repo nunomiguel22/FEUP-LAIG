@@ -6,8 +6,6 @@ class CheckerLogic {
         this.selectedPiece = null;
         this.availableMoves = [];
 
-        this.nextFreeAuxWhiteTile = 0;
-        this.nextFreeAuxBlackTile = 12;
         this.capturedWhitePieces = 0;
         this.capturedBlackPieces = 0;
 
@@ -159,6 +157,7 @@ class CheckerLogic {
             }
             default: break;
         }
+
         return moves;
     }
 
