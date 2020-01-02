@@ -12,7 +12,7 @@ class StateGame {
 
     handlePick(pickResult) {
         if (this.checkers.isPickPiece(pickResult))
-            this.checkers.checkerLogic.selectPiece(pickResult);
+            this.checkers.checkerLogic.selectPiece(pickResult, false);
         else {
             let tileName = CheckerTile.IDtoName(pickResult);
             this.checkers.logTile(tileName);

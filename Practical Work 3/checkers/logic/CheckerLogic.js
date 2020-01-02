@@ -35,13 +35,13 @@ class CheckerLogic {
         else return ID < 12;
     }
 
-    selectPiece(pickResult) {
+    selectPiece(pickResult, captureOnly) {
         let pickID = pickResult - 1;
         if (!this.isSamePick(pickResult) && this.isPiecePickable(pickID)) {
             this.deselectPiece();
             this.selectedPiece = pickID;
             this.pieces[this.selectedPiece].select();
-            this.availableMoves = this.generatePossibleMoves(this.selectedPiece);
+            this.availableMoves = this.generatePossibleMoves(this.selectedPiece, captureOnly);
             this.highlightAvailableMoves();
         }
     }
@@ -56,7 +56,7 @@ class CheckerLogic {
     }
 
     lockSelection(pieceID) {
-        this.selectPiece(pieceID);
+        this.selectPiece(pieceID, true);
         this.lockPicking = true;
     }
 
@@ -96,7 +96,7 @@ class CheckerLogic {
     }
 
     canPieceCapture(piece) {
-        let moves = this.generatePossibleMoves(piece.ID);
+        let moves = this.generatePossibleMoves(piece.ID - 1, true);
 
         for (let i in moves)
             if (moves[i].capturedPiece)
@@ -128,7 +128,20 @@ class CheckerLogic {
         return null;
     }
 
-    generatePossibleMoves(pieceID) {
+    filterCaptureMoves(moves) {
+        let capMoves = [];
+        for (let i in moves) {
+            if (moves[i].capturedPiece)
+                capMoves.push(moves[i]);
+        }
+
+        if (capMoves.length)
+            return capMoves;
+
+        return moves;
+    }
+
+    generatePossibleMoves(pieceID, captureOnly) {
         let moves = [];
 
         let tile = this.getTileFromPieceID(pieceID);
@@ -157,6 +170,9 @@ class CheckerLogic {
             }
             default: break;
         }
+
+        if (captureOnly)
+            moves = this.filterCaptureMoves(moves);
 
         return moves;
     }
@@ -258,26 +274,8 @@ class CheckerLogic {
         let tile = move.destinationTile;
 
         let tileRange = Math.abs(tile.name.charCodeAt(1) - piece.tile.name.charCodeAt(1));
-        if (tileRange > 1) {
-            if (piece.type == "white") {
-                let topLeft = this.getTileFromName(piece.tile.topLeft);
-                if (topLeft != null && topLeft.topLeft == tile.name)
-                    this.checkers.capturePiece(topLeft.piece);
-                else {
-                    let topRight = this.getTileFromName(piece.tile.topRight);
-                    this.checkers.capturePiece(topRight.piece);
-                };
-            }
-            else {
-                let bottomLeft = this.getTileFromName(piece.tile.bottomLeft);
-                if (bottomLeft != null && bottomLeft.bottomLeft == tile.name)
-                    this.checkers.capturePiece(bottomLeft.piece);
-                else {
-                    let bottomRight = this.getTileFromName(piece.tile.bottomRight);
-                    this.checkers.capturePiece(bottomRight.piece);
-                }
-            }
-        }
+        if (tileRange > 1)
+            this.checkers.capturePiece(move.capturedPiece);
 
         this.movePieceFromOBJ(piece, tile);
 
