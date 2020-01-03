@@ -39,6 +39,7 @@ class Checkers {
         // Attach Piece to tile when animation is over
         anim.onAnimationOver(this.checkerLogic.makePlay.bind(this.checkerLogic), move);
         // Register move
+        this.checkerSequence.addMove(move);
     }
 
 
