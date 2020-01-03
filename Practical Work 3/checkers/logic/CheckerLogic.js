@@ -13,7 +13,6 @@ class CheckerLogic {
         this.player2 = null;
         this.activePlayer = null;;
 
-
         this.gameOver = false;
         this.gameStarted = false;
         this.winner = null;
@@ -29,17 +28,17 @@ class CheckerLogic {
         this.activePlayer.onTurn();
     }
 
-    updateMoves() {
+    updateMoves(forcedCapture) {
         if (this.playerTurn) {
             for (let i = 12; i < 24; ++i) {
                 if (!this.pieces[i].captured)
-                    this.pieces[i].availableMoves = this.generatePossibleMoves(i, false);
+                    this.pieces[i].availableMoves = this.generatePossibleMoves(i, forcedCapture);
             }
         }
         else {
             for (let i = 0; i < 12; ++i) {
                 if (!this.pieces[i].captured)
-                    this.pieces[i].availableMoves = this.generatePossibleMoves(i, false);
+                    this.pieces[i].availableMoves = this.generatePossibleMoves(i, forcedCapture);
             }
         }
     }
@@ -266,7 +265,7 @@ class CheckerLogic {
         if (!(move.capturedPiece && this.canPieceCapture(piece))) {
             this.switchTurn();
             if (!capture)
-                this.updateMoves();
+                this.updateMoves(false);
         }
         else this.activePlayer.onJump(move.piece);
     }

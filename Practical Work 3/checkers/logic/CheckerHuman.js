@@ -58,7 +58,7 @@ class CheckerHuman extends CheckerPlayer {
 
     lockSelection(pieceID) {
         this.deselectPiece();
-        this.checkerLogic.updateMoves();
+        this.checkerLogic.updateMoves(true);
         this.selectPiece(pieceID, true);
         this.lockPicking = true;
     }
