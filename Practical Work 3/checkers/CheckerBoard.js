@@ -130,7 +130,7 @@ class CheckerBoard extends CGFobject {
         }
     }
 
-    movePiece(piece, destination) {
+    movePiece(piece, destination, heightAdjust) {
         let vecx = destination.centerx - piece.tile.centerx;
         let vecy = destination.centery - piece.tile.centery;
         let anim = new KeyframeAnimation(this.scene.graph);
@@ -140,7 +140,7 @@ class CheckerBoard extends CGFobject {
         let key2 = new Keyframe(1.0, vec3.fromValues(vecx, vecy, 3.0), vec3.fromValues(0, 0, 0),
             vec3.fromValues(1, 1, 1));
         anim.addKeyframe(key2);
-        let key3 = new Keyframe(1.3, vec3.fromValues(vecx, vecy, 0), vec3.fromValues(0, 0, 0),
+        let key3 = new Keyframe(1.3, vec3.fromValues(vecx, vecy, heightAdjust), vec3.fromValues(0, 0, 0),
             vec3.fromValues(1, 1, 1));
         anim.addKeyframe(key3);
         piece.setAnimation(anim);

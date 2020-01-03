@@ -28,6 +28,24 @@ class CheckerLogic {
         this.activePlayer.onTurn();
     }
 
+    checkNewKings() {
+
+        for (let i in this.tileRow1) {
+            let piece = this.tileRow1[i].piece;
+            if (piece)
+                if (!piece.king && piece.type == "black")
+                    this.checkers.makeKing(piece);
+
+        }
+
+        for (let i in this.tileRow8) {
+            let piece = this.tileRow8[i].piece;
+            if (piece)
+                if (!piece.king && piece.type == "white")
+                    this.checkers.makeKing(piece);
+        }
+    }
+
     updateMoves(forcedCapture) {
         if (this.playerTurn) {
             for (let i = 12; i < 24; ++i) {
@@ -54,6 +72,18 @@ class CheckerLogic {
         return this.auxiliarTiles[this.capturedBlackPieces];
     }
 
+    getCapturedPiece(type) {
+        for (let i in this.pieces)
+            if (this.pieces[i].captured && this.pieces[i].type == type)
+                return this.pieces[i];
+        return null;
+    }
+
+    makeKing(piece, sparePiece) {
+        piece.makeKing(sparePiece);
+        this.updateMoves();
+    }
+
     capturePiece(piece) {
         piece.tile.piece = null;
         piece.tile = null;
@@ -68,6 +98,7 @@ class CheckerLogic {
         // Capture black piece
         this.auxiliarTiles[this.capturedBlackPieces].attachPiece(piece);
         ++this.capturedBlackPieces;
+        this.checkNewKings();
     }
 
     canPieceCapture(piece) {
@@ -120,30 +151,49 @@ class CheckerLogic {
         let tile = this.getTileFromPieceID(pieceID);
         let piece = this.getPieceFromID(pieceID);
 
-        switch (piece.type) {
-            case "white": {
-                let topLeftMove = this.generateTopLeftMove(tile, piece);
-                if (topLeftMove)
-                    moves.push(topLeftMove);
+        if (piece.king) {
+            let topLeftMove = this.generateTopLeftMove(tile, piece);
+            if (topLeftMove)
+                moves.push(topLeftMove);
 
-                let topRightMove = this.generateTopRightMove(tile, piece);
-                if (topRightMove)
-                    moves.push(topRightMove);
-                break;
-            }
-            case "black": {
-                let bottomLeftMove = this.generateBottomLeftMove(tile, piece);
-                if (bottomLeftMove)
-                    moves.push(bottomLeftMove);
+            let topRightMove = this.generateTopRightMove(tile, piece);
+            if (topRightMove)
+                moves.push(topRightMove);
+            ;
+            let bottomLeftMove = this.generateBottomLeftMove(tile, piece);
+            if (bottomLeftMove)
+                moves.push(bottomLeftMove);
 
-                let bottomRightMove = this.generateBottomRightMove(tile, piece);
-                if (bottomRightMove)
-                    moves.push(bottomRightMove);
-                break;
-            }
-            default: break;
+            let bottomRightMove = this.generateBottomRightMove(tile, piece);
+            if (bottomRightMove)
+                moves.push(bottomRightMove);
+
         }
+        else {
+            switch (piece.type) {
+                case "white": {
+                    let topLeftMove = this.generateTopLeftMove(tile, piece);
+                    if (topLeftMove)
+                        moves.push(topLeftMove);
 
+                    let topRightMove = this.generateTopRightMove(tile, piece);
+                    if (topRightMove)
+                        moves.push(topRightMove);
+                    break;
+                }
+                case "black": {
+                    let bottomLeftMove = this.generateBottomLeftMove(tile, piece);
+                    if (bottomLeftMove)
+                        moves.push(bottomLeftMove);
+
+                    let bottomRightMove = this.generateBottomRightMove(tile, piece);
+                    if (bottomRightMove)
+                        moves.push(bottomRightMove);
+                    break;
+                }
+                default: break;
+            }
+        }
         if (captureOnly)
             moves = this.filterCaptureMoves(moves);
 
@@ -162,7 +212,8 @@ class CheckerLogic {
 
         /*  If top left piece is of the same type or next top left is out of bounds 
            jump is impossible  */
-        if (topLeft.piece.type == piece.type || !topLeft.hasTopLeftTile())
+        if (topLeft.piece.type == piece.type || !topLeft.hasTopLeftTile()
+            || topLeft.piece.captured)
             return null;
 
         let topLeft2 = this.getTileFromName(topLeft.topLeft);
@@ -185,7 +236,8 @@ class CheckerLogic {
 
         /*  If top left piece is of the same type or next top left is out of bounds 
                jump is impossible  */
-        if (topRight.piece.type == piece.type || !topRight.hasTopRightTile())
+        if (topRight.piece.type == piece.type || !topRight.hasTopRightTile()
+            || topRight.piece.captured)
             return null;
 
         let topRight2 = this.getTileFromName(topRight.topRight);
@@ -207,7 +259,8 @@ class CheckerLogic {
             return new CheckerMove(piece, bottomLeft, null);
         /*  If top left piece is of the same type or next top left is out of bounds 
            jump is impossible  */
-        if (bottomLeft.piece.type == piece.type || !bottomLeft.hasBottomLeftTile())
+        if (bottomLeft.piece.type == piece.type || !bottomLeft.hasBottomLeftTile()
+            || bottomLeft.piece.captured)
             return null;
 
         let bottomLeft2 = this.getTileFromName(bottomLeft.bottomLeft);
@@ -229,7 +282,8 @@ class CheckerLogic {
             return new CheckerMove(piece, bottomRight, null);
         /*  If top left piece is of the same type or next top left is out of bounds 
            jump is impossible  */
-        if (bottomRight.piece.type == piece.type || !bottomRight.hasBottomRightTile())
+        if (bottomRight.piece.type == piece.type || !bottomRight.hasBottomRightTile()
+            || bottomRight.piece.captured)
             return null;
 
         let bottomRight2 = this.getTileFromName(bottomRight.bottomRight);
@@ -264,8 +318,10 @@ class CheckerLogic {
 
         if (!(move.capturedPiece && this.canPieceCapture(piece))) {
             this.switchTurn();
-            if (!capture)
+            if (!capture) {
+                this.checkNewKings();
                 this.updateMoves(false);
+            }
         }
         else this.activePlayer.onJump(move.piece);
     }
@@ -333,6 +389,17 @@ class CheckerLogic {
         for (let i = 12; i < 24; ++i) {
             let tileName = "B" + i;
             this.auxiliarTiles.push(new CheckerTile(this.scene, tileName, null));
+        }
+
+        // Arrays with first and last row easy checking of new kings
+        this.tileRow1 = [];
+        this.tileRow8 = [];
+        for (let i in this.tiles) {
+            let tilename = this.tiles[i].name;
+            if (tilename.charAt(1) == '1' && (tilename.charCodeAt(0) % 2))
+                this.tileRow1.push(this.tiles[i]);
+            else if (tilename.charAt(1) == '8' && !(tilename.charCodeAt(0) % 2))
+                this.tileRow8.push(this.tiles[i]);
         }
     }
 

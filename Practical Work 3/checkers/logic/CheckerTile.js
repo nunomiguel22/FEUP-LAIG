@@ -95,9 +95,9 @@ class CheckerTile {
     display() {
         this.scene.registerForPick(this.ID, this);
 
-        if (this.highlight) {
+        if (this.highlight)
             this.scene.graph.materials["piecehighlight"].apply();
-        }
+
         this.tileRect.display();
 
         if (this.highlight)

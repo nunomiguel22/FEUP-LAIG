@@ -28,8 +28,8 @@ serialInclude([
     'checkers/CheckerBoard.js', 'checkers/CheckerThemer.js', 'checkers/CheckerAnimator.js',
     //      Logic
     'checkers/logic/CheckerTile.js', 'checkers/logic/CheckerPiece.js',
-    'checkers/logic/CheckerLogic.js', 'checkers/logic/CheckerMode.js',
-    'checkers/logic/CheckerPlayer.js', 'checkers/logic/CheckerHuman.js',
+    'checkers/logic/CheckerLogic.js', 'checkers/logic/CheckerPlayer.js',
+    'checkers/logic/CheckerHuman.js',
     //      Sequence
     'checkers/sequence/CheckerMove.js', 'checkers/sequence/CheckerSequence.js',
     //      States

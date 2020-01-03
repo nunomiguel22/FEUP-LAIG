@@ -35,19 +35,29 @@ class Checkers {
         let piece = move.piece;
         let tile = move.destinationTile;
         // Play Animation
-        let anim = this.checkerBoard.movePiece(piece, tile);
+        let anim = this.checkerBoard.movePiece(piece, tile, 0);
         // Attach Piece to tile when animation is over
         anim.onAnimationOver(this.checkerLogic.makePlay.bind(this.checkerLogic), move);
         // Register move
+    }
 
+
+    makeKing(piece) {
+        let capturedPiece = this.checkerLogic.getCapturedPiece(piece.type);
+        if (!capturedPiece)
+            return;
+
+        let anim = this.checkerBoard.movePiece(capturedPiece, piece.tile, 0.3);
+        anim.onAnimationOver(this.checkerLogic.makeKing.bind(this.checkerLogic), piece, capturedPiece);
     }
 
     changeState(state) { this.state = state; }
 
     capturePiece(piece) {
+        piece.captured = true;
 
         let anim = this.checkerBoard.movePiece(piece,
-            this.checkerLogic.getFreeAuxTile(piece.type));
+            this.checkerLogic.getFreeAuxTile(piece.type), 0);
 
         anim.onAnimationOver(this.checkerLogic.capturePiece.bind(this.checkerLogic), piece);
     }
