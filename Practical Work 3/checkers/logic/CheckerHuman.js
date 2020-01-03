@@ -1,27 +1,27 @@
-class CheckerHuman {
+class CheckerHuman extends CheckerPlayer {
 
-    constructor(scene, checkers, checkerLogic) {
-        this.scene = scene;
-        this.checkers = checkers;
-        this.checkerLogic = checkerLogic;
+    constructor(scene, checkers, checkerLogic, type) {
+        super(scene, checkers, checkerLogic, type)
         CheckerHuman.selectedPiece = null;
         CheckerHuman.lockPicking = false;
     }
 
-    onTurn() {
-        this.unlockSelection();
-    }
+    onTurn() { this.unlockSelection(); }
 
     onJump(piece) { this.lockSelection(piece.ID); }
 
+
+
     handlePick(pickResult) {
-        if (this.isPickPiece(pickResult))
-            this.selectPiece(pickResult, false);
+        if (this.isPickPiece(pickResult)) {
+            if (!this.isPickCaptured(pickResult))
+                this.selectPiece(pickResult, false);
+        }
         else {
             let tileName = CheckerTile.IDtoName(pickResult);
             this.checkers.logTile(tileName);
 
-            let move = this.checkerLogic.getValidMove(tileName);
+            let move = this.checkerLogic.getValidMove(this.getSelectedPiece(), tileName);
             if (move)
                 this.checkers.movePiece(move);
         }
@@ -41,23 +41,24 @@ class CheckerHuman {
         if (captureOnly || (!this.isSamePick(pickResult) && this.isPiecePickable(pickID))) {
             this.deselectPiece();
             CheckerHuman.selectedPiece = pickID;
-            this.checkerLogic.pieces[CheckerHuman.selectedPiece].select();
-            this.checkerLogic.availableMoves =
-                this.checkerLogic.generatePossibleMoves(CheckerHuman.selectedPiece, captureOnly);
-            this.checkerLogic.highlightAvailableMoves();
+            let selectedPiece = this.getSelectedPiece();
+            selectedPiece.select();
+            selectedPiece.highlightAvailableMoves(true);
         }
     }
 
     deselectPiece() {
         if (CheckerHuman.selectedPiece != null) {
-            for (let i in this.checkerLogic.availableMoves)
-                this.checkerLogic.availableMoves[i].destinationTile.highlight = false;
-            this.checkerLogic.pieces[CheckerHuman.selectedPiece].deselect();
+            let selectedPiece = this.getSelectedPiece();
+            selectedPiece.deselect();
+            selectedPiece.highlightAvailableMoves(false);
             CheckerHuman.selectedPiece = null;
         }
     }
 
     lockSelection(pieceID) {
+        this.deselectPiece();
+        this.checkerLogic.updateMoves();
         this.selectPiece(pieceID, true);
         this.lockPicking = true;
     }
@@ -67,11 +68,13 @@ class CheckerHuman {
         CheckerHuman.lockPicking = false;
     }
 
+    isPickCaptured(pickResult) { return this.checkerLogic.pieces[pickResult - 1].captured; }
+
     isSamePick(pickResult) { return (pickResult - 1) == CheckerHuman.selectedPiece; }
 
-    getPickType(pickResult) {
-        return this.checkerLogic.pieces[pickResult - 1].type;
-    }
+    getPickType(pickResult) { return this.checkerLogic.pieces[pickResult - 1].type; }
+
+    getSelectedPiece() { return this.checkerLogic.pieces[CheckerHuman.selectedPiece]; }
 
 
     isPickPiece(pickResult) { return pickResult < 25; }

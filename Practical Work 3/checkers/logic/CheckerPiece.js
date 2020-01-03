@@ -10,14 +10,14 @@ class CheckerPiece {
         this.tile = null;
         this.ID = ID;
 
+        this.captured = false;
+
         this.availableMoves = [];
     }
 
     setSelectionAnimation(anim) { this.selectAnim = anim; }
 
-    setTile(tile) {
-        this.tile = tile;
-    }
+    setTile(tile) { this.tile = tile; }
 
     select() { this.selected = true; }
 
@@ -26,6 +26,17 @@ class CheckerPiece {
     setModelComponent(modelComponent) { this.modelComponent = modelComponent; }
 
     setAnimation(animation) { this.anim = animation; }
+
+    highlightAvailableMoves(highlight) {
+        for (let i in this.availableMoves)
+            this.availableMoves[i].destinationTile.highlight = highlight;
+    }
+
+    capture() {
+        this.captured = true;
+        this.availableMoves = [];
+        this.deselect();
+    }
 
     display() {
         this.scene.registerForPick(this.ID, this);

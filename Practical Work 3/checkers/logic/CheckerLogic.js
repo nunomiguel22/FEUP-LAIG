@@ -8,7 +8,7 @@ class CheckerLogic {
         this.capturedWhitePieces = 0;
         this.capturedBlackPieces = 0;
 
-        this.playerTurn = 1;
+        this.playerTurn = 0;
         this.player1 = null;
         this.player2 = null;
         this.activePlayer = null;;
@@ -29,6 +29,21 @@ class CheckerLogic {
         this.activePlayer.onTurn();
     }
 
+    updateMoves() {
+        if (this.playerTurn) {
+            for (let i = 12; i < 24; ++i) {
+                if (!this.pieces[i].captured)
+                    this.pieces[i].availableMoves = this.generatePossibleMoves(i, false);
+            }
+        }
+        else {
+            for (let i = 0; i < 12; ++i) {
+                if (!this.pieces[i].captured)
+                    this.pieces[i].availableMoves = this.generatePossibleMoves(i, false);
+            }
+        }
+    }
+
     handlePick(pickResult) { this.activePlayer.handlePick(pickResult); }
 
     // CAPTURING PIECES
@@ -38,13 +53,14 @@ class CheckerLogic {
             return this.auxiliarTiles[this.capturedWhitePieces + 12];
 
         return this.auxiliarTiles[this.capturedBlackPieces];
-
     }
 
     capturePiece(piece) {
         piece.tile.piece = null;
         piece.tile = null;
+        piece.capture();
         // Capture white piece
+        this.updateMoves();
         if (piece.type == "white") {
             this.auxiliarTiles[this.capturedWhitePieces + 12].attachPiece(piece);
             ++this.capturedWhitePieces;
@@ -75,10 +91,13 @@ class CheckerLogic {
             this.availableMoves[i].destinationTile.highlight = true;
     }
 
-    getValidMove(tileName) {
-        for (let i in this.availableMoves)
-            if (this.availableMoves[i].destinationTile.name == tileName)
-                return this.availableMoves[i];
+    getValidMove(piece, tileName) {
+        if (!piece || !tileName)
+            return null;
+
+        for (let i in piece.availableMoves)
+            if (piece.availableMoves[i].destinationTile.name == tileName)
+                return piece.availableMoves[i];
 
         return null;
     }
@@ -228,10 +247,13 @@ class CheckerLogic {
         let piece = move.piece;
         let tile = move.destinationTile;
 
-        let tileRange = Math.abs(tile.name.charCodeAt(1) - piece.tile.name.charCodeAt(1));
-        if (tileRange > 1)
-            this.checkers.capturePiece(move.capturedPiece);
+        let capture = false;
 
+        let tileRange = Math.abs(tile.name.charCodeAt(1) - piece.tile.name.charCodeAt(1));
+        if (tileRange > 1) {
+            this.checkers.capturePiece(move.capturedPiece);
+            capture = true;
+        }
         this.movePiece(piece, tile);
 
         // Check if game is over
@@ -241,8 +263,11 @@ class CheckerLogic {
             return;
         }
 
-        if (!(move.capturedPiece && this.canPieceCapture(piece)))
+        if (!(move.capturedPiece && this.canPieceCapture(piece))) {
             this.switchTurn();
+            if (!capture)
+                this.updateMoves();
+        }
         else this.activePlayer.onJump(move.piece);
     }
 
@@ -264,9 +289,10 @@ class CheckerLogic {
         this.fillStartBlock("white");
         this.fillStartBlock("black");
         if (type == "HvH") {
-            this.player1 = new CheckerHuman(this.scene, this.checkers, this);
-            this.player2 = new CheckerHuman(this.scene, this.checkers, this);
-            this.activePlayer = this.player1;
+            this.player1 = new CheckerHuman(this.scene, this.checkers, this, "black");
+            this.player2 = new CheckerHuman(this.scene, this.checkers, this, "white");
+            this.switchTurn();
+            this.updateMoves();
         }
     }
 
