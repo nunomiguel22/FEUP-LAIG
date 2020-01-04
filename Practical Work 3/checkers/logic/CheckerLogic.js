@@ -36,7 +36,6 @@ class CheckerLogic {
             if (piece)
                 if (!piece.king && piece.type == "black")
                     this.checkers.makeKing(piece);
-
         }
 
         for (let i in this.tileRow8) {

@@ -9,12 +9,19 @@ class StateGameOver extends State {
         this.checkerLogic.gameStarted = false;
         this.checkers.checkerAnimator.reset();
 
-        this.message = new UIString(this.scene, this.playerName + " Wins!");
-        this.message.setOrtho(true);
-        this.message.setPosition(0.0, 0.7, 0.0);
-        this.message.setColor(0.8, 0.8, 0.8, 1.0);
-        this.message.setSize(0.08);
-        this.message.setAlignment("center");
+        this.winnerMessage = new UIString(this.scene, this.playerName + " Wins!");
+        this.winnerMessage.setOrtho(true);
+        this.winnerMessage.setPosition(0.0, 0.7, 0.0);
+        this.winnerMessage.setColor(0.8, 0.8, 0.8, 1.0);
+        this.winnerMessage.setSize(0.08);
+        this.winnerMessage.setAlignment("center");
+
+        this.contMessage = new UIString(this.scene, "Press Escape to watch replay or play a new game");
+        this.contMessage.setOrtho(true);
+        this.contMessage.setPosition(0.0, 0.6, 0.0);
+        this.contMessage.setColor(0.8, 0.8, 0.8, 1.0);
+        this.contMessage.setSize(0.04);
+        this.contMessage.setAlignment("center");
     }
 
     handlePick(pickResult) { }
@@ -27,6 +34,7 @@ class StateGameOver extends State {
     update(t) { }
 
     display() {
-        this.message.display();
+        this.winnerMessage.display();
+        this.contMessage.display();
     }
 }
