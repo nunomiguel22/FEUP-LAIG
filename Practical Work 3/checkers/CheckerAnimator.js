@@ -18,6 +18,12 @@ class CheckerAnimator {
 
     playCameraAnimation(camera) { this.cameraAnimations.push(camera); }
 
+    reset() {
+        this.moveAnimations = [];
+    }
+
+    isAnimatingMoves() { return this.moveAnimations.length; }
+
     update(t) {
         if (CheckerHuman.selectedPiece != null)
             this.selectedAnimation.update(t);

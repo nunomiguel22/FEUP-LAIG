@@ -13,6 +13,7 @@ class CheckerLogic {
         this.player2 = null;
         this.activePlayer = null;;
 
+        this.gameType = null;
         this.gameOver = false;
         this.gameStarted = false;
         this.winner = null;
@@ -93,12 +94,19 @@ class CheckerLogic {
         if (piece.type == "white") {
             this.auxiliarTiles[this.capturedWhitePieces + 12].attachPiece(piece);
             ++this.capturedWhitePieces;
+            this.winner = this.winConditionsMet();
+            if (this.winner)
+                this.gameOver = true;
             return;
         }
         // Capture black piece
         this.auxiliarTiles[this.capturedBlackPieces].attachPiece(piece);
         ++this.capturedBlackPieces;
         this.checkNewKings();
+
+        this.winner = this.winConditionsMet();
+        if (this.winner)
+            this.gameOver = true;
     }
 
     canPieceCapture(piece) {
@@ -296,15 +304,16 @@ class CheckerLogic {
 
     // MOVE PIECES
 
-    makePlay(move) {
+    makePlay(move, animate) {
         let piece = move.piece;
         let tile = move.destinationTile;
 
         let capture = false;
 
-        let tileRange = Math.abs(tile.name.charCodeAt(1) - piece.tile.name.charCodeAt(1));
-        if (tileRange > 1) {
-            this.checkers.capturePiece(move.capturedPiece);
+        if (move.capturedPiece) {
+            if (animate)
+                this.checkers.capturePiece(move.capturedPiece);
+            else this.capturePiece(move.capturedPiece);
             capture = true;
         }
         this.movePiece(piece, tile);
@@ -331,7 +340,7 @@ class CheckerLogic {
     // OTHERS
 
     winConditionsMet() {
-        if (this.capturedWhitePieces >= 12)
+        if (this.capturedWhitePieces >= 1)
             return "black";
 
         if (this.capturedBlackPieces >= 12)
@@ -340,9 +349,13 @@ class CheckerLogic {
         return false;
     }
 
-    newGame(type) {
+    newGame(type, resetSequence) {
+
+        this.reset(resetSequence);
+
         this.fillStartBlock("white");
         this.fillStartBlock("black");
+        this.gameType = type;
         if (type == "HvH") {
             this.player1 = new CheckerHuman(this.scene, this.checkers, this, "black");
             this.player2 = new CheckerHuman(this.scene, this.checkers, this, "white");
@@ -351,13 +364,6 @@ class CheckerLogic {
         }
     }
 
-    endGame() {
-        for (let i in this.tiles)
-            this.tiles[i].detatchPiece();
-
-        for (let i in this.auxiliarTiles)
-            this.auxiliarTiles[i].detatchPiece();
-    }
 
     init() {
         this.tiles = [];
@@ -424,6 +430,39 @@ class CheckerLogic {
                 let tileName = String.fromCharCode(startCollumn.charCodeAt(0) + i) + j;
                 this.tiles[tileName].attachPiece(this.pieces[pieceNumber++]);
             }
+    }
+
+    resetTiles() {
+        for (let i in this.tiles)
+            this.tiles[i].reset();
+
+        for (let i in this.auxiliarTiles)
+            this.auxiliarTiles[i].reset();
+    }
+
+    resetPieces() {
+        for (let i in this.pieces)
+            this.pieces[i].reset();
+    }
+
+
+    resetGame() {
+        if (this.gameType)
+            this.newGame(this.gameType);
+    }
+
+    reset(resetSequence) {
+        if (resetSequence)
+            this.checkers.checkerSequence.reset();
+        this.availableMoves = [];
+        this.capturedWhitePieces = 0;
+        this.capturedBlackPieces = 0;
+        this.playerTurn = 0;
+        this.gameOver = false;
+        this.gameStarted = false;
+        this.winner = null;
+        this.resetTiles();
+        this.resetPieces();
     }
 
     getPieceFromID(ID) { return this.pieces[ID]; }

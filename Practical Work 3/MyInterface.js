@@ -51,6 +51,8 @@ class MyInterface extends CGFinterface {
             "whitePlayerName").onChange(updateNamesFun).name("White Player");
 
         gameFolder.add(checkers, "blackPlayerName").onChange(updateNamesFun).name("Black Player");
+        gameFolder.add(checkers, "undo").name("Undo");
+
 
         gameFolder.open();
     }

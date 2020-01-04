@@ -1,9 +1,7 @@
-class StateGame {
+class StateGame extends State {
 
     constructor(scene, checkers) {
-        this.scene = scene;
-        this.checkers = checkers;
-        this.checkerLogic = checkers.checkerLogic;
+        super(scene, checkers);
         this.gameOver = false;
 
         // Player 1 Information
@@ -13,9 +11,17 @@ class StateGame {
     handlePick(pickResult) { this.checkerLogic.handlePick(pickResult); }
 
     processKeyDown(event) {
-        if (event.code == "Escape")
-            this.checkers.changeState(this.checkers.menuState);
+
+        if (!this.checkers.checkerAnimator.moveAnimations.length) {
+            if (event.code == "Escape")
+                this.checkers.changeState(this.checkers.menuState);
+            if (event.code == "KeyZ" && event.ctrlKey)
+                this.checkers.checkerSequence.undo();
+        }
+
     }
+
+    undo() { this.checkers.checkerSequence.undo(); }
 
     update(t) {
         this.checkers.checkerAnimator.update(t);

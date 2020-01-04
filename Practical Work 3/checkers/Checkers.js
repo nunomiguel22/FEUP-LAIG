@@ -26,6 +26,7 @@ class Checkers {
         this.gameState = new StateGame(this.scene, this);
         this.menuState = new StateMainMenu(this.scene, this);
         this.state = this.menuState;
+        this.previousState = null;
     }
 
     setCheckerBoard(checkerBoard) { this.checkerBoard = checkerBoard; }
@@ -37,10 +38,13 @@ class Checkers {
         // Play Animation
         let anim = this.checkerBoard.movePiece(piece, tile, 0);
         // Attach Piece to tile when animation is over
-        anim.onAnimationOver(this.checkerLogic.makePlay.bind(this.checkerLogic), move);
+        anim.onAnimationOver(this.checkerLogic.makePlay.bind(this.checkerLogic), move, true);
         // Register move
-        this.checkerSequence.addMove(move);
+        if (this.state == this.gameState)
+            this.checkerSequence.addMove(move);
     }
+
+    undo() { this.state.undo(); }
 
 
     makeKing(piece) {
@@ -52,7 +56,10 @@ class Checkers {
         anim.onAnimationOver(this.checkerLogic.makeKing.bind(this.checkerLogic), piece, capturedPiece);
     }
 
-    changeState(state) { this.state = state; }
+    changeState(state) {
+        this.previousState = this.state;
+        this.state = state;
+    }
 
     capturePiece(piece) {
         piece.captured = true;

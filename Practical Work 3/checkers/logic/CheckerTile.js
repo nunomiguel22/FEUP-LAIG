@@ -30,6 +30,13 @@ class CheckerTile {
         this.updateCenterPoints();
     }
 
+    reset() {
+        this.highlight = false;
+        if (this.piece)
+            this.piece.tile = null;
+        this.piece = null;
+    }
+
     updateCenterPoints() {
         const centerdist = (this.tileRect.x2 - this.tileRect.x1) / 2.0;
         this.centerx = this.tileRect.x1 + centerdist;

@@ -33,8 +33,9 @@ serialInclude([
     //      Sequence
     'checkers/sequence/CheckerMove.js', 'checkers/sequence/CheckerSequence.js',
     //      States
-    'checkers/states/StateGame.js', 'checkers/states/StateMainMenu.js',
-    'checkers/states/StateGameOver.js',
+    'checkers/states/State.js', 'checkers/states/StateGame.js',
+    'checkers/states/StateGameOver.js', 'checkers/states/StateMainMenu.js',
+    'checkers/states/StateReplay.js',
     //      Checkers
     'checkers/Checkers.js',
     // UI

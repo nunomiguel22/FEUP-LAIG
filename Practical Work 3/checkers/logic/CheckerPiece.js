@@ -45,6 +45,13 @@ class CheckerPiece {
         this.deselect();
     }
 
+    reset() {
+        this.king = null;
+        this.captured = false;
+        this.availableMoves = [];
+        this.deselect();
+    }
+
     display() {
         if (!this.captured)
             this.scene.registerForPick(this.ID, this);

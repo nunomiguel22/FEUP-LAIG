@@ -1,19 +1,20 @@
-class StateGameOver {
+class StateGameOver extends State {
 
     constructor(scene, checkers) {
-        this.scene = scene;
-        this.checkers = checkers;
-        if (this.checkers.checkerLogic.winner == "white")
+        super(scene, checkers);
+        if (this.checkerLogic.winner == "white")
             this.playerName = this.checkers.whitePlayerName;
         else this.playerName = this.checkers.blackPlayerName;
 
-        this.checkers.checkerLogic.gameStarted = false;
+        this.checkerLogic.gameStarted = false;
+        this.checkers.checkerAnimator.reset();
 
-        this.message = new GLString(this.scene, this.playerName + " Wins!");
+        this.message = new UIString(this.scene, this.playerName + " Wins!");
         this.message.setOrtho(true);
-        this.message.setSize(0.09);
+        this.message.setPosition(0.0, 0.7, 0.0);
+        this.message.setColor(0.8, 0.8, 0.8, 1.0);
+        this.message.setSize(0.08);
         this.message.setAlignment("center");
-        this.message.setPosition([0, 0.3, 0]);
     }
 
     handlePick(pickResult) { }
@@ -23,7 +24,7 @@ class StateGameOver {
             this.checkers.changeState(this.checkers.menuState);
     }
 
-    update(t) { this.checkers.checkerAnimator.update(t); }
+    update(t) { }
 
     display() {
         this.message.display();

@@ -1,28 +1,32 @@
-class StateMainMenu {
+class StateMainMenu extends State {
 
     constructor(scene, checkers) {
-        this.scene = scene;
-        this.checkers = checkers;
+        super(scene, checkers);
         // Menu
-        this.mainMenu = new UIMainMenu(this.scene, this);
+        this.mainMenu = new UIMainMenu(this.scene, this.checkers);
     }
 
     handlePick(pickResult) {
         switch (pickResult) {
             case this.mainMenu.newGameString.ID: {
-                this.checkers.checkerLogic.newGame("HvH");
+                this.checkerLogic.newGame("HvH", true);
                 this.checkers.changeState(this.checkers.gameState);
-                this.checkers.checkerLogic.gameStarted = true;
+                this.checkerLogic.gameStarted = true;
+                break;
+            }
+
+            case this.mainMenu.replayString.ID: {
+                this.checkers.changeState(new StateReplay(this.scene, this.checkers));
                 break;
             }
         }
     }
 
-    update(t) { this.checkers.checkerAnimator.update(t); }
+    update(t) { }
 
     processKeyDown(event) {
-        if (event.code == "Escape" && this.checkers.checkerLogic.gameStarted)
-            this.checkers.changeState(this.checkers.gameState);
+        if (event.code == "Escape" && this.checkers.previousState)
+            this.checkers.changeState(this.checkers.previousState);
     }
 
 
