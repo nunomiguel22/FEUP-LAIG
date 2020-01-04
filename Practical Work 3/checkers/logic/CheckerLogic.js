@@ -339,7 +339,7 @@ class CheckerLogic {
     // OTHERS
 
     winConditionsMet() {
-        if (this.capturedWhitePieces >= 1)
+        if (this.capturedWhitePieces >= 12)
             return "black";
 
         if (this.capturedBlackPieces >= 12)
