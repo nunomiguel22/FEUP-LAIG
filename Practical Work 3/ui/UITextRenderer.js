@@ -30,7 +30,8 @@ class UITextRenderer {
     }
 
     displayString(uistring) {
-
+        if (uistring.forceVis)
+            this.scene.setDepthTest(false);
         this.scene.pushMatrix();
         // Apply Ortho Camera when required
         if (uistring.ortho) {
@@ -65,6 +66,8 @@ class UITextRenderer {
             CGFextendedCamera.applyPreviousTransform(this.scene);
             this.scene.setDepthTest(true);
         }
+        if (uistring.forceVis)
+            this.scene.setDepthTest(true);
     }
 
     display() {

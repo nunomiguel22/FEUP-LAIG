@@ -14,6 +14,7 @@ class UIString {
         this.setRotationDegrees(0.0, 0.0, 0.0);
         this.setOrtho(false);
         this.setPickID(null);
+        this.setAlwaysVisible(false);
     }
 
     display() {
@@ -32,6 +33,8 @@ class UIString {
         this.spacing = spacing;
         this._updateSpacing();
     }
+
+    setAlwaysVisible(vis) { this.forceVis = vis; }
 
     setAlignment(alignment) {
         this.alignment = alignment;

@@ -10,7 +10,9 @@ class CheckerLogic {
 
         this.playerTurn = 0;
         this.player1 = null;
+        this.player1Type = null;
         this.player2 = null;
+        this.player2Type = null;
         this.activePlayer = null;;
 
         this.gameType = null;
@@ -383,20 +385,35 @@ class CheckerLogic {
         return false;
     }
 
-    newGame(type, resetSequence) {
+    makeNewPlayer(type, color) {
+        let player = null;
+        switch (type) {
+            case "human": {
+                player = new CheckerHuman(this.scene, this.checkers, this, color);
+                break;
+            }
+            case "Machine:Easy": {
+                player = new CheckerMachine(this.scene, this.checkers, this, color, "easy");
+                break;
+            }
+            case "Machine:Hard": {
+                player = new CheckerMachine(this.scene, this.checkers, this, color, "hard");
+                break;
+            }
+            default: player = new CheckerHuman(this.scene, this.checkers, this, color);
+        }
+        return player;
+    }
+
+    newGame(p1Type, p2Type, resetSequence) {
         this.reset(resetSequence);
 
         this.fillStartBlock("white");
         this.fillStartBlock("black");
-        this.gameType = type;
-        if (type == "HvH") {
-            //this.player1 = new CheckerHuman(this.scene, this.checkers, this, "black");
-            //this.player2 = new CheckerHuman(this.scene, this.checkers, this, "white");
-            this.player1 = new CheckerMachine(this.scene, this.checkers, this, "black", "easy")
-            this.player2 = new CheckerMachine(this.scene, this.checkers, this, "white", "hard");
-            this.switchTurn();
-            this.updateMoves();
-        }
+        this.player1 = this.makeNewPlayer(p1Type, "black");
+        this.player2 = this.makeNewPlayer(p2Type, "white");
+        this.switchTurn();
+        this.updateMoves();
     }
 
     init() {
