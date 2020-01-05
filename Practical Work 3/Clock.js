@@ -4,9 +4,17 @@ class Clock {
     constructor() {
         this.firstTime = 0;
         this.time = 0;
+        this.stopClock = false;
     }
 
-    update() { this.time = Date.now(); }
+    update() {
+        if (!this.stopClock)
+            this.time = Date.now();
+    }
+
+    stop() { this.stopClock = true; }
+
+    continue() { this.stopClock = false; }
 
     reset() { this.firstTime = Date.now(); }
 

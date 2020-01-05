@@ -342,6 +342,7 @@ class CheckerLogic {
             }
         }
         else this.activePlayer.onJump(move.piece);
+        this.turnClock.continue();
     }
 
     movePiece(piece, tile) { tile.attachPiece(piece); }
@@ -439,6 +440,7 @@ class CheckerLogic {
 
     update() {
         this.gameClock.update();
+
         if (this.turnTimerEnabled) {
             this.turnClock.update();
             if (this.turnClock.timeElapsedSeconds() >= this.maxTurnTime) {

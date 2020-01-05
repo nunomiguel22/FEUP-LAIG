@@ -33,6 +33,8 @@ class Checkers {
     setCheckerBoard(checkerBoard) { this.checkerBoard = checkerBoard; }
 
     movePiece(move) {
+        // Stop the turn timer from running during animations
+        this.checkerLogic.turnClock.stop();
         // Get Tile and Piece
         let piece = move.piece;
         let tile = move.destinationTile;
