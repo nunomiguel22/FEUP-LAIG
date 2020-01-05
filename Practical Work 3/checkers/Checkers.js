@@ -89,4 +89,5 @@ class Checkers {
     processKeyDown(event) { this.state.processKeyDown(event); }
 
     logTile(tileName) { console.log("Selected Tile: " + tileName); }
+    logPiece(pieceID) { console.log("Selected Piece: " + pieceID); }
 }

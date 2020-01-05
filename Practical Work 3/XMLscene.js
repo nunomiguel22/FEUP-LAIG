@@ -160,7 +160,6 @@ class XMLscene extends CGFscene {
                     if (obj) {
                         var customId = this.pickResults[i][1];
                         this.checkers.handlePick(customId);
-                        console.log(customId);
                     }
                 }
                 this.pickResults = [];

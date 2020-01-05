@@ -10,7 +10,7 @@ class UIFPSCounter {
         this.fpsString = new UIString(this.scene, "FPS 0");
         this.fpsString.setOrtho(true);
         this.fpsString.setColor(0.0, 0.6, 0.0, 1.0);
-        this.fpsString.setPosition(-1.0, 0.95, 0.0);
+        this.fpsString.setPosition(-1.0, 0.94, 0.0);
         this.fpsString.setSize(0.035);
         this.enabled = false;
         this.log = true;

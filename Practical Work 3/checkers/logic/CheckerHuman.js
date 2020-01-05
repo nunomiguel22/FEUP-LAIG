@@ -16,6 +16,7 @@ class CheckerHuman extends CheckerPlayer {
         if (this.isPickPiece(pickResult)) {
             if (!this.isPickCaptured(pickResult))
                 this.selectPiece(pickResult, false);
+            this.checkers.logPiece(pickResult);
         }
         else {
             let tileName = CheckerTile.IDtoName(pickResult);
