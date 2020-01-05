@@ -83,9 +83,11 @@ class CheckerLogic {
     }
 
     getCapturedPiece(type) {
-        for (let i in this.pieces)
-            if (this.pieces[i].captured && this.pieces[i].type == type)
+        for (let i in this.pieces) {
+            let piece = this.pieces[i];
+            if (piece.captured && piece[i].type == type && !piece.onKing)
                 return this.pieces[i];
+        }
         return null;
     }
 
@@ -342,6 +344,7 @@ class CheckerLogic {
             }
         }
         else this.activePlayer.onJump(move.piece);
+
         this.turnClock.continue();
     }
 
@@ -387,8 +390,10 @@ class CheckerLogic {
         this.fillStartBlock("black");
         this.gameType = type;
         if (type == "HvH") {
-            this.player1 = new CheckerHuman(this.scene, this.checkers, this, "black");
-            this.player2 = new CheckerHuman(this.scene, this.checkers, this, "white");
+            //this.player1 = new CheckerHuman(this.scene, this.checkers, this, "black");
+            //this.player2 = new CheckerHuman(this.scene, this.checkers, this, "white");
+            this.player1 = new CheckerMachine(this.scene, this.checkers, this, "black", "easy")
+            this.player2 = new CheckerMachine(this.scene, this.checkers, this, "white", "hard");
             this.switchTurn();
             this.updateMoves();
         }
@@ -440,7 +445,8 @@ class CheckerLogic {
 
     update() {
         this.gameClock.update();
-
+        if (this.activePlayer)
+            this.activePlayer.update();
         if (this.turnTimerEnabled) {
             this.turnClock.update();
             if (this.turnClock.timeElapsedSeconds() >= this.maxTurnTime) {

@@ -9,4 +9,6 @@ class CheckerMove {
         if (this.capturedPiece != null)
             this.capturedTile = this.capturedPiece.tile;
     }
+
+    hasCapture() { return this.capturedPiece ? true : false; }
 }

@@ -11,5 +11,7 @@ class CheckerPlayer {
 
     onJump(piece) { }
 
+    update() { }
+
     handlePick(pickResult) { }
 }

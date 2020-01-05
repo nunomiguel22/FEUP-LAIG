@@ -10,6 +10,7 @@ class CheckerPiece {
         this.tile = null;
         this.ID = ID;
         this.king = null;
+        this.onKing = false;
 
         this.captured = false;
 
@@ -36,6 +37,7 @@ class CheckerPiece {
     makeKing(piece) {
         piece.tile.piece = null;
         piece.tile = null;
+        piece.onKing = true;
         this.king = piece;
     }
 

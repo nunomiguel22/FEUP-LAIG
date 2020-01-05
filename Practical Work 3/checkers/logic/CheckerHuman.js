@@ -1,7 +1,7 @@
 class CheckerHuman extends CheckerPlayer {
 
     constructor(scene, checkers, checkerLogic, type) {
-        super(scene, checkers, checkerLogic, type)
+        super(scene, checkers, checkerLogic, type);
         CheckerHuman.selectedPiece = null;
         CheckerHuman.lockPicking = false;
     }
@@ -9,8 +9,6 @@ class CheckerHuman extends CheckerPlayer {
     onTurn() { this.unlockSelection(); }
 
     onJump(piece) { this.lockSelection(piece.ID); }
-
-
 
     handlePick(pickResult) {
         if (this.isPickPiece(pickResult)) {
@@ -23,9 +21,12 @@ class CheckerHuman extends CheckerPlayer {
             this.checkers.logTile(tileName);
 
             let move = this.checkerLogic.getValidMove(this.getSelectedPiece(), tileName);
-            if (move)
+            if (move) {
+                this.unlockSelection();
                 this.checkers.movePiece(move);
+            }
         }
+
     }
 
     isPiecePickable(ID) {
@@ -77,7 +78,5 @@ class CheckerHuman extends CheckerPlayer {
 
     getSelectedPiece() { return this.checkerLogic.pieces[CheckerHuman.selectedPiece]; }
 
-
     isPickPiece(pickResult) { return pickResult < 25; }
-
 }
