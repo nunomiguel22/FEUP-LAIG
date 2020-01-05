@@ -44,10 +44,10 @@
     </lights>
 
     <textures>
-        <texture id="cmwallstex" file="scenes/images/cubemap/walls.jpg" />
+        <texture id="cmwallstex" file="scenes/images/cubemap/walls2.jpg" />
         <texture id="pillarTex" file="scenes/images/room/pillar.jpg" />
         <texture id="cmdoorwalltex" file="scenes/images/cubemap/doorwall.jpg" />
-        <texture id="cmfloortex" file="scenes/images/cubemap/floor.jpg" />
+        <texture id="cmfloortex" file="scenes/images/cubemap/floor2.jpg" />
         <texture id="tabletex" file="scenes/images/table.jpg" />
         <texture id="checkerfloortex" file="scenes/images/checkerboard/checkerFloor.jpg" />
         <texture id="checkerbasetex" file="scenes/images/checkerboard/checkerBase.jpg" />
@@ -165,19 +165,6 @@
     </primitives>
 
      <components>
-        <component id="pillar">
-            <transformation>
-            <translate x="-300.0" y="0.0" z="-100.0" />
-            <rotate axis="x" angle="270"/>
-            </transformation>
-            <materials>
-                <material id="defaultMat" />
-            </materials>
-             <texture id="pillarTex" length_s="1" length_t="1" />
-            <children>
-                <primitiveref id="pillarprim" />
-            </children>
-        </component>
         <component id="chair1">
             <transformation>
                 <translate x="0.0" y="0.0" z="-100.0" />
@@ -440,7 +427,6 @@
             <children>
                 <componentref id="cubemap" />
                 <componentref id="tableAssembly" />
-                <componentref id="pillar" />
                 <componentref id="ceillingLight" />
                 <componentref id="chair1" />
                 <componentref id="chair2" />

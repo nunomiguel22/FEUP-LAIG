@@ -14,6 +14,7 @@ class StateMainMenu extends State {
     handlePick(pickResult) {
         switch (pickResult) {
             case this.mainMenu.newGameString.ID: {
+                this.scene.interface.close();
                 this.checkerLogic.newGame(this.p1Type, this.p2Type, true);
                 this.checkers.changeState(this.checkers.gameState);
                 this.checkerLogic.gameStarted = true;
@@ -54,7 +55,7 @@ class StateMainMenu extends State {
         }
     }
 
-    update(t) { }
+    update(t) { this.checkers.checkerAnimator.update(t); }
 
     processKeyDown(event) {
         if (event.code == "Escape" && this.checkers.previousState)

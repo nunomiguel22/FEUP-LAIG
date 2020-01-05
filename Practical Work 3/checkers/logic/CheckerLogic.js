@@ -87,7 +87,7 @@ class CheckerLogic {
     getCapturedPiece(type) {
         for (let i in this.pieces) {
             let piece = this.pieces[i];
-            if (piece.captured && piece[i].type == type && !piece.onKing)
+            if (piece.captured && piece.type == type && !piece.onKing)
                 return this.pieces[i];
         }
         return null;

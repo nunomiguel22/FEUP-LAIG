@@ -23,10 +23,10 @@ class MyInterface extends CGFinterface {
 
         this.initKeys();
 
-        this.gui.close();
-
         return true;
     }
+
+    close() { this.gui.close(); }
 
 
     onThemerLoaded() {

@@ -21,7 +21,6 @@ class UIMainMenu {
         this.newGameString.setAlignment("center");
         this.newGameString.setPickID(200);
 
-
         this.replayString = new UIString(this.scene, "Replay last game");
         this.replayString.setAlwaysVisible(true);
         this.replayString.setColor(1.0, 1.0, 1.0, 1.0);
