@@ -349,11 +349,32 @@ class CheckerLogic {
     // OTHERS
 
     winConditionsMet() {
-        if (this.capturedWhitePieces >= 1)
+        // If a player has captured all pieces he wins
+        if (this.capturedWhitePieces >= 12)
             return "black";
 
         if (this.capturedBlackPieces >= 12)
             return "white";
+
+        // If a player has no moves left the other player wins
+        let noMoves = true, winner = null, i = 0, iStop = 12;
+        if (this.playerTurn) {
+            winner = "white";
+            i = 12;
+            iStop = 24;
+        }
+        else {
+            winner = "black";
+            i = 0;
+            iStop = 12;
+        }
+
+        for (; i < iStop; ++i)
+            if (this.pieces[i].availableMoves.length)
+                noMoves = false;
+
+        if (noMoves)
+            return winner;
 
         return false;
     }
@@ -371,7 +392,6 @@ class CheckerLogic {
             this.updateMoves();
         }
     }
-
 
     init() {
         this.tiles = [];
