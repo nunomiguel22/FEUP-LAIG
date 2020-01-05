@@ -1,4 +1,7 @@
-
+/**
+ * Class responsible for managing real time
+ * @constructor
+ */
 class Clock {
 
     constructor() {

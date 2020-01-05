@@ -1,3 +1,9 @@
+/**
+ * Abstract class representing a state in the game
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {checkers} checkers  Reference to checkers object
+ */
 class State {
 
     constructor(scene, checkers) {

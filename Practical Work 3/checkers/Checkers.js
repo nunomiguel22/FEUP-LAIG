@@ -1,3 +1,8 @@
+/**
+ * Class manages all facets of the game, logic, animations, etc
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ */
 class Checkers {
 
     constructor(scene) {

@@ -1,3 +1,9 @@
+/**
+ * Class displays a text string on screen
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {string} string  Text to display
+ */
 class UIString {
 
     constructor(scene, string) {
@@ -21,21 +27,32 @@ class UIString {
         this.transformMatrix = [...this.scene.getMatrix()];
         this.textRenderer.strings.push(this);
     }
-
+    /**
+     * Updates UI string value
+     */
     setString(string) {
         this.string = string;
         this.setAlignment(this.alignment);
     }
-
+    /**
+     * Sets string color
+     */
     setColor(red, green, blue, alpha) { this.color = [red, green, blue, alpha]; }
-
+    /**
+     * Sets spacing between characters
+     */
     setSpacing(spacing) {
         this.spacing = spacing;
         this._updateSpacing();
     }
-
+    /**
+     * Disables depth testing when rendering string
+     */
     setAlwaysVisible(vis) { this.forceVis = vis; }
-
+    /**
+     * Sets horizontal string aligment in relation to the location
+     * values are "left", "right" and "center"
+     */
     setAlignment(alignment) {
         this.alignment = alignment;
 
@@ -55,14 +72,20 @@ class UIString {
             default: this.alignmentValue = 0; break;
         }
     }
-
+    /**
+     * Sets string position
+     */
     setPosition(x, y, z) { this.position = [x, y, z]; }
-
+    /**
+     * Font size
+     */
     setSize(size) {
         this.size = size;
         this._updateSpacing();
     }
-
+    /**
+     * Rotates string on each axis
+     */
     setRotationDegrees(xAxis, yAxis, zAxis) {
         const degreesToRadians = Math.PI / 180;
         xAxis *= degreesToRadians;
@@ -70,13 +93,21 @@ class UIString {
         zAxis *= degreesToRadians;
         this.rotation = [xAxis, yAxis, zAxis];
     }
-
+    /**
+     * Rotates string on each axis
+     */
     setRotationRadians(xAxis, yAxis, zAxis) { this.rotation = [xAxis, yAxis, zAxis]; }
-
+    /**
+     * Returns true if it has rotation
+     */
     hasRotation() { return this.rotation[0] || this.rotation[1] || this.hasRotation[2]; }
-
+    /**
+     * If true the string will be rendered in a ortho (-1, -1) to (1, 1) perspective
+     */
     setOrtho(ortho) { this.ortho = ortho; }
-
+    /**
+     * Set unique ID for object picking
+     */
     setPickID(ID) { this.ID = ID; }
 
     _updateSpacing() {

@@ -1,3 +1,11 @@
+/**
+ * Class responsible for loading the font atlas and rendering the strings
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {fontAtlas} fontAtlas  filepath to font atlas image
+ * @param {rows} rows  Number of rows in font atlas
+ * @param {columns} columns  Number of columns in font atlas
+ */
 class UITextRenderer {
 
     constructor(scene, fontAtlas, rows, columns) {

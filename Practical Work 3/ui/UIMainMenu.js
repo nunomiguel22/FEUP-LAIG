@@ -1,3 +1,10 @@
+/**
+ * Class displays the main menu
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {checkers} checkers  Reference to checkers object
+ * @param {menuState} menuState  Reference to the main menu state
+ */
 class UIMainMenu {
 
     constructor(scene, checkers, menuState) {

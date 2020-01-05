@@ -1,3 +1,9 @@
+/**
+ * Class displays game information
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {checkers} checkers  Reference to checkers object
+ */
 class UIGameInfo {
 
     constructor(scene, checkers) {

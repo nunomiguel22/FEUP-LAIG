@@ -1,3 +1,12 @@
+/**
+ * Class with some extra functionality for CGFcamera
+ * @constructor
+ * @param {fov} fov  Angle of field of view
+ * @param {near} near  Near limit draw plane
+ * @param {far} far  Far limit draw plane
+ * @param {position} position  World position of camera
+ * @param {target} target  World position of location camera is looking at
+ */
 class CGFextendedCamera extends CGFcamera {
     constructor(fov, near, far, position, target) {
         super(fov, near, far, position, target);
@@ -19,6 +28,10 @@ class CGFextendedCamera extends CGFcamera {
         this.stopAnimation();
     }
 
+    /**
+     * Swaps the scene camera mid render 
+     * if keepModelTransform is true the world transformations are kept
+     */
     static swapSceneCamera(scene, camera, keepModelTransform) {
         scene.camera = camera;
         scene.updateProjectionMatrix();
@@ -28,7 +41,9 @@ class CGFextendedCamera extends CGFcamera {
         if (keepModelTransform)
             scene.multMatrix(transform);
     }
-
+    /**
+     * Restores previous transformations after swaping camera
+     */
     static applyPreviousTransform(scene) { scene.multMatrix(CGFextendedCamera.transform); }
 
     reset() {
@@ -38,7 +53,6 @@ class CGFextendedCamera extends CGFcamera {
         this.setTarget(this.originalTarget);
         this.overcallback = null;
         this.overcallbackargs = null;
-
     }
 
     animateToCamera(camera, durationMS) {

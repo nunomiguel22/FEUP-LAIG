@@ -1,3 +1,10 @@
+/**
+ * Class representing checkerboard pieces
+ * @constructor
+ * @param {scene} scene  Reference to scene
+ * @param {type} type  "white" or "black" piece
+ * @param {ID} ID  Unique ID used for object picking
+ */
 class CheckerPiece {
 
     constructor(scene, type, ID) {

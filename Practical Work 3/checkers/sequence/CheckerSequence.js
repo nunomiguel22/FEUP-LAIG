@@ -1,3 +1,8 @@
+/**
+ * Class manages undo function and stores moves for replaying
+ * @constructor
+ * @param {checkerLogic} checkerLogic  Reference to checker logic object
+ */
 class CheckerSequence {
 
     constructor(checkerLogic) {

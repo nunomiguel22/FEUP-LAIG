@@ -1,3 +1,9 @@
+/**
+ * Replay state class, displays a replay of the previous game
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {checkers} checkers  Reference to checkers object
+ */
 class StateReplay extends State {
 
     constructor(scene, checkers) {

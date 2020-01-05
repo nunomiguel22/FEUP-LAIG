@@ -1,3 +1,10 @@
+/**
+ * Class responsible for managing the pieces, moves and rules
+ * @constructor
+ * @param {scene} scene  Reference to scene
+ * @param {checkers} checkers  Reference to checkers object
+ */
+
 class CheckerLogic {
 
     constructor(scene, checkers) {

@@ -1,3 +1,9 @@
+/**
+ * Game Over state class, displays final game info
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {checkers} checkers  Reference to checkers object
+ */
 class StateGameOver extends State {
 
     constructor(scene, checkers) {

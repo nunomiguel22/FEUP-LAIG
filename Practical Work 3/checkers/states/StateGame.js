@@ -1,3 +1,9 @@
+/**
+ * Game state class, displays game info, updates animations and checkers logic
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {checkers} checkers  Reference to checkers object
+ */
 class StateGame extends State {
 
     constructor(scene, checkers) {

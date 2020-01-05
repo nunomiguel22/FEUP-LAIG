@@ -1,3 +1,12 @@
+/**
+ * Class responsible for managing the player's moves
+ * @constructor
+ * @param {scene} scene  Reference to scene
+ * @param {checkers} checkers  Reference to checkers object
+ * @param {checkerLogic} checkerLogic  Reference to checkers logic object
+ * @param {type} type  Playing on "white" or "black" side
+ * @param {difficulty} difficulty  Easy or hard difficulty
+ */
 class CheckerHuman extends CheckerPlayer {
 
     constructor(scene, checkers, checkerLogic, type) {

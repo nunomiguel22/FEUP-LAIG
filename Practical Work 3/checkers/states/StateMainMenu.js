@@ -1,3 +1,9 @@
+/**
+ * Main menu state class, displays and handles menu operations
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {checkers} checkers  Reference to checkers object
+ */
 class StateMainMenu extends State {
 
     constructor(scene, checkers) {

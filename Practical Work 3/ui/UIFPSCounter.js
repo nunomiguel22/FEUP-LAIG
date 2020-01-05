@@ -1,3 +1,8 @@
+/**
+ * Class displays and updates FPS counter
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ */
 class UIFPSCounter {
 
     constructor(scene) {

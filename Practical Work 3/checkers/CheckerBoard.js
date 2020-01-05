@@ -1,4 +1,11 @@
-
+/**
+ * Class responsible for displaying on screen the pieces and tiles in checker logic
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {size} size  Size of the checkerboard
+ * @param {auxheight} auxheight  Height of auxiliar boards
+ * @param {checkers} checkers  Reference to checkers object
+ */
 class CheckerBoard extends CGFobject {
 
     constructor(scene, size, auxheight, checkers) {

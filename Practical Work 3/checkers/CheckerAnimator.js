@@ -1,4 +1,9 @@
-
+/**
+ * Class manages and updates animations
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ * @param {checkers} checkers  Reference to checkers object
+ */
 class CheckerAnimator {
 
     constructor(scene, checkers) {

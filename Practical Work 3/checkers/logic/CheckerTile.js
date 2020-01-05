@@ -1,4 +1,10 @@
-
+/**
+ * Class representing checkerboard tiles
+ * @constructor
+ * @param {scene} scene  Reference to scene
+ * @param {name} name  Tile name from "A1" to "H8"
+ * @param {ID} ID  Unique ID used for object picking
+ */
 class CheckerTile {
     constructor(scene, name, ID) {
 

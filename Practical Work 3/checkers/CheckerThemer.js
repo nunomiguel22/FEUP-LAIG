@@ -1,3 +1,8 @@
+/**
+ * Class manages theme loading and displaying
+ * @constructor
+ * @param {scene} scene  Reference to the scene
+ */
 class CheckerThemer {
 
     constructor(scene) {
