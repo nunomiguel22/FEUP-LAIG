@@ -6,6 +6,8 @@ class StateReplay extends State {
         this.checkerAnimator = this.checkers.checkerAnimator;
         this.checkerAnimator.reset();
         this.checkerSequence = this.checkers.checkerSequence;
+        this.prevTurnTimerEnabled = this.checkerLogic.turnTimerEnabled;
+        this.checkerLogic.turnTimerEnabled = false;
 
         this.gameInfo = new UIGameInfo(this.scene, this.checkers);
 
@@ -26,6 +28,7 @@ class StateReplay extends State {
             this.checkerSequence.checkerMoves = this.moves;
             this.checkerAnimator.reset();
             this.checkers.changeState(new StateGameOver(this.scene, this.checkers));
+            this.checkerLogic.turnTimerEnabled = this.prevTurnTimerEnabled;
             return;
         }
         this.checkerAnimator.update(t);

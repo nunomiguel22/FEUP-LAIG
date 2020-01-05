@@ -4,8 +4,8 @@ class Checkers {
         this.scene = scene;
 
         // Game Settings
-        this.whitePlayerName = "player 1";
-        this.blackPlayerName = "player 2";
+        this.blackPlayerName = "player 1";
+        this.whitePlayerName = "player 2";
 
         // CheckerBoard Theme
         this.checkerThemer = new CheckerThemer(this.scene);
@@ -27,6 +27,7 @@ class Checkers {
         this.menuState = new StateMainMenu(this.scene, this);
         this.state = this.menuState;
         this.previousState = null;
+        this.resetScore();
     }
 
     setCheckerBoard(checkerBoard) { this.checkerBoard = checkerBoard; }
@@ -46,6 +47,12 @@ class Checkers {
 
     undo() { this.state.undo(); }
 
+    resetScore() {
+        CheckerPlayer.player1Score = 0;
+        CheckerPlayer.player2Score = 0;
+        this.gameState.gameInfo.p1Score.setString(" Score:" + CheckerPlayer.player1Score);
+        this.gameState.gameInfo.p2Score.setString(" Score:" + CheckerPlayer.player2Score);
+    }
 
     makeKing(piece) {
         let capturedPiece = this.checkerLogic.getCapturedPiece(piece.type);
@@ -72,7 +79,10 @@ class Checkers {
 
     handlePick(pickResult) { this.state.handlePick(pickResult); }
 
-    update(t) { this.state.update(t); }
+    update(t) {
+        this.checkerLogic.update();
+        this.state.update(t);
+    }
 
     display() { this.state.display(); }
 

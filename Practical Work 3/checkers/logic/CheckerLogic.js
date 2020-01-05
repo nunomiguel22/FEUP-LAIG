@@ -18,14 +18,24 @@ class CheckerLogic {
         this.gameStarted = false;
         this.winner = null;
 
+        this.gameClock = new Clock();
+
+        this.turnClock = new Clock();
+        this.turnTimerEnabled = false;
+        this.maxTurnTime = 0;
+
+
+        this.turn = 0;
         this.init();
     }
 
     // PICKING
 
     switchTurn() {
+        ++this.turn;
         this.playerTurn ^= 1;
         this.activePlayer = (this.playerTurn) ? this.player1 : this.player2;
+        this.turnClock.reset();
         this.activePlayer.onTurn();
     }
 
@@ -339,7 +349,7 @@ class CheckerLogic {
     // OTHERS
 
     winConditionsMet() {
-        if (this.capturedWhitePieces >= 12)
+        if (this.capturedWhitePieces >= 1)
             return "black";
 
         if (this.capturedBlackPieces >= 12)
@@ -349,7 +359,6 @@ class CheckerLogic {
     }
 
     newGame(type, resetSequence) {
-
         this.reset(resetSequence);
 
         this.fillStartBlock("white");
@@ -408,6 +417,17 @@ class CheckerLogic {
         }
     }
 
+    update() {
+        this.gameClock.update();
+        if (this.turnTimerEnabled) {
+            this.turnClock.update();
+            if (this.turnClock.timeElapsedSeconds() >= this.maxTurnTime) {
+                this.winner = (this.playerTurn) ? "white" : "black";
+                this.gameOver = true;
+            }
+        }
+    }
+
     fillStartBlock(type) {
         let j = 1;
         let pieceNumber = 0;
@@ -450,9 +470,20 @@ class CheckerLogic {
             this.newGame(this.gameType);
     }
 
+    updateTurnTimer() {
+        if (this.maxTurnTime) {
+            this.turnClock.reset();
+            this.turnTimerEnabled = true;
+        }
+        else this.turnTimerEnabled = false;
+    }
+
     reset(resetSequence) {
         if (resetSequence)
             this.checkers.checkerSequence.reset();
+
+        this.gameClock.reset();
+        this.turnClock.reset();
         this.availableMoves = [];
         this.capturedWhitePieces = 0;
         this.capturedBlackPieces = 0;
@@ -460,6 +491,7 @@ class CheckerLogic {
         this.gameOver = false;
         this.gameStarted = false;
         this.winner = null;
+        this.turn = 0;
         this.resetTiles();
         this.resetPieces();
     }

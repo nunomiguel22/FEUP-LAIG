@@ -15,7 +15,7 @@ serialInclude([
     // CGF
     '../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.js',
     'CGF/CGFextendedCamera.js', 'CGF/CGFOBJModel.js', 'CGF/CGFResourceReader.js',
-    'GraphNode.js',
+    'GraphNode.js', 'Clock.js',
     // Primitives
     'primitives/MyRectangle.js', 'primitives/MyTriangle.js', 'primitives/MySphere.js',
     'primitives/MyCylinder.js', 'primitives/MyTorus.js', 'primitives/MyPlane.js',

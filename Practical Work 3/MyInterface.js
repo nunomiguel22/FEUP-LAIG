@@ -23,6 +23,8 @@ class MyInterface extends CGFinterface {
 
         this.initKeys();
 
+        this.gui.close();
+
         return true;
     }
 
@@ -52,6 +54,9 @@ class MyInterface extends CGFinterface {
 
         gameFolder.add(checkers, "blackPlayerName").onChange(updateNamesFun).name("Black Player");
         gameFolder.add(checkers, "undo").name("Undo");
+        gameFolder.add(checkers, "resetScore").name("Reset Score");
+        gameFolder.add(checkers.checkerLogic,
+            "maxTurnTime").min(0).onChange(checkers.checkerLogic.updateTurnTimer.bind(checkers.checkerLogic)).name("Turn Timer (s)");
 
 
         gameFolder.open();

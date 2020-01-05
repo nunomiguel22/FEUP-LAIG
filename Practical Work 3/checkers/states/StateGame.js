@@ -26,13 +26,19 @@ class StateGame extends State {
     update(t) {
         this.checkers.checkerAnimator.update(t);
         if (this.checkers.checkerLogic.gameOver) {
+            if (this.checkerLogic.winner == "white") {
+                ++CheckerPlayer.player2Score;
+                this.gameInfo.p2Score.setString(" Score:" + CheckerPlayer.player2Score);
+            }
+            else {
+                ++CheckerPlayer.player1Score;
+                this.gameInfo.p1Score.setString(" Score:" + CheckerPlayer.player1Score);
+            }
             this.checkers.changeState(new StateGameOver(this.scene, this.checkers));
         }
-    }
-
-    display() {
-        this.gameInfo.display();
 
     }
+
+    display() { this.gameInfo.display(); }
 
 }
