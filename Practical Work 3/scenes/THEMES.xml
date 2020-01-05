@@ -2,7 +2,6 @@
     <scenes default="Default">
         <scene id="Default" filename="DEFAULT_THEME.xml" />
         <scene id="Default 2" filename="DEFAULT_2.xml" />
-        <scene id="Close up" filename="CLOSEUP.xml" />
-        
+        <scene id="Close up" filename="CLOSEUP.xml" /> 
     </scenes>
 </lxs>

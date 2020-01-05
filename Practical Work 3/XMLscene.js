@@ -43,8 +43,6 @@ class XMLscene extends CGFscene {
 
         this.textRenderer = new UITextRenderer(this, "scenes/images/fontAtlas.jpg", 10, 10);
         this.fpsCounter = new UIFPSCounter(this);
-        this.testShader = new CGFshader(this.gl, "../lib/CGF/shaders/Gouraud/textured/multiple_light-vertex.glsl",
-            "shaders/test.frag");
     }
 
     /**
