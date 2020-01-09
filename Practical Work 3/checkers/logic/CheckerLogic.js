@@ -419,6 +419,7 @@ class CheckerLogic {
         this.fillStartBlock("black");
         this.player1 = this.makeNewPlayer(p1Type, "black");
         this.player2 = this.makeNewPlayer(p2Type, "white");
+        this.gameType = p1Type + "v" + p2Type;
         this.switchTurn();
         this.updateMoves();
     }
