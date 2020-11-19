@@ -49,7 +49,7 @@ if (!$allowed) {
 flush();
 
 
-if ( $_POST['payload'] ) {
+//if ( $_POST['payload'] ) {
   // Only respond to POST requests from Github
 
 
@@ -60,5 +60,5 @@ if ( $_POST['payload'] ) {
     exec("cd {$LOCAL_REPO} && sudo -u reav git pull");
     die("done " . mktime());
   }
-}
+//}
 ?>
